@@ -11,6 +11,7 @@
     "plugin:prettier/recommended",
     "prettier"
   ],
+  "ignorePatterns": ["docs/out/**"],
   "plugins": [
     "promise",
     "chai-expect"
@@ -39,6 +40,7 @@
     "promise/avoid-new": "warn",
     "promise/no-new-statics": "error",
     "promise/no-return-in-finally": "warn",
-    "promise/valid-params": "warn"
+    "promise/valid-params": "warn",
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["test/**/*.js", "example/**/*.js"]}]
   }
 }
