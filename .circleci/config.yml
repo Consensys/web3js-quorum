@@ -107,7 +107,7 @@ jobs:
         at: /tmp/workspace
     - add_ssh_keys:
         fingerprints:
-          - 'b4:b3:84:2a:8d:25:45:39:f4:b1:86:4d:d4:db:fb:b4'
+          - '94:91:fb:74:ea:25:01:8f:37:bd:2c:bb:95:39:23:d4'
     - run:
         name: Set Git user params
         command: |
