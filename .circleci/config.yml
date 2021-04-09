@@ -15,10 +15,10 @@ commands:
     description: "checkout, install all packages required by Ubuntu Docker machines and handle cache"
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - node-cache-{{ checksum "package-lock.json" }}
-            - node-cache-
+      # - restore_cache:
+      #     keys:
+      #       - node-cache-{{ checksum "package-lock.json" }}
+      #       - node-cache-
       - run:
           name: install base packages
           command: |
@@ -34,26 +34,26 @@ commands:
       - run:
           name: install node packages
           command: npm ci
-      - save_cache:
-          paths:
-            - ~/.npm
-          key: node-cache-{{ checksum "package-lock.json" }}
+      # - save_cache:
+      #     paths:
+      #       - ~/.npm
+      #     key: node-cache-{{ checksum "package-lock.json" }}
 
   prepare_node:
     description: "checkout, install all packages and handle cache"
     steps:
     - checkout
-    - restore_cache:
-        keys:
-          - node-cache-{{ checksum "package-lock.json" }}
-          - node-cache-
+    # - restore_cache:
+    #     keys:
+    #       - node-cache-{{ checksum "package-lock.json" }}
+    #       - node-cache-
     - run:
         name: install packages
         command: npm ci
-    - save_cache:
-        paths:
-          - ~/.npm
-        key: node-cache-{{ checksum "package-lock.json" }}
+    # - save_cache:
+    #     paths:
+    #       - ~/.npm
+    #     key: node-cache-{{ checksum "package-lock.json" }}
 jobs:
   build:
     executor: node_executor
