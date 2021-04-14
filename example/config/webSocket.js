@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
 // Define a WebSocket provider, passing in the desired options:
 // See https://github.com/ethereum/web3.js/tree/1.x/packages/web3-providers-ws for options
@@ -27,7 +27,7 @@ const websocketProvider = new Web3.providers.WebsocketProvider(
   providerOptions
 );
 
-const web3Ws = new EEAClient(new Web3(websocketProvider), 2018);
+const web3Ws = new Web3Quorum(new Web3(websocketProvider));
 
 web3Ws.eth
   .getBlockNumber()

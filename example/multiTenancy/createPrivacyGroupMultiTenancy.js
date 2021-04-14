@@ -1,11 +1,10 @@
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 const { orion, besu } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
 
-const web3 = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const web3 = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url))
 );
 
 const createPrivacyGroup = () => {

@@ -4,7 +4,7 @@ const Web3 = require("web3");
 
 const { besu, orion } = require("../keys");
 const { createHttpProvider } = require("../helpers.js");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
 const artifact = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.json")
@@ -12,9 +12,8 @@ const artifact = fs.readFileSync(
 const { abi } = JSON.parse(artifact).output;
 const params = JSON.parse(fs.readFileSync(path.join(__dirname, "params.json")));
 
-const node = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const node = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url))
 );
 
 async function run() {

@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const Web3 = require("web3");
-const EEAClient = require("../src");
+const Web3Quorum = require("../src");
 const EventEmitterAbi = require("./solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
@@ -12,7 +12,7 @@ const binary = fs.readFileSync(
   path.join(__dirname, "./solidity/EventEmitter/EventEmitter.bin")
 );
 
-const web3 = new EEAClient(new Web3(besu.node1.url), 2018);
+const web3 = new Web3Quorum(new Web3(besu.node1.url));
 // eslint-disable-next-line no-new
 new web3.eth.Contract(EventEmitterAbi);
 

@@ -1,12 +1,12 @@
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 const EventEmitterAbi = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
 const { orion, besu } = require("../keys.js");
 
 const storeValueFromNode2 = (address, value, privacyGroupId) => {
-  const web3 = new EEAClient(new Web3(besu.node2.url), 2018);
+  const web3 = new Web3Quorum(new Web3(besu.node2.url));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -40,7 +40,7 @@ const storeValueFromNode2 = (address, value, privacyGroupId) => {
 };
 
 const getValue = (url, address, privacyGroupId) => {
-  const web3 = new EEAClient(new Web3(url), 2018);
+  const web3 = new Web3Quorum(new Web3(url));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -48,16 +48,12 @@ const getValue = (url, address, privacyGroupId) => {
     return e.name === "value";
   });
 
-  const functionCall = {
-    to: address,
-    data: functionAbi.signature,
-    privacyGroupId,
-  };
-
-  return web3.priv.call(functionCall).then((result) => {
-    console.log(`Get Value from ${url}:`, result);
-    return result;
-  });
+  return web3.priv
+    .call(privacyGroupId, { to: address, data: functionAbi.signature })
+    .then((result) => {
+      console.log(`Get Value from ${url}:`, result);
+      return result;
+    });
 };
 
 const getValueFromNode1 = (address, privacyGroupId) => {

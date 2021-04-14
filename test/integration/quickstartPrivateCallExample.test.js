@@ -1,27 +1,24 @@
-const test = require("tape");
-
 const deployContract = require("../../example/multiNodeExamplePrivateCall/deployContract");
 const node1Example = require("../../example/multiNodeExamplePrivateCall/storeValueFromNode1");
 const node2Example = require("../../example/multiNodeExamplePrivateCall/storeValueFromNode2");
 
-test("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Call", (t) => {
+describe("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Call", () => {
   let contractAddress;
   let privacyGroupId;
-  t.test("deploy contract", async (st) => {
+  // deploy contract
+  beforeEach(async () => {
     const response = await deployContract();
     ({ contractAddress, privacyGroupId } = response);
-    st.end();
   });
 
-  t.test("store and gets from node 1", async (st) => {
+  it("store and gets from node 1", async () => {
     const result = await node1Example.storeValueFromNode1(
       contractAddress,
       1000,
       privacyGroupId
     );
 
-    st.equal(
-      result.logs[0].data,
+    expect(result.logs[0].data).toEqual(
       "0x000000000000000000000000fe3b557e8fb62b89f4916b721be55ceb828dbd7300000000000000000000000000000000000000000000000000000000000003e8"
     );
 
@@ -30,8 +27,7 @@ test("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Cal
       privacyGroupId
     );
 
-    st.equal(
-      getNode1,
+    expect(getNode1).toEqual(
       "0x00000000000000000000000000000000000000000000000000000000000003e8"
     );
 
@@ -40,23 +36,19 @@ test("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Cal
       privacyGroupId
     );
 
-    st.equal(
-      getNode2,
+    expect(getNode2).toEqual(
       "0x00000000000000000000000000000000000000000000000000000000000003e8"
     );
-
-    st.end();
   });
 
-  t.test("store and gets from node 2", async (st) => {
+  it("store and gets from node 2", async () => {
     const result = await node2Example.storeValueFromNode2(
       contractAddress,
       42,
       privacyGroupId
     );
 
-    st.equal(
-      result.logs[0].data,
+    expect(result.logs[0].data).toEqual(
       "0x000000000000000000000000627306090abab3a6e1400e9345bc60c78a8bef57000000000000000000000000000000000000000000000000000000000000002a"
     );
 
@@ -65,8 +57,7 @@ test("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Cal
       privacyGroupId
     );
 
-    st.equal(
-      getNode1,
+    expect(getNode1).toEqual(
       "0x000000000000000000000000000000000000000000000000000000000000002a"
     );
 
@@ -75,11 +66,8 @@ test("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Cal
       privacyGroupId
     );
 
-    st.equal(
-      getNode2,
+    expect(getNode2).toEqual(
       "0x000000000000000000000000000000000000000000000000000000000000002a"
     );
-
-    st.end();
   });
 });

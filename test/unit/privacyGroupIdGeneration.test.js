@@ -1,15 +1,12 @@
-const tape = require("tape");
 const { generatePrivacyGroup } = require("../../src/privacyGroup");
 const txFixtures = require("./support/keySets.json");
 
-tape("[EEA]: Privacy Group Generation", (t) => {
-  t.test("should generate correct privacy group id", (st) => {
-    /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
+describe("[EEA]: Privacy Group Generation", () => {
+  it("should generate correct privacy group id", () => {
     txFixtures.forEach((pg) => {
       const expected = pg.privacyGroupId;
       const input = pg.privacyGroup;
-      st.equal(generatePrivacyGroup({ privateFrom: input }), expected);
+      expect(generatePrivacyGroup({ privateFrom: input })).toEqual(expected);
     });
-    st.end();
   });
 });

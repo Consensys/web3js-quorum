@@ -1,6 +1,6 @@
 const Web3 = require("web3");
 const Tx = require("ethereumjs-tx");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 const EventEmitter = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 const CrossContractReader = require("../solidity/CrossContractReader/CrossContractReader.json")
@@ -9,7 +9,7 @@ const CrossContractReader = require("../solidity/CrossContractReader/CrossContra
 const { orion, besu } = require("../keys.js");
 
 const storeValueFromNode1 = (address, value) => {
-  const web3 = new EEAClient(new Web3(besu.node1.url), 2018);
+  const web3 = new Web3Quorum(new Web3(besu.node1.url));
   const contract = new web3.eth.Contract(EventEmitter);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -56,7 +56,7 @@ const getValue = (
   privateFor,
   privateKey
 ) => {
-  const web3 = new EEAClient(new Web3(url), 2018);
+  const web3 = new Web3Quorum(new Web3(url));
 
   const contract = new web3.eth.Contract(CrossContractReader);
 

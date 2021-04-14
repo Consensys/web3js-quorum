@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
 const { orion, besu } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
@@ -12,13 +12,11 @@ const binary = fs.readFileSync(
 
 const greeterAbi = require("../solidity/Greeter/greeter_meta").output.abi;
 
-const node1 = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const node1 = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url))
 );
-const node2 = new EEAClient(
-  new Web3(createHttpProvider(orion.node2.jwt, besu.node2.url)),
-  2018
+const node2 = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node2.jwt, besu.node2.url))
 );
 
 const createGreeterContract = (privacyGroupId) => {

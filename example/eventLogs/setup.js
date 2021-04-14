@@ -1,7 +1,7 @@
 const Web3 = require("web3");
 const fs = require("fs");
 const path = require("path");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
 const { besu, orion } = require("../keys");
 
@@ -10,7 +10,7 @@ const bytecode = fs.readFileSync(
 );
 
 const provider = new Web3.providers.HttpProvider(besu.node1.url);
-const node = new EEAClient(new Web3(provider), 2018);
+const node = new Web3Quorum(new Web3(provider));
 
 async function run() {
   const enclaveKey = orion.node1.publicKey;
