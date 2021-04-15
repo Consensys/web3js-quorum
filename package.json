@@ -24,7 +24,7 @@
     "generate:doc": "node_modules/.bin/jsdoc --configure jsdoc.json --verbose"
   },
   "jest": {
-    "testTimeout": 30000,
+    "testTimeout": 50000,
     "coverageThreshold": {
       "global": {
         "statements": 85,
