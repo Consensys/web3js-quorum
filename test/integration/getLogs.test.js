@@ -14,6 +14,7 @@ describe("getLogs", () => {
     contracts.eventEmitter.bytecode,
     contracts.eventEmitter.abi
   );
+  const logCount = 4;
   let privacyGroupId;
   let contract2Address;
   let send4Receipt;
@@ -66,7 +67,6 @@ describe("getLogs", () => {
   });
 
   describe("accessibility", () => {
-    const logCount = 4;
     it("creator should get logs", async () => {
       const logs = await node1Client.priv.getPastLogs(privacyGroupId, {});
       expect(logs).toHaveLength(logCount);
