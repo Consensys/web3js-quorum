@@ -2,12 +2,12 @@ const Web3 = require("web3");
 const Web3Quorum = require("../../src");
 
 const { contracts } = require("./support/helpers");
-const { besu, orion } = require("./support/keys");
+const { network, orion } = require("./support/keys");
 
 describe("getPrivateTransaction", () => {
-  const node2Client = new Web3Quorum(new Web3(besu.node2.url));
-  const node1Client = new Web3Quorum(new Web3(besu.node1.url));
-  const node3Client = new Web3Quorum(new Web3(besu.node3.url));
+  const node2Client = new Web3Quorum(new Web3(network.node2.url));
+  const node1Client = new Web3Quorum(new Web3(network.node1.url));
+  const node3Client = new Web3Quorum(new Web3(network.node3.url));
 
   let privacyGroupId;
   let publicHash;
@@ -23,7 +23,7 @@ describe("getPrivateTransaction", () => {
         data: `0x${contracts.eventEmitter.bytecode}`,
         privateFrom: orion.node1.publicKey,
         privacyGroupId,
-        privateKey: besu.node1.privateKey,
+        privateKey: network.node1.privateKey,
       })
       .then((hash) => {
         return node1Client.priv.getTransactionReceipt(

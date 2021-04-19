@@ -1,8 +1,8 @@
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 
-const web3 = new Web3Quorum(new Web3(besu.node2.url));
+const web3 = new Web3Quorum(new Web3(network.node2.url));
 
 const findPrivacyGroupForNode23 = () => {
   const contractOptions = {

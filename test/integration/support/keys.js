@@ -10,7 +10,7 @@ module.exports = {
       publicKey: "k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=",
     },
   },
-  besu: {
+  network: {
     node1: {
       url: "http://localhost:20000",
       privateKey:

@@ -3,9 +3,9 @@ const path = require("path");
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
 
-const { besu } = require("../keys");
+const { network } = require("../keys");
 
-const node = new Web3Quorum(new Web3(besu.node1.url));
+const node = new Web3Quorum(new Web3(network.node1.url));
 const params = JSON.parse(fs.readFileSync(path.join(__dirname, "params.json")));
 
 async function run() {

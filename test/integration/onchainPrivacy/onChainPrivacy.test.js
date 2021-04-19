@@ -3,13 +3,13 @@ const Web3 = require("web3");
 
 const Web3Quorum = require("../../../src");
 
-const { besu, orion } = require("../support/keys");
+const { network, orion } = require("../support/keys");
 const { contracts } = require("../support/helpers");
 
 describe("On chain privacy", () => {
-  const node1Client = new Web3Quorum(new Web3(besu.node1.url));
-  const node2Client = new Web3Quorum(new Web3(besu.node2.url));
-  const node3Client = new Web3Quorum(new Web3(besu.node3.url));
+  const node1Client = new Web3Quorum(new Web3(network.node1.url));
+  const node2Client = new Web3Quorum(new Web3(network.node2.url));
+  const node3Client = new Web3Quorum(new Web3(network.node3.url));
 
   const privacyContractAddress = contracts.privacyInterface.address;
 
@@ -19,14 +19,14 @@ describe("On chain privacy", () => {
   const privacyOptions = {
     enclaveKey: orion.node1.publicKey,
     privacyGroupId: undefined, // set later
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
   // createPrivacyGroup
   it("should create privacy group", async () => {
     const receipt = await node1Client.privx.createPrivacyGroup({
       participants,
       enclaveKey: orion.node1.publicKey,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     });
 
     ({ privacyGroupId } = receipt);
@@ -96,7 +96,7 @@ describe("On chain privacy", () => {
     await expect(
       node3Client.privx.addToPrivacyGroup({
         enclaveKey: orion.node3.publicKey,
-        privateKey: besu.node3.privateKey,
+        privateKey: network.node3.privateKey,
         privacyGroupId,
       })
     ).rejects.toThrowError();
@@ -113,7 +113,7 @@ describe("On chain privacy", () => {
           data: `0x${contracts.eventEmitter.bytecode}`,
           privateFrom: orion.node1.publicKey,
           privacyGroupId,
-          privateKey: besu.node1.privateKey,
+          privateKey: network.node1.privateKey,
         })
         .then((hash) => {
           console.log("hash: ", hash);
@@ -179,7 +179,7 @@ describe("On chain privacy", () => {
       const result = await writeValue(
         node1Client,
         orion.node1.publicKey,
-        besu.node1.privateKey,
+        network.node1.privateKey,
         1
       );
       expect(result.status).toEqual("0x1");
@@ -189,7 +189,7 @@ describe("On chain privacy", () => {
       const result = await writeValue(
         node2Client,
         orion.node2.publicKey,
-        besu.node2.privateKey,
+        network.node2.privateKey,
         2
       );
       expect(result.status).toEqual("0x1");
@@ -197,7 +197,7 @@ describe("On chain privacy", () => {
 
     it("non-member node should NOT be able to write to the contract", async () => {
       await expect(
-        writeValue(node3Client, orion.node3.publicKey, besu.node3.privateKey, 3)
+        writeValue(node3Client, orion.node3.publicKey, network.node3.privateKey, 3)
       ).rejects.toThrowError();
     });
   });
@@ -222,7 +222,7 @@ describe("On chain privacy", () => {
           data: contract.methods.store([newValue]).encodeABI(),
           privateFrom: orion.node1.publicKey,
           privacyGroupId,
-          privateKey: besu.node1.privateKey,
+          privateKey: network.node1.privateKey,
         })
         .then((transactionHash) => {
           return node1Client.priv.getTransactionReceipt(

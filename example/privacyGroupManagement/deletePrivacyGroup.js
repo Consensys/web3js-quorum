@@ -1,8 +1,8 @@
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
-const { besu } = require("../keys.js");
+const { network } = require("../keys.js");
 
-const web3 = new Web3Quorum(new Web3(besu.node1.url));
+const web3 = new Web3Quorum(new Web3(network.node1.url));
 
 const deletePrivacyGroup = (givenPrivacyGroupId) => {
   const contractOptions = {

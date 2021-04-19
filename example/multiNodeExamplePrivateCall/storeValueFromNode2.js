@@ -3,10 +3,10 @@ const Web3Quorum = require("../../src");
 const EventEmitterAbi = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 
 const storeValueFromNode2 = (address, value, privacyGroupId) => {
-  const web3 = new Web3Quorum(new Web3(besu.node2.url));
+  const web3 = new Web3Quorum(new Web3(network.node2.url));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -22,7 +22,7 @@ const storeValueFromNode2 = (address, value, privacyGroupId) => {
     data: functionAbi.signature + functionArgs,
     privateFrom: orion.node2.publicKey,
     privacyGroupId,
-    privateKey: besu.node2.privateKey,
+    privateKey: network.node2.privateKey,
   };
   return web3.eea
     .sendRawTransaction(functionCall)
@@ -57,15 +57,15 @@ const getValue = (url, address, privacyGroupId) => {
 };
 
 const getValueFromNode1 = (address, privacyGroupId) => {
-  return getValue(besu.node1.url, address, privacyGroupId);
+  return getValue(network.node1.url, address, privacyGroupId);
 };
 
 const getValueFromNode2 = (address, privacyGroupId) => {
-  return getValue(besu.node2.url, address, privacyGroupId);
+  return getValue(network.node2.url, address, privacyGroupId);
 };
 
 const getValueFromNode3 = (address, privacyGroupId) => {
-  return getValue(besu.node3.url, address, privacyGroupId);
+  return getValue(network.node3.url, address, privacyGroupId);
 };
 
 module.exports = {

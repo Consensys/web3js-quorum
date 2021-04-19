@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
 
-const { besu, orion } = require("../keys");
+const { network, orion } = require("../keys");
 const Web3Quorum = require("../../src");
 
 const artifact = fs.readFileSync(
@@ -11,7 +11,7 @@ const artifact = fs.readFileSync(
 const { abi } = JSON.parse(artifact).output;
 const params = JSON.parse(fs.readFileSync(path.join(__dirname, "params.json")));
 
-const node = new Web3Quorum(new Web3(besu.node1.url));
+const node = new Web3Quorum(new Web3(network.node1.url));
 
 async function run() {
   const { privacyGroupId, contractAddress } = params;
@@ -30,7 +30,7 @@ async function run() {
       data: contract.methods.store([value]).encodeABI(),
       privateFrom: enclaveKey,
       privacyGroupId,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     })
     .then((transactionHash) => {
       return node.priv.getTransactionReceipt(transactionHash);

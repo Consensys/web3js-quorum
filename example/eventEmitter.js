@@ -6,13 +6,13 @@ const Web3Quorum = require("../src");
 const EventEmitterAbi = require("./solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, besu } = require("./keys.js");
+const { orion, network } = require("./keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "./solidity/EventEmitter/EventEmitter.bin")
 );
 
-const web3 = new Web3Quorum(new Web3(besu.node1.url));
+const web3 = new Web3Quorum(new Web3(network.node1.url));
 // eslint-disable-next-line no-new
 new web3.eth.Contract(EventEmitterAbi);
 
@@ -21,7 +21,7 @@ const createPrivateEmitterContract = () => {
     data: `0x${binary}`,
     privateFrom: orion.node1.publicKey,
     privateFor: [orion.node2.publicKey],
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
   return web3.eea.sendRawTransaction(contractOptions);
 };
@@ -49,7 +49,7 @@ const storeValue = (contractAddress, value) => {
     data: functionAbi.signature + functionArgs,
     privateFrom: orion.node1.publicKey,
     privateFor: [orion.node2.publicKey],
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
   return web3.eea.sendRawTransaction(functionCall);
 };
@@ -64,7 +64,7 @@ const getValue = (contractAddress) => {
     data: functionAbi.signature,
     privateFrom: orion.node1.publicKey,
     privateFor: [orion.node2.publicKey],
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
 
   return web3.eea

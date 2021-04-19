@@ -7,14 +7,14 @@ const Web3Quorum = require("../../src");
 
 const createGroup = require("../privacyGroupManagement/createPrivacyGroup");
 
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.bin")
 );
 
-const web3 = new Web3Quorum(new Web3(besu.node1.url));
-const web3Node2 = new Web3Quorum(new Web3(besu.node2.url));
+const web3 = new Web3Quorum(new Web3(network.node1.url));
+const web3Node2 = new Web3Quorum(new Web3(network.node2.url));
 
 const createGroupId = () => {
   return createGroup.createPrivacyGroup();
@@ -25,7 +25,7 @@ const distributeRawContractCreation = (privacyGroupId) => {
     data: `0x${binary}`,
     privateFrom: orion.node1.publicKey,
     privacyGroupId,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
   return web3.priv.distributeRawTransaction(contractOptions);
 };
@@ -34,7 +34,7 @@ const sendPrivacyMarkerTransaction = (enclaveKey) => {
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
     const besuAccount = web3.eth.accounts.privateKeyToAccount(
-      `0x${besu.node1.privateKey}`
+      `0x${network.node1.privateKey}`
     );
     web3.eth
       .getTransactionCount(besuAccount.address, "pending")
@@ -49,7 +49,7 @@ const sendPrivacyMarkerTransaction = (enclaveKey) => {
           gasLimit: "0xFFFFF",
         };
         const tx = new Tx(rawTx);
-        tx.sign(Buffer.from(besu.node1.privateKey, "hex"));
+        tx.sign(Buffer.from(network.node1.privateKey, "hex"));
         const serializedTx = tx.serialize();
         return web3.eth
           .sendSignedTransaction(`0x${serializedTx.toString("hex")}`)

@@ -1,10 +1,10 @@
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
 
 const web3 = new Web3Quorum(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url))
+  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
 );
 
 const createPrivacyGroup = () => {

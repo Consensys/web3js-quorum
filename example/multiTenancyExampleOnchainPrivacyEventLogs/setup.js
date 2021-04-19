@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const Web3Quorum = require("../../src");
 
-const { besu, orion } = require("../keys");
+const { network, orion } = require("../keys");
 const { createHttpProvider } = require("../helpers.js");
 
 const bytecode = fs.readFileSync(
@@ -11,7 +11,7 @@ const bytecode = fs.readFileSync(
 );
 
 const node = new Web3Quorum(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url))
+  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
 );
 
 async function run() {
@@ -28,7 +28,7 @@ async function run() {
       participants: addresses,
       enclaveKey: orion.node1.publicKey,
       privateFrom: orion.node1.publicKey,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     }
   );
   console.log("Creation result");
@@ -50,7 +50,7 @@ async function run() {
       data: `0x${bytecode}`,
       privateFrom: enclaveKey,
       privacyGroupId,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     })
     .then((hash) => {
       return node.priv.getTransactionReceipt(hash, enclaveKey);

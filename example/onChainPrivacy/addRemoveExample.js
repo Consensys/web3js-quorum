@@ -2,11 +2,11 @@ const Web3 = require("web3");
 const Web3Quorum = require("../../src");
 
 const Utils = require("../helpers.js");
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 
-const node1 = new Web3Quorum(new Web3(besu.node1.url));
-const node2 = new Web3Quorum(new Web3(besu.node2.url));
-const node3 = new Web3Quorum(new Web3(besu.node3.url));
+const node1 = new Web3Quorum(new Web3(network.node1.url));
+const node2 = new Web3Quorum(new Web3(network.node2.url));
+const node3 = new Web3Quorum(new Web3(network.node3.url));
 
 module.exports = async () => {
   const onChainPrivacyGroupCreationResult = await node1.privx.createPrivacyGroup(
@@ -14,7 +14,7 @@ module.exports = async () => {
       participants: [orion.node1.publicKey, orion.node2.publicKey],
       enclaveKey: orion.node1.publicKey,
       privateFrom: orion.node1.publicKey,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     }
   );
   console.log("Created new on-chain privacy group:");
@@ -34,7 +34,7 @@ module.exports = async () => {
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
     privacyGroupId: onChainPrivacyGroupCreationResult.privacyGroupId,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   });
   console.log("Added new node to privacy group:");
   console.log(addResult);
@@ -64,7 +64,7 @@ module.exports = async () => {
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
     privacyGroupId: onChainPrivacyGroupCreationResult.privacyGroupId,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   });
   console.log("Removed third participant from privacy group:");
   console.log(removeResult);
