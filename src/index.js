@@ -37,52 +37,21 @@ function Web3Quorum(web3) {
 
   /* eslint-disable no-param-reassign */
   // Initialize the extensions
-  web3.priv = {
-    subscriptionPollingInterval: 1000,
-  };
+  // web3.priv = {
+  //   ,
+  // };
   web3.eea = {};
   web3.privx = {};
   /* eslint-enable no-param-reassign */
-  Object.assign(web3, Priv(web3));
+  Object.assign(web3.priv, {
+    ...Priv(web3).priv,
+    subscriptionPollingInterval: 1000,
+  });
 
   // INTERNAL ==========
   web3.extend({
     property: "privInternal",
     methods: [
-      // eea
-      {
-        name: "sendRawTransaction",
-        call: "eea_sendRawTransaction",
-        params: 1,
-      },
-      {
-        name: "getTransactionCount",
-        call: "priv_getTransactionCount",
-        params: 2,
-        outputFormatter: (output) => {
-          return parseInt(output, 16);
-        },
-      },
-      {
-        name: "getTransactionReceipt",
-        call: "priv_getTransactionReceipt",
-        params: 2,
-      },
-      {
-        name: "distributeRawTransaction",
-        call: "priv_distributeRawTransaction",
-        params: 1,
-      },
-      {
-        name: "findPrivacyGroup",
-        call: "priv_findPrivacyGroup",
-        params: 1,
-      },
-      {
-        name: "deletePrivacyGroup",
-        call: "priv_deletePrivacyGroup",
-        params: 1,
-      },
       {
         name: "subscribe",
         call: "priv_subscribe",
@@ -121,12 +90,7 @@ function Web3Quorum(web3) {
     const privateKeyBuffer = Buffer.from(options.privateKey, "hex");
     const from = `0x${privateToAddress(privateKeyBuffer).toString("hex")}`;
     return web3.priv
-      .getTransactionCount({
-        from,
-        privateFrom: options.privateFrom,
-        privateFor: options.privateFor,
-        privacyGroupId: options.privacyGroupId,
-      })
+      .getTransactionCount(from, options.privacyGroupId)
       .then(async (transactionCount) => {
         tx.nonce = options.nonce || transactionCount;
         tx.gasPrice = GAS_PRICE;
@@ -152,9 +116,9 @@ function Web3Quorum(web3) {
 
         let result;
         if (method === "eea_sendRawTransaction") {
-          result = web3.privInternal.sendRawTransaction(signedRlpEncoded);
+          result = web3.priv.sendRawTransaction(signedRlpEncoded);
         } else if (method === "priv_distributeRawTransaction") {
-          result = web3.privInternal.distributeRawTransaction(signedRlpEncoded);
+          result = web3.priv.distributeRawTransaction(signedRlpEncoded);
         }
 
         if (result != null) {
@@ -227,101 +191,6 @@ function Web3Quorum(web3) {
     return retryOperation(operation, retries);
   };
 
-  // PRIV ==========
-  web3.extend({
-    property: "priv",
-    methods: [
-      {
-        name: "createPrivacyGroup",
-        call: "priv_createPrivacyGroup",
-        params: 1,
-      },
-      {
-        name: "getTransaction",
-        call: "priv_getPrivateTransaction",
-        params: 1,
-      },
-      {
-        name: "getPastLogs",
-        call: "priv_getLogs",
-        params: 3,
-        inputFormatter: [
-          null,
-          null,
-          web3.extend.formatters.inputDefaultBlockNumberFormatter,
-        ],
-        outputFormatter: web3.extend.outputLogFormatter,
-      },
-      {
-        name: "createFilter",
-        call: "priv_newFilter",
-        params: 3,
-        inputFormatter: [
-          null,
-          null,
-          web3.extend.formatters.inputDefaultBlockNumberFormatter,
-        ],
-      },
-      {
-        name: "getFilterLogs",
-        call: "priv_getFilterLogs",
-        params: 2,
-        outputFormatter: web3.extend.outputLogFormatter,
-      },
-      {
-        name: "getFilterChanges",
-        call: "priv_getFilterChanges",
-        params: 2,
-        outputFormatter: web3.extend.outputLogFormatter,
-      },
-      {
-        name: "uninstallFilter",
-        call: "priv_uninstallFilter",
-        params: 2,
-      },
-    ],
-  });
-
-  /**
-   * Get the transaction count
-   * @param options Options passed into `eea_sendRawTransaction`
-   * @returns Promise<transaction count | never>
-   * @memberOf Web3Quorum
-   */
-  const getTransactionCount = (options) => {
-    let privacyGroupId;
-    if (options.privacyGroupId) {
-      ({ privacyGroupId } = options);
-    } else {
-      privacyGroupId = generatePrivacyGroup(options);
-    }
-
-    return web3.privInternal.getTransactionCount(options.from, privacyGroupId);
-  };
-
-  /**
-   * Delete a privacy group
-   * @param options Options passed into `deletePrivacyGroup`
-   * - options.privacyGroupId
-   * @returns Promise<transaction count | never>
-   * @memberOf Web3Quorum
-   */
-  const deletePrivacyGroup = (options) => {
-    // TODO: remove this function and pass arguments individually (breaks API)
-    return web3.privInternal.deletePrivacyGroup(options.privacyGroupId);
-  };
-
-  /**
-   * Find privacy groups
-   * @param options Options passed into `findPrivacyGroup`
-   * - options.addresses
-   * @returns Promise<transaction count | never>
-   */
-  const findPrivacyGroup = (options) => {
-    // TODO: remove this function and pass arguments individually(breaks API)
-    return web3.privInternal.findPrivacyGroup(options.addresses);
-  };
-
   const distributeRawTransaction = (options) => {
     return genericSendRawTransaction(options, "priv_distributeRawTransaction");
   };
@@ -373,11 +242,7 @@ function Web3Quorum(web3) {
 
   Object.assign(web3.priv, {
     generatePrivacyGroup,
-    deletePrivacyGroup,
-    findPrivacyGroup,
     distributeRawTransaction,
-    getTransactionCount,
-    getTransactionReceipt,
     subscribe,
   });
 

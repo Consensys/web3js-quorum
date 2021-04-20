@@ -62,7 +62,7 @@ PollingSubscription.prototype.subscribe = async function subscribe(
   blockId
 ) {
   // install filter
-  this.subscription.filterId = await this.web3.priv.createFilter(
+  this.subscription.filterId = await this.web3.priv.newFilter(
     privacyGroupId,
     filter,
     blockId

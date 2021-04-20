@@ -68,64 +68,64 @@ describe("getLogs", () => {
 
   describe("accessibility", () => {
     it("creator should get logs", async () => {
-      const logs = await node1Client.priv.getPastLogs(privacyGroupId, {});
+      const logs = await node1Client.priv.getLogs(privacyGroupId, {});
       expect(logs).toHaveLength(logCount);
     });
     it("member should get logs", async () => {
-      const logs = await node2Client.priv.getPastLogs(privacyGroupId, {});
+      const logs = await node2Client.priv.getLogs(privacyGroupId, {});
       expect(logs).toHaveLength(logCount);
     });
 
     it("non-member should not get logs", async () => {
-      const logs = await node3Client.priv.getPastLogs(privacyGroupId, {});
+      const logs = await node3Client.priv.getLogs(privacyGroupId, {});
       expect(logs).toHaveLength(0);
     });
   });
 
   describe("filters", () => {
     it("should get logs by address", async () => {
-      const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs1 = await node1Client.priv.getLogs(privacyGroupId, {
         address: contract1Address,
       });
       expect(logs1).toHaveLength(3);
 
-      const logs2 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs2 = await node1Client.priv.getLogs(privacyGroupId, {
         address: contract2Address,
       });
       expect(logs2).toHaveLength(1);
     });
 
     it("should get logs to a given block number", async () => {
-      const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs1 = await node1Client.priv.getLogs(privacyGroupId, {
         toBlock: deployReceipt.blockNumber,
       });
       expect(logs1).toHaveLength(0);
 
-      const logs2 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs2 = await node1Client.priv.getLogs(privacyGroupId, {
         toBlock: send2Receipt.blockNumber,
       });
       expect(logs2).toHaveLength(2);
 
-      const logs4 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs4 = await node1Client.priv.getLogs(privacyGroupId, {
         toBlock: send4Receipt.blockNumber,
       });
       expect(logs4).toHaveLength(4);
     });
 
     it("should get logs from a given block number", async () => {
-      const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs1 = await node1Client.priv.getLogs(privacyGroupId, {
         fromBlock: deployReceipt.blockNumber,
       });
       expect(logs1).toHaveLength(4);
 
       // skip 1
-      const logs2 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs2 = await node1Client.priv.getLogs(privacyGroupId, {
         fromBlock: send2Receipt.blockNumber,
       });
       expect(logs2).toHaveLength(3);
 
       // skip 3
-      const logs4 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs4 = await node1Client.priv.getLogs(privacyGroupId, {
         fromBlock: send4Receipt.blockNumber,
       });
       expect(logs4).toHaveLength(1);
@@ -137,7 +137,7 @@ describe("getLogs", () => {
       const filter = factory.contract.events.stored({});
       const { topics } = filter.arguments[0];
 
-      const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
+      const logs1 = await node1Client.priv.getLogs(privacyGroupId, {
         topics,
       });
       expect(logs1).toHaveLength(4);

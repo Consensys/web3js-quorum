@@ -5,10 +5,7 @@ const { network } = require("../keys.js");
 const web3 = new Web3Quorum(new Web3(network.node1.url));
 
 const deletePrivacyGroup = (givenPrivacyGroupId) => {
-  const contractOptions = {
-    privacyGroupId: givenPrivacyGroupId,
-  };
-  return web3.priv.deletePrivacyGroup(contractOptions).then((result) => {
+  return web3.priv.deletePrivacyGroup(givenPrivacyGroupId).then((result) => {
     console.log(`The privacy group deleted is:`, result);
     return result;
   });
