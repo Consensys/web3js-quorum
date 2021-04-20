@@ -37,16 +37,13 @@ function Web3Quorum(web3) {
 
   /* eslint-disable no-param-reassign */
   // Initialize the extensions
-  // web3.priv = {
-  //   ,
-  // };
+  web3.priv = {
+    subscriptionPollingInterval: 1000,
+  };
   web3.eea = {};
   web3.privx = {};
   /* eslint-enable no-param-reassign */
-  Object.assign(web3.priv, {
-    ...Priv(web3).priv,
-    subscriptionPollingInterval: 1000,
-  });
+  Object.assign(web3.priv, Priv(web3).priv);
 
   // INTERNAL ==========
   web3.extend({

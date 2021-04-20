@@ -1,14 +1,16 @@
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
-
-const logOutput = ({ stdout, stderr }) => {
-  console.log("stdout:", stdout);
-  console.log("stderr:", stderr);
-  return Promise.resolve({});
-};
+const { spawn } = require("child_process");
 
 const stopPrivacyDocker = () => {
-  return exec("cd docker && ./stop.sh && ./remove.sh").then(logOutput);
+  return new Promise((resolve) => {
+    const run = spawn("cd docker && ./stop.sh && ./remove.sh", {
+      shell: true,
+      stdio: "inherit",
+    });
+
+    run.on("close", () => {
+      return resolve({});
+    });
+  });
 };
 
 stopPrivacyDocker().catch(console.error);
