@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
 
 const binary = fs.readFileSync(
@@ -12,13 +12,11 @@ const binary = fs.readFileSync(
 
 const greeterAbi = require("../solidity/Greeter/greeter_meta").output.abi;
 
-const node1 = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const node1 = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
 );
-const node2 = new EEAClient(
-  new Web3(createHttpProvider(orion.node2.jwt, besu.node2.url)),
-  2018
+const node2 = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node2.jwt, network.node2.url))
 );
 
 const createGreeterContract = (privacyGroupId) => {
@@ -26,7 +24,7 @@ const createGreeterContract = (privacyGroupId) => {
     data: `0x${binary}`,
     privateFrom: orion.node1.publicKey,
     privacyGroupId,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
   return node1.eea.sendRawTransaction(contractOptions);
 };
@@ -86,7 +84,7 @@ module.exports = async () => {
     participants: [orion.node1.publicKey, orion.node2.publicKey],
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   });
 
   console.log(privacyGroupCreationResult);
@@ -100,7 +98,7 @@ module.exports = async () => {
   const callGreetFunctionResult = await callGenericFunctionOnContract(
     node1,
     orion.node1.publicKey,
-    besu.node1.privateKey,
+    network.node1.privateKey,
     greeterContractAddress,
     privacyGroupCreationResult.privacyGroupId,
     "greet",
@@ -114,7 +112,7 @@ module.exports = async () => {
   const callSetGreetingFunctionResultFromSecondParticipant = await callGenericFunctionOnContract(
     node2,
     orion.node2.publicKey,
-    besu.node2.privateKey,
+    network.node2.privateKey,
     greeterContractAddress,
     privacyGroupCreationResult.privacyGroupId,
     "setGreeting",
@@ -128,7 +126,7 @@ module.exports = async () => {
   const callFireEventFunctionResult = await callGenericFunctionOnContract(
     node1,
     orion.node1.publicKey,
-    besu.node1.privateKey,
+    network.node1.privateKey,
     greeterContractAddress,
     privacyGroupCreationResult.privacyGroupId,
     "fire",

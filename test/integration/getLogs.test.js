@@ -1,146 +1,137 @@
-const test = require("tape");
-
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
 const { contracts, ContractFactory } = require("./support/helpers");
-const { besu, orion } = require("./support/keys");
+const { network, orion } = require("./support/keys");
 
-test("getLogs", async (t) => {
-  const chainID = 2018;
-  const node1Client = new EEAClient(new Web3(besu.node1.url), chainID);
-  const node2Client = new EEAClient(new Web3(besu.node2.url), chainID);
-  const node3Client = new EEAClient(new Web3(besu.node3.url), chainID);
-
-  // create privacy group
-  const privacyGroupId = await node1Client.priv.createPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-    name: "",
-    description: "Nodes 1 and 2",
-  });
+describe("getLogs", () => {
+  const node1Client = new Web3Quorum(new Web3(network.node1.url));
+  const node2Client = new Web3Quorum(new Web3(network.node2.url));
+  const node3Client = new Web3Quorum(new Web3(network.node3.url));
 
   // deploy contract
   const factory = new ContractFactory(
     contracts.eventEmitter.bytecode,
     contracts.eventEmitter.abi
   );
-
-  factory.connect(
-    node1Client,
-    { enclaveKey: orion.node1.publicKey, privacyGroupId },
-    besu.node1.privateKey
-  );
-
-  const contract = await factory.privateDeploy(privacyGroupId);
-  const { deployReceipt } = contract;
-  const contract1Address = deployReceipt.contractAddress;
-  console.log(deployReceipt);
-
-  // send some transactions from member 1
-  await contract.send("store", [1]);
-  const send2Receipt = await contract.send("store", [2]);
-
-  // send some transactions from member 2
-  factory.connect(
-    node2Client,
-    { enclaveKey: orion.node2.publicKey, privacyGroupId },
-    besu.node2.privateKey
-  );
-
-  await contract.send("store", [3]);
-
-  // deploy another contract
-  factory.connect(
-    node1Client,
-    { enclaveKey: orion.node1.publicKey, privacyGroupId },
-    besu.node1.privateKey
-  );
-  const contract2 = await factory.privateDeploy(privacyGroupId);
-  const { deployReceipt: deployReceipt2 } = contract2;
-  const contract2Address = deployReceipt2.contractAddress;
-  console.log(deployReceipt2);
-
-  // send a transaction to the second contract
-  const send4Receipt = await contract2.send("store", [4]);
-
-  t.test("accessibility", async (st) => {
-    const logCount = 4;
-    st.test("creator should get logs", async (sst) => {
-      const logs = await node1Client.priv.getPastLogs(privacyGroupId, {});
-      sst.strictEqual(logs.length, logCount, "sees all logs");
-      sst.end();
+  const logCount = 4;
+  let privacyGroupId;
+  let contract2Address;
+  let send4Receipt;
+  let contract1Address;
+  let send2Receipt;
+  let deployReceipt;
+  beforeAll(async () => {
+    // create privacy group
+    privacyGroupId = await node1Client.priv.createPrivacyGroup({
+      addresses: [orion.node1.publicKey, orion.node2.publicKey],
+      name: "",
+      description: "Nodes 1 and 2",
     });
+    await factory.connect(
+      node1Client,
+      { enclaveKey: orion.node1.publicKey, privacyGroupId },
+      network.node1.privateKey
+    );
 
-    st.test("member should get logs", async (sst) => {
-      const logs = await node2Client.priv.getPastLogs(privacyGroupId, {});
-      sst.strictEqual(logs.length, logCount, "sees all logs");
-      sst.end();
-    });
+    const contract = await factory.privateDeploy(privacyGroupId);
+    ({ deployReceipt } = contract);
+    contract1Address = deployReceipt.contractAddress;
+    console.log(deployReceipt);
 
-    st.test("non-member should not get logs", async (sst) => {
-      const logs = await node3Client.priv.getPastLogs(privacyGroupId, {});
-      sst.strictEqual(logs.length, 0, "sees no logs");
-      sst.end();
-    });
-    st.end();
+    // send some transactions from member 1
+    await contract.send("store", [1]);
+    send2Receipt = await contract.send("store", [2]);
+
+    // send some transactions from member 2
+    await factory.connect(
+      node2Client,
+      { enclaveKey: orion.node2.publicKey, privacyGroupId },
+      network.node2.privateKey
+    );
+
+    await contract.send("store", [3]);
+    // deploy another contract
+    await factory.connect(
+      node1Client,
+      { enclaveKey: orion.node1.publicKey, privacyGroupId },
+      network.node1.privateKey
+    );
+    const contract2 = await factory.privateDeploy(privacyGroupId);
+    const { deployReceipt: deployReceipt2 } = contract2;
+    contract2Address = deployReceipt2.contractAddress;
+    console.log(deployReceipt2);
+
+    // send a transaction to the second contract
+    send4Receipt = await contract2.send("store", [4]);
   });
 
-  t.test("filters", async (st) => {
-    st.test("should get logs by address", async (sst) => {
+  describe("accessibility", () => {
+    it("creator should get logs", async () => {
+      const logs = await node1Client.priv.getPastLogs(privacyGroupId, {});
+      expect(logs).toHaveLength(logCount);
+    });
+    it("member should get logs", async () => {
+      const logs = await node2Client.priv.getPastLogs(privacyGroupId, {});
+      expect(logs).toHaveLength(logCount);
+    });
+
+    it("non-member should not get logs", async () => {
+      const logs = await node3Client.priv.getPastLogs(privacyGroupId, {});
+      expect(logs).toHaveLength(0);
+    });
+  });
+
+  describe("filters", () => {
+    it("should get logs by address", async () => {
       const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
         address: contract1Address,
       });
-      sst.strictEqual(logs1.length, 3, "sees logs from contract 1");
+      expect(logs1).toHaveLength(3);
 
       const logs2 = await node1Client.priv.getPastLogs(privacyGroupId, {
         address: contract2Address,
       });
-      sst.strictEqual(logs2.length, 1, "sees logs from contract 2");
-
-      sst.end();
+      expect(logs2).toHaveLength(1);
     });
 
-    st.test("should get logs to a given block number", async (sst) => {
+    it("should get logs to a given block number", async () => {
       const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
         toBlock: deployReceipt.blockNumber,
       });
-      sst.strictEqual(logs1.length, 0, "sees logs to deploy tx");
+      expect(logs1).toHaveLength(0);
 
       const logs2 = await node1Client.priv.getPastLogs(privacyGroupId, {
         toBlock: send2Receipt.blockNumber,
       });
-      sst.strictEqual(logs2.length, 2, "sees logs to send tx 2");
+      expect(logs2).toHaveLength(2);
 
       const logs4 = await node1Client.priv.getPastLogs(privacyGroupId, {
         toBlock: send4Receipt.blockNumber,
       });
-      sst.strictEqual(logs4.length, 4, "sees logs to send tx 4");
-
-      sst.end();
+      expect(logs4).toHaveLength(4);
     });
 
-    st.test("should get logs from a given block number", async (sst) => {
+    it("should get logs from a given block number", async () => {
       const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
         fromBlock: deployReceipt.blockNumber,
       });
-      sst.strictEqual(logs1.length, 4, "sees all logs from deploy tx");
+      expect(logs1).toHaveLength(4);
 
       // skip 1
       const logs2 = await node1Client.priv.getPastLogs(privacyGroupId, {
         fromBlock: send2Receipt.blockNumber,
       });
-      sst.strictEqual(logs2.length, 3, "sees logs from send tx 2");
+      expect(logs2).toHaveLength(3);
 
       // skip 3
       const logs4 = await node1Client.priv.getPastLogs(privacyGroupId, {
         fromBlock: send4Receipt.blockNumber,
       });
-      sst.strictEqual(logs4.length, 1, "sees logs from send tx 4");
-
-      sst.end();
+      expect(logs4).toHaveLength(1);
     });
 
-    st.test("should get logs by topic", async (sst) => {
+    it("should get logs by topic", async () => {
       // eslint-disable-next-line no-underscore-dangle
       factory.contract._address = contract1Address;
       const filter = factory.contract.events.stored({});
@@ -149,13 +140,7 @@ test("getLogs", async (t) => {
       const logs1 = await node1Client.priv.getPastLogs(privacyGroupId, {
         topics,
       });
-      sst.strictEqual(logs1.length, 4, "sees logs with topic");
-
-      sst.end();
+      expect(logs1).toHaveLength(4);
     });
-
-    st.end();
   });
-
-  t.end();
 });

@@ -20,13 +20,14 @@ const privacyProxyAbi = require("./solidity/PrivacyProxy.json").output.abi;
 const PrivateTransaction = require("./privateTransaction");
 const { generatePrivacyGroup } = require("./privacyGroup");
 const { PrivateSubscription } = require("./privateSubscription");
+const Priv = require("./priv");
 
 /**
  * Handles elements
  * @name Web3Quorum
  * @class Web3Quorum
  */
-function Web3Quorum(web3, chainId) {
+function Web3Quorum(web3) {
   const GAS_PRICE = 0;
   const GAS_LIMIT = 3000000;
 
@@ -42,6 +43,7 @@ function Web3Quorum(web3, chainId) {
   web3.eea = {};
   web3.privx = {};
   /* eslint-enable no-param-reassign */
+  Object.assign(web3, Priv(web3));
 
   // INTERNAL ==========
   web3.extend({
@@ -52,17 +54,6 @@ function Web3Quorum(web3, chainId) {
         name: "sendRawTransaction",
         call: "eea_sendRawTransaction",
         params: 1,
-      },
-      // priv
-      {
-        name: "call",
-        call: "priv_call",
-        params: 3,
-        inputFormatter: [
-          null, // privacyGroupId
-          null, // tx
-          web3.extend.formatters.inputDefaultBlockNumberFormatter,
-        ],
       },
       {
         name: "getTransactionCount",
@@ -136,7 +127,7 @@ function Web3Quorum(web3, chainId) {
         privateFor: options.privateFor,
         privacyGroupId: options.privacyGroupId,
       })
-      .then((transactionCount) => {
+      .then(async (transactionCount) => {
         tx.nonce = options.nonce || transactionCount;
         tx.gasPrice = GAS_PRICE;
         tx.gasLimit = GAS_LIMIT;
@@ -144,7 +135,7 @@ function Web3Quorum(web3, chainId) {
         tx.value = 0;
         tx.data = options.data;
         // eslint-disable-next-line no-underscore-dangle
-        tx._chainId = chainId;
+        tx._chainId = await web3.eth.getChainId();
         tx.privateFrom = options.privateFrom;
 
         if (options.privateFor) {
@@ -180,7 +171,7 @@ function Web3Quorum(web3, chainId) {
    * @param {int} retries Number of retries to be made to get the private marker transaction receipt
    * @param {int} delay The delay between the retries
    * @returns Promise to resolve the private marker transaction receipt
-   * @memberOf EEAClient
+   * @memberOf Web3Quorum
    */
   const getMarkerTransaction = (txHash, retries, delay) => {
     /* eslint-disable promise/param-names */
@@ -295,7 +286,7 @@ function Web3Quorum(web3, chainId) {
    * Get the transaction count
    * @param options Options passed into `eea_sendRawTransaction`
    * @returns Promise<transaction count | never>
-   * @memberOf EEAClient
+   * @memberOf Web3Quorum
    */
   const getTransactionCount = (options) => {
     let privacyGroupId;
@@ -313,7 +304,7 @@ function Web3Quorum(web3, chainId) {
    * @param options Options passed into `deletePrivacyGroup`
    * - options.privacyGroupId
    * @returns Promise<transaction count | never>
-   * @memberOf EEAClient
+   * @memberOf Web3Quorum
    */
   const deletePrivacyGroup = (options) => {
     // TODO: remove this function and pass arguments individually (breaks API)
@@ -355,28 +346,6 @@ function Web3Quorum(web3, chainId) {
   };
 
   /**
-   * Invokes a private contract function locally
-   * @param options Options passed into `priv_call`
-   * options map can contain the following:
-   * - **privacyGroupId:** Enclave id representing the receivers of the transaction
-   * - **to:** Contract address,
-   * - **data:** Encoded function call (signature + data)
-   * - **blockNumber:** Blocknumber defaults to "latest"
-   * @returns {Promise<AxiosResponse<T>>}
-   */
-  const call = (options) => {
-    const txCall = {};
-    txCall.to = options.to;
-    txCall.data = options.data;
-
-    return web3.privInternal.call(
-      options.privacyGroupId,
-      txCall,
-      options.blockNumber
-    );
-  };
-
-  /**
    * Subscribe to new logs matching a filter
    *
    * If the provider supports subscriptions, it uses `priv_subscribe`, otherwise
@@ -409,7 +378,6 @@ function Web3Quorum(web3, chainId) {
     distributeRawTransaction,
     getTransactionCount,
     getTransactionReceipt,
-    call,
     subscribe,
   });
 

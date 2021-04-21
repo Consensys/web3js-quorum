@@ -1,15 +1,15 @@
 const Web3 = require("web3");
 const Tx = require("ethereumjs-tx");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 const EventEmitter = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 const CrossContractReader = require("../solidity/CrossContractReader/CrossContractReader.json")
   .output.abi;
 
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 
 const storeValueFromNode1 = (address, value) => {
-  const web3 = new EEAClient(new Web3(besu.node1.url), 2018);
+  const web3 = new Web3Quorum(new Web3(network.node1.url));
   const contract = new web3.eth.Contract(EventEmitter);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -21,7 +21,7 @@ const storeValueFromNode1 = (address, value) => {
     .slice(2);
 
   const besuAccount = web3.eth.accounts.privateKeyToAccount(
-    `0x${besu.node1.privateKey}`
+    `0x${network.node1.privateKey}`
   );
   return web3.eth
     .getTransactionCount(besuAccount.address, "pending")
@@ -36,7 +36,7 @@ const storeValueFromNode1 = (address, value) => {
         gasLimit: "0xFFFFFFF",
       };
       const tx = new Tx(rawTx);
-      tx.sign(Buffer.from(besu.node1.privateKey, "hex"));
+      tx.sign(Buffer.from(network.node1.privateKey, "hex"));
       const serializedTx = tx.serialize();
       return web3.eth.sendSignedTransaction(
         `0x${serializedTx.toString("hex")}`
@@ -56,7 +56,7 @@ const getValue = (
   privateFor,
   privateKey
 ) => {
-  const web3 = new EEAClient(new Web3(url), 2018);
+  const web3 = new Web3Quorum(new Web3(url));
 
   const contract = new web3.eth.Contract(CrossContractReader);
 
@@ -93,12 +93,12 @@ const getValue = (
 
 const getValueFromNode1 = (publicAddress, privateAddress) => {
   return getValue(
-    besu.node1.url,
+    network.node1.url,
     publicAddress,
     privateAddress,
     orion.node1.publicKey,
     [orion.node2.publicKey],
-    besu.node1.privateKey
+    network.node1.privateKey
   );
 };
 

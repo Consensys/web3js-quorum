@@ -2,17 +2,17 @@ const fs = require("fs");
 const path = require("path");
 
 const Web3 = require("web3");
-const EEAClient = require("../src");
+const Web3Quorum = require("../src");
 const HumanStandardTokenAbi = require("./solidity/HumanStandardToken/HumanStandardToken.json")
   .output.abi;
 const ethUtil = require("../src/custom-ethjs-util");
-const { orion, besu } = require("./keys.js");
+const { orion, network } = require("./keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "./solidity/EventEmitter/EventEmitter.bin")
 );
 
-const web3 = new EEAClient(new Web3(besu.node1.url), 2018);
+const web3 = new Web3Quorum(new Web3(network.node1.url));
 
 const contract = new web3.eth.Contract(HumanStandardTokenAbi);
 
@@ -34,7 +34,7 @@ const contractOptions = {
   data: `0x${binary}${constructorArgs}`,
   privateFrom: orion.node1.publicKey,
   privateFor: [orion.node1.publicKey],
-  privateKey: besu.node1.privateKey,
+  privateKey: network.node1.privateKey,
 };
 
 web3.eea
@@ -59,7 +59,7 @@ web3.eea
       return element.name === "transfer";
     });
     const transferTo = `0x${ethUtil
-      .privateToAddress(Buffer.from(besu.node2.privateKey, "hex"))
+      .privateToAddress(Buffer.from(network.node2.privateKey, "hex"))
       .toString("hex")}`;
     const functionArgs = web3.eth.abi
       .encodeParameters(functionAbi.inputs, [transferTo, 1])
@@ -70,7 +70,7 @@ web3.eea
       data: functionAbi.signature + functionArgs,
       privateFrom: orion.node1.publicKey,
       privateFor: [orion.node2.publicKey],
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     });
   })
   .then((transactionHash) => {

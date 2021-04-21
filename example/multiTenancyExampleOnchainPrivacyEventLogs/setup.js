@@ -1,18 +1,17 @@
 const Web3 = require("web3");
 const fs = require("fs");
 const path = require("path");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
-const { besu, orion } = require("../keys");
+const { network, orion } = require("../keys");
 const { createHttpProvider } = require("../helpers.js");
 
 const bytecode = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.bin")
 );
 
-const node = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const node = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
 );
 
 async function run() {
@@ -29,7 +28,7 @@ async function run() {
       participants: addresses,
       enclaveKey: orion.node1.publicKey,
       privateFrom: orion.node1.publicKey,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     }
   );
   console.log("Creation result");
@@ -51,7 +50,7 @@ async function run() {
       data: `0x${bytecode}`,
       privateFrom: enclaveKey,
       privacyGroupId,
-      privateKey: besu.node1.privateKey,
+      privateKey: network.node1.privateKey,
     })
     .then((hash) => {
       return node.priv.getTransactionReceipt(hash, enclaveKey);

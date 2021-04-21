@@ -1,14 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
-const { besu, orion } = require("../keys");
+const { network, orion } = require("../keys");
 const { createHttpProvider } = require("../helpers.js");
 
-const node = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const node = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
 );
 const params = JSON.parse(fs.readFileSync(path.join(__dirname, "params.json")));
 
@@ -21,7 +20,7 @@ async function run() {
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
     privacyGroupId,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   });
 
   console.log(addResult);

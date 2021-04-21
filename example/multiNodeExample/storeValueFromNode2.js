@@ -1,12 +1,12 @@
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 const EventEmitterAbi = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 
 const storeValueFromNode2 = (address, value) => {
-  const web3 = new EEAClient(new Web3(besu.node2.url), 2018);
+  const web3 = new Web3Quorum(new Web3(network.node2.url));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -22,7 +22,7 @@ const storeValueFromNode2 = (address, value) => {
     data: functionAbi.signature + functionArgs,
     privateFrom: orion.node2.publicKey,
     privateFor: [orion.node1.publicKey],
-    privateKey: besu.node2.privateKey,
+    privateKey: network.node2.privateKey,
   };
   return web3.eea
     .sendRawTransaction(functionCall)
@@ -40,7 +40,7 @@ const storeValueFromNode2 = (address, value) => {
 };
 
 const getValue = (url, address, privateFrom, privateFor, privateKey) => {
-  const web3 = new EEAClient(new Web3(url), 2018);
+  const web3 = new Web3Quorum(new Web3(url));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
   // eslint-disable-next-line no-underscore-dangle
@@ -72,31 +72,31 @@ const getValue = (url, address, privateFrom, privateFor, privateKey) => {
 
 const getValueFromNode1 = (address) => {
   return getValue(
-    besu.node1.url,
+    network.node1.url,
     address,
     orion.node1.publicKey,
     [orion.node2.publicKey],
-    besu.node1.privateKey
+    network.node1.privateKey
   );
 };
 
 const getValueFromNode2 = (address) => {
   return getValue(
-    besu.node2.url,
+    network.node2.url,
     address,
     orion.node2.publicKey,
     [orion.node1.publicKey],
-    besu.node2.privateKey
+    network.node2.privateKey
   );
 };
 
 const getValueFromNode3 = (address) => {
   return getValue(
-    besu.node3.url,
+    network.node3.url,
     address,
     orion.node3.publicKey,
     [orion.node1.publicKey],
-    besu.node3.privateKey
+    network.node3.privateKey
   );
 };
 

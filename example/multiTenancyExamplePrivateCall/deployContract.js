@@ -1,18 +1,17 @@
 const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
-const EEAClient = require("../../src");
+const Web3Quorum = require("../../src");
 
-const { orion, besu } = require("../keys.js");
+const { orion, network } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.bin")
 );
 
-const node1 = new EEAClient(
-  new Web3(createHttpProvider(orion.node1.jwt, besu.node1.url)),
-  2018
+const node1 = new Web3Quorum(
+  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
 );
 
 const createEventEmitterContract = (privacyGroupId) => {
@@ -20,7 +19,7 @@ const createEventEmitterContract = (privacyGroupId) => {
     data: `0x${binary}`,
     privateFrom: orion.node1.publicKey,
     privacyGroupId,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   };
   return node1.eea.sendRawTransaction(contractOptions);
 };
@@ -38,7 +37,7 @@ module.exports = async () => {
     participants: [orion.node1.publicKey, orion.node2.publicKey],
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
-    privateKey: besu.node1.privateKey,
+    privateKey: network.node1.privateKey,
   });
 
   console.log("Created privacy group");

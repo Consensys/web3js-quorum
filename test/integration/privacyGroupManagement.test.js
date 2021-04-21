@@ -1,24 +1,19 @@
-const test = require("tape");
-
 const createGroup = require("../../example/privacyGroupManagement/createPrivacyGroup");
 const findGroup = require("../../example/privacyGroupManagement/findPrivacyGroup");
 const deleteGroup = require("../../example/privacyGroupManagement/deletePrivacyGroup");
 
-test("[MultiNodeExample]: Can manage privacy groups", (t) => {
-  t.test("can create and find privacy group", async (st) => {
+describe("[MultiNodeExample]: Can manage privacy groups", () => {
+  it("can create and find privacy group", async () => {
     const createdGroupId = await createGroup.createPrivacyGroup();
-
     const returnedPrivacyGroup = await findGroup.findPrivacyGroup();
-
     const listWithPrivacyGroup = returnedPrivacyGroup.filter((i) => {
       return i.privacyGroupId === createdGroupId;
     });
 
-    st.equal(createdGroupId, listWithPrivacyGroup[0].privacyGroupId);
-    st.end();
+    expect(createdGroupId).toEqual(listWithPrivacyGroup[0].privacyGroupId);
   });
 
-  t.test("can create, find and delete privacy group", async (st) => {
+  it("can create, find and delete privacy group", async () => {
     const createdGroupId = await createGroup.createPrivacyGroup();
 
     let returnedPrivacyGroup = await findGroup.findPrivacyGroup();
@@ -27,11 +22,11 @@ test("[MultiNodeExample]: Can manage privacy groups", (t) => {
       return i.privacyGroupId === createdGroupId;
     });
 
-    st.equal(createdGroupId, listWithPrivacyGroup[0].privacyGroupId);
+    expect(createdGroupId).toEqual(listWithPrivacyGroup[0].privacyGroupId);
 
     const deletedGroup = await deleteGroup.deletePrivacyGroup(createdGroupId);
 
-    st.equal(deletedGroup, createdGroupId);
+    expect(deletedGroup).toEqual(createdGroupId);
 
     returnedPrivacyGroup = await findGroup.findPrivacyGroup();
 
@@ -39,12 +34,10 @@ test("[MultiNodeExample]: Can manage privacy groups", (t) => {
       return i.privacyGroupId === deletedGroup;
     });
 
-    st.equal(listWithPrivacyGroupAfterDelete.length, 0);
-
-    st.end();
+    expect(listWithPrivacyGroupAfterDelete).toHaveLength(0);
   });
 
-  t.test("create twice and delete once", async (st) => {
+  it("create twice and delete once", async () => {
     const newPrivacyGroup1 = await createGroup.createPrivacyGroup();
     const newPrivacyGroup2 = await createGroup.createPrivacyGroup();
 
@@ -54,17 +47,17 @@ test("[MultiNodeExample]: Can manage privacy groups", (t) => {
       return i.privacyGroupId === newPrivacyGroup1;
     });
 
-    st.equal(newListWithPrivacyGroup1.length, 1);
+    expect(newListWithPrivacyGroup1).toHaveLength(1);
 
     let newListWithPrivacyGroup2 = privacyGroupList.filter((i) => {
       return i.privacyGroupId === newPrivacyGroup2;
     });
 
-    st.equal(newListWithPrivacyGroup2.length, 1);
+    expect(newListWithPrivacyGroup2).toHaveLength(1);
 
     const deletedGroup = await deleteGroup.deletePrivacyGroup(newPrivacyGroup1);
 
-    st.equal(deletedGroup, newPrivacyGroup1);
+    expect(deletedGroup).toEqual(newPrivacyGroup1);
 
     privacyGroupList = await findGroup.findPrivacyGroup();
 
@@ -72,14 +65,12 @@ test("[MultiNodeExample]: Can manage privacy groups", (t) => {
       return i.privacyGroupId === newPrivacyGroup1;
     });
 
-    st.equal(newListWithPrivacyGroup1.length, 0);
+    expect(newListWithPrivacyGroup1).toHaveLength(0);
 
     newListWithPrivacyGroup2 = privacyGroupList.filter((i) => {
       return i.privacyGroupId === newPrivacyGroup2;
     });
 
-    st.equal(newListWithPrivacyGroup2.length, 1);
-
-    st.end();
+    expect(newListWithPrivacyGroup2).toHaveLength(1);
   });
 });

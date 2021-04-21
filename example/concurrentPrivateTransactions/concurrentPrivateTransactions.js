@@ -1,10 +1,10 @@
 const Web3 = require("web3");
 const Tx = require("ethereumjs-tx");
 const PromisePool = require("async-promise-pool");
-const EEAClient = require("../../src");
-const { orion, besu } = require("../keys.js");
+const Web3Quorum = require("../../src");
+const { orion, network } = require("../keys.js");
 
-const web3 = new EEAClient(new Web3(besu.node1.url), 2018);
+const web3 = new Web3Quorum(new Web3(network.node1.url));
 
 /*
   Transactions are sent in batches.
@@ -18,7 +18,7 @@ const BATCH_SIZE = 5;
 const privacyOptions = {
   privateFrom: orion.node1.publicKey,
   privateFor: [orion.node1.publicKey],
-  privateKey: besu.node1.privateKey,
+  privateKey: network.node1.privateKey,
 };
 
 const deployContractData =
@@ -57,7 +57,7 @@ function sendPMT(sender, enclaveKey, nonce) {
   };
 
   const tx = new Tx(rawTx);
-  tx.sign(Buffer.from(besu.node1.privateKey, "hex"));
+  tx.sign(Buffer.from(network.node1.privateKey, "hex"));
 
   const hexTx = `0x${tx.serialize().toString("hex")}`;
 
@@ -76,7 +76,7 @@ function sendPMT(sender, enclaveKey, nonce) {
 
 function printPrivTxDetails(pmtRcpt) {
   return web3.priv
-    .getTransactionReceipt(pmtRcpt.transactionHash, besu.node1.privateKey)
+    .getTransactionReceipt(pmtRcpt.transactionHash, network.node1.privateKey)
     .then((privTxRcpt) => {
       console.log(
         `=== Private TX ${privTxRcpt.transactionHash}\n` +
