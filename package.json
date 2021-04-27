@@ -7,7 +7,7 @@
     "test": "npm run test:unit && npm run test:integration && npm run test:onchain",
     "test:unit": "jest src",
     "pretest:integration": "BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=false npm run network:up",
-    "test:integration": "jest integration-tests/*.test.js",
+    "test:integration": "jest integration-tests/*.test.js --runInBand",
     "posttest:integration": "npm run network:down",
     "cover": "npm run cover:unit && npm run cover:integration && npm run cover:onchain && npm run cover:report",
     "cover:unit": "npm run test:unit -- --coverage",
