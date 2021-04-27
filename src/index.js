@@ -15,12 +15,11 @@
 
 const crypto = require("crypto");
 
-const { privateToAddress } = require("./custom-ethjs-util");
-const privacyProxyAbi = require("./solidity/PrivacyProxy.json").output.abi;
-const PrivateTransaction = require("./privateTransaction");
+const privacyProxyAbi = require("../solidity/PrivacyProxy.json").output.abi;
 const { generatePrivacyGroup } = require("./privacyGroup");
 const { PrivateSubscription } = require("./privateSubscription");
 const Priv = require("./priv");
+const FlexiblePrivacyGroup = require("./flexiblePrivacyGroup");
 
 /**
  * Handles elements
@@ -28,9 +27,6 @@ const Priv = require("./priv");
  * @class Web3Quorum
  */
 function Web3Quorum(web3) {
-  const GAS_PRICE = 0;
-  const GAS_LIMIT = 3000000;
-
   if (web3.currentProvider == null) {
     throw new Error("Missing provider");
   }
@@ -40,176 +36,14 @@ function Web3Quorum(web3) {
   web3.priv = {
     subscriptionPollingInterval: 1000,
   };
-  web3.eea = {};
   web3.privx = {};
+  web3.eth.flexiblePrivacyGroup = {};
   /* eslint-enable no-param-reassign */
   Object.assign(web3.priv, Priv(web3).priv);
-
-  // INTERNAL ==========
-  web3.extend({
-    property: "privInternal",
-    methods: [
-      {
-        name: "subscribe",
-        call: "priv_subscribe",
-        params: 3, // type, privacyGroupId, filter
-      },
-      {
-        name: "unsubscribe",
-        call: "priv_unsubscribe",
-        params: 2, // privacyGroupId, filterId
-      },
-      // privx
-      {
-        name: "findOnChainPrivacyGroup",
-        call: "privx_findOnChainPrivacyGroup",
-        params: 1,
-      },
-    ],
-  });
-
-  /**
-   * Send a transaction to `eea_sendRawTransaction` or `priv_distributeRawTransaction`
-   * @param options Used to create the private transaction
-   * - options.privateKey
-   * - options.privateFrom
-   * - options.privacyGroupId
-   * - options.privateFor
-   * - options.nonce
-   * - options.to
-   * - options.data
-   */
-  const genericSendRawTransaction = (options, method) => {
-    if (options.privacyGroupId && options.privateFor) {
-      throw Error("privacyGroupId and privateFor are mutually exclusive");
-    }
-    const tx = new PrivateTransaction();
-    const privateKeyBuffer = Buffer.from(options.privateKey, "hex");
-    const from = `0x${privateToAddress(privateKeyBuffer).toString("hex")}`;
-    return web3.priv
-      .getTransactionCount(from, options.privacyGroupId)
-      .then(async (transactionCount) => {
-        tx.nonce = options.nonce || transactionCount;
-        tx.gasPrice = GAS_PRICE;
-        tx.gasLimit = GAS_LIMIT;
-        tx.to = options.to;
-        tx.value = 0;
-        tx.data = options.data;
-        // eslint-disable-next-line no-underscore-dangle
-        tx._chainId = await web3.eth.getChainId();
-        tx.privateFrom = options.privateFrom;
-
-        if (options.privateFor) {
-          tx.privateFor = options.privateFor;
-        }
-        if (options.privacyGroupId) {
-          tx.privacyGroupId = options.privacyGroupId;
-        }
-        tx.restriction = "restricted";
-
-        tx.sign(privateKeyBuffer);
-
-        const signedRlpEncoded = tx.serialize().toString("hex");
-
-        let result;
-        if (method === "eea_sendRawTransaction") {
-          result = web3.priv.sendRawTransaction(signedRlpEncoded);
-        } else if (method === "priv_distributeRawTransaction") {
-          result = web3.priv.distributeRawTransaction(signedRlpEncoded);
-        }
-
-        if (result != null) {
-          return result;
-        }
-
-        throw new Error(`Unknown method ${method}`);
-      });
-  };
-
-  /**
-   * Returns the Private Marker transaction
-   * @param {string} txHash The transaction hash
-   * @param {int} retries Number of retries to be made to get the private marker transaction receipt
-   * @param {int} delay The delay between the retries
-   * @returns Promise to resolve the private marker transaction receipt
-   * @memberOf Web3Quorum
-   */
-  const getMarkerTransaction = (txHash, retries, delay) => {
-    /* eslint-disable promise/param-names */
-    /* eslint-disable promise/avoid-new */
-
-    const waitFor = (ms) => {
-      return new Promise((r) => {
-        return setTimeout(r, ms);
-      });
-    };
-
-    let notified = false;
-    const retryOperation = (operation, times) => {
-      return new Promise((resolve, reject) => {
-        return operation()
-          .then((result) => {
-            if (result == null) {
-              if (!notified) {
-                console.log("Waiting for transaction to be mined ...");
-                notified = true;
-              }
-              if (delay === 0) {
-                throw new Error(
-                  `Timed out after ${retries} attempts waiting for transaction to be mined`
-                );
-              } else {
-                const waitInSeconds = (retries * delay) / 1000;
-                throw new Error(
-                  `Timed out after ${waitInSeconds}s waiting for transaction to be mined`
-                );
-              }
-            } else {
-              return resolve();
-            }
-          })
-          .catch((reason) => {
-            if (times - 1 > 0) {
-              // eslint-disable-next-line promise/no-nesting
-              return waitFor(delay)
-                .then(retryOperation.bind(null, operation, times - 1))
-                .then(resolve)
-                .catch(reject);
-            }
-            return reject(reason);
-          });
-      });
-    };
-
-    const operation = () => {
-      return web3.eth.getTransactionReceipt(txHash);
-    };
-
-    return retryOperation(operation, retries);
-  };
-
-  const distributeRawTransaction = (options) => {
-    return genericSendRawTransaction(options, "priv_distributeRawTransaction");
-  };
-
-  /**
-   * Get the private transaction Receipt.
-   * @param {string} txHash Transaction Hash of the marker transaction
-   * @param {string} enclavePublicKey Public key used to start-up the Enclave
-   * @param {int} retries Number of retries to be made to get the private marker transaction receipt
-   * @param {int} delay The delay between the retries
-   * @returns {Promise<AxiosResponse<any> | never>}
-   */
-  const getTransactionReceipt = (
-    txHash,
-    enclavePublicKey,
-    retries = 300,
-    delay = 1000
-  ) => {
-    return getMarkerTransaction(txHash, retries, delay).then(() => {
-      return web3.privInternal.getTransactionReceipt(txHash, enclavePublicKey);
-    });
-  };
+  Object.assign(
+    web3.eth.flexiblePrivacyGroup,
+    FlexiblePrivacyGroup(web3).eth.flexiblePrivacyGroup
+  );
 
   /**
    * Subscribe to new logs matching a filter
@@ -239,32 +73,7 @@ function Web3Quorum(web3) {
 
   Object.assign(web3.priv, {
     generatePrivacyGroup,
-    distributeRawTransaction,
-    subscribe,
-  });
-
-  // EEA ==========
-
-  /**
-   * Send the Raw transaction to the Besu node
-   * @param options Map to send a raw transaction to besu
-   * options map can contain the following:
-   * - privateKey : Private Key used to sign transaction with
-   * - privateFrom : Enclave public key
-   * - privateFor : Enclave keys to send the transaction to
-   * - privacyGroupId : Enclave id representing the receivers of the transaction
-   * - nonce(Optional) : If not provided, will be calculated using `eea_getTransctionCount`
-   * - to : The address to send the transaction
-   * - data : Data to be sent in the transaction
-   *
-   * @returns {Promise<AxiosResponse<any> | never>}
-   */
-  const sendRawTransaction = (options) => {
-    return genericSendRawTransaction(options, "eea_sendRawTransaction");
-  };
-
-  Object.assign(web3.eea, {
-    sendRawTransaction,
+    subscribeWithPooling: subscribe,
   });
 
   // PRIVX ==========
@@ -281,7 +90,6 @@ function Web3Quorum(web3) {
    */
   const setPrivacyGroupLockState = (options) => {
     const contract = new web3.eth.Contract(privacyProxyAbi);
-    // eslint-disable-next-line no-underscore-dangle
     const functionAbi = contract._jsonInterface.find((e) => {
       return e.name === (options.lock ? "lock" : "unlock");
     });
@@ -294,13 +102,10 @@ function Web3Quorum(web3) {
       privateKey: options.privateKey,
     };
 
-    return web3.eea
-      .sendRawTransaction(functionCall)
+    return web3.priv
+      .generateAndSendRawTransaction(functionCall)
       .then(async (transactionHash) => {
-        return web3.priv.getTransactionReceipt(
-          transactionHash,
-          options.publicKey
-        );
+        return web3.priv.waitForTransactionReceipt(transactionHash);
       });
   };
 
@@ -316,7 +121,6 @@ function Web3Quorum(web3) {
    */
   const createXPrivacyGroup = (options) => {
     const contract = new web3.eth.Contract(privacyProxyAbi);
-    // eslint-disable-next-line no-underscore-dangle
     const functionAbi = contract._jsonInterface.find((e) => {
       return e.name === "addParticipants";
     });
@@ -339,12 +143,11 @@ function Web3Quorum(web3) {
       privacyGroupId,
       privateKey: options.privateKey,
     };
-    return web3.eea.sendRawTransaction(functionCall).then((transactionHash) => {
-      return web3.priv.getTransactionReceipt(
-        transactionHash,
-        options.publicKey
-      );
-    });
+    return web3.priv
+      .generateAndSendRawTransaction(functionCall)
+      .then((transactionHash) => {
+        return web3.priv.waitForTransactionReceipt(transactionHash);
+      });
   };
 
   /**
@@ -383,7 +186,6 @@ function Web3Quorum(web3) {
    */
   const removeFromPrivacyGroup = (options) => {
     const contract = new web3.eth.Contract(privacyProxyAbi);
-    // eslint-disable-next-line no-underscore-dangle
     const functionAbi = contract._jsonInterface.find((e) => {
       return e.name === "removeParticipant";
     });
@@ -400,29 +202,15 @@ function Web3Quorum(web3) {
       privacyGroupId: options.privacyGroupId,
       privateKey: options.privateKey,
     };
-    return web3.eea.sendRawTransaction(functionCall).then((transactionHash) => {
-      return web3.priv.getTransactionReceipt(
-        transactionHash,
-        options.publicKey
-      );
-    });
-  };
-
-  /**
-   * Find privacy groups
-   * @param options Map to find the group
-   * options map can contain the following:
-   * - **addresses:** the members of the privacy group
-   * @returns Promise<privacy group | never>
-   */
-  const findOnChainPrivacyGroup = (options) => {
-    // TODO: remove this function and pass arguments individually (breaks API)
-    return web3.privInternal.findOnChainPrivacyGroup(options.addresses);
+    return web3.priv
+      .generateAndSendRawTransaction(functionCall)
+      .then((transactionHash) => {
+        return web3.priv.waitForTransactionReceipt(transactionHash);
+      });
   };
 
   Object.assign(web3.privx, {
     createPrivacyGroup: createXPrivacyGroup,
-    findOnChainPrivacyGroup,
     removeFromPrivacyGroup,
     addToPrivacyGroup,
     setPrivacyGroupLockState,

@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const Web3 = require("web3");
 
-const Web3Quorum = require("../../../src");
+const Web3Quorum = require("../../src");
 
 const { network, orion } = require("../support/keys");
 const { contracts } = require("../support/helpers");
@@ -59,9 +59,9 @@ describe("On chain privacy", () => {
 
   // findOnChainPrivacyGroup
   it("should find privacy group after creation", async () => {
-    const found = await node1Client.privx.findOnChainPrivacyGroup({
-      addresses: participants,
-    });
+    const found = await node1Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+      participants
+    );
 
     // the one we created should be in there
     const created = found.find((group) => {
@@ -76,9 +76,9 @@ describe("On chain privacy", () => {
   });
 
   it("non-member should not find privacy group(s)", async () => {
-    const found = await node2Client.privx.findOnChainPrivacyGroup({
-      addresses: participants,
-    });
+    const found = await node2Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+      participants
+    );
     expect(found).toHaveLength(0);
   });
 
@@ -108,8 +108,8 @@ describe("On chain privacy", () => {
   let readValue;
   describe("interaction with contract", () => {
     beforeAll(async () => {
-      const receipt = await node1Client.eea
-        .sendRawTransaction({
+      const receipt = await node1Client.priv
+        .generateAndSendRawTransaction({
           data: `0x${contracts.eventEmitter.bytecode}`,
           privateFrom: orion.node1.publicKey,
           privacyGroupId,
@@ -117,10 +117,7 @@ describe("On chain privacy", () => {
         })
         .then((hash) => {
           console.log("hash: ", hash);
-          return node1Client.priv.getTransactionReceipt(
-            hash,
-            orion.node1.publicKey
-          );
+          return node1Client.priv.waitForTransactionReceipt(hash);
         });
 
       ({ contractAddress } = receipt);
@@ -162,8 +159,8 @@ describe("On chain privacy", () => {
 
     // Write
     const writeValue = async (node, enclaveKey, privateKey, value) => {
-      return node.eea
-        .sendRawTransaction({
+      return node.priv
+        .generateAndSendRawTransaction({
           to: contractAddress,
           data: contract.methods.store([value]).encodeABI(),
           privateFrom: enclaveKey,
@@ -171,7 +168,7 @@ describe("On chain privacy", () => {
           privateKey,
         })
         .then((transactionHash) => {
-          return node.priv.getTransactionReceipt(transactionHash, enclaveKey);
+          return node.priv.waitForTransactionReceipt(transactionHash);
         });
     };
 
@@ -197,7 +194,12 @@ describe("On chain privacy", () => {
 
     it("non-member node should NOT be able to write to the contract", async () => {
       await expect(
-        writeValue(node3Client, orion.node3.publicKey, network.node3.privateKey, 3)
+        writeValue(
+          node3Client,
+          orion.node3.publicKey,
+          network.node3.privateKey,
+          3
+        )
       ).rejects.toThrowError();
     });
   });
@@ -216,8 +218,8 @@ describe("On chain privacy", () => {
       // member node updates contract
       const newValue = 4;
 
-      const updateReceipt = await node1Client.eea
-        .sendRawTransaction({
+      const updateReceipt = await node1Client.priv
+        .generateAndSendRawTransaction({
           to: contractAddress,
           data: contract.methods.store([newValue]).encodeABI(),
           privateFrom: orion.node1.publicKey,
@@ -225,10 +227,7 @@ describe("On chain privacy", () => {
           privateKey: network.node1.privateKey,
         })
         .then((transactionHash) => {
-          return node1Client.priv.getTransactionReceipt(
-            transactionHash,
-            orion.node1.publicKey
-          );
+          return node1Client.priv.waitForTransactionReceipt(transactionHash);
         });
       expect(updateReceipt.status).toEqual("0x1");
 
@@ -250,9 +249,9 @@ describe("On chain privacy", () => {
     });
 
     it("removed node should not find the privacy group", async () => {
-      const result = await node2Client.privx.findOnChainPrivacyGroup({
-        addresses: [orion.node2.publicKey],
-      });
+      const result = await node2Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+        [orion.node2.publicKey]
+      );
       expect(result).toHaveLength(0);
     });
   });

@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 /**
  * Interacts with a private contract
  * @param {EEAClient} client
@@ -27,8 +25,8 @@ function PrivateContract(client, contract, address, options) {
 PrivateContract.prototype.send = async function send(method, params) {
   const data = this.contract.methods[method](params).encodeABI();
 
-  return this.client.eea
-    .sendRawTransaction({
+  return this.client.priv
+    .generateAndSendRawTransaction({
       to: this.address,
       data,
       privateFrom: this.privacyOptions.enclaveKey,
@@ -36,10 +34,7 @@ PrivateContract.prototype.send = async function send(method, params) {
       privateKey: this.privateKey,
     })
     .then((transactionHash) => {
-      return this.client.priv.getTransactionReceipt(
-        transactionHash,
-        this.enclaveKey
-      );
+      return this.client.priv.waitForTransactionReceipt(transactionHash);
     });
 };
 
@@ -87,15 +82,15 @@ ContractFactory.prototype.privateDeploy = async function privateDeploy(
 ) {
   this._checkConnection();
 
-  const receipt = await this.client.eea
-    .sendRawTransaction({
+  const receipt = await this.client.priv
+    .generateAndSendRawTransaction({
       data: `0x${this.bytecode}`,
       privateFrom: this.privacyOptions.enclaveKey,
       privacyGroupId,
       privateKey: this.privateKey,
     })
     .then((hash) => {
-      return this.client.priv.getTransactionReceipt(hash, this.enclaveKey);
+      return this.client.priv.waitForTransactionReceipt(hash);
     });
   this.deployedTx = receipt;
 

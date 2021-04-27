@@ -21,10 +21,10 @@ const { BN, rlp } = ethUtils;
 
 const _typeof =
   typeof Symbol === "function" && typeof Symbol.iterator === "symbol"
-    ? function(obj) {
+    ? function (obj) {
         return typeof obj;
       }
-    : function(obj) {
+    : function (obj) {
         return obj &&
           typeof Symbol === "function" &&
           obj.constructor === Symbol &&
@@ -32,7 +32,6 @@ const _typeof =
           ? "symbol"
           : typeof obj;
       };
-
 
 /**
  * Attempts to turn a value into a `Buffer`. As input it supports `Buffer`, `String`, `Number`, null/undefined, `BN` and other objects with a `toArray()` method.
@@ -100,10 +99,10 @@ function defineProperties(self, fields, data) {
   self._fields = [];
 
   // attach the `toJSON`
-  self.toJSON = function(label) {
+  self.toJSON = function (label) {
     if (label) {
       const obj = {};
-      self._fields.forEach(function(field) {
+      self._fields.forEach(function (field) {
         obj[field] = `0x${self[field].toString("hex")}`;
       });
       return obj;
@@ -130,7 +129,7 @@ function defineProperties(self, fields, data) {
     return rlp.encode(arr);
   };
 
-  fields.forEach(function(field, i) {
+  fields.forEach(function (field, i) {
     self._fields.push(field.name);
     function getter() {
       return self.raw[i];
@@ -167,7 +166,7 @@ function defineProperties(self, fields, data) {
       enumerable: true,
       configurable: true,
       get: getter,
-      set: setter
+      set: setter,
     });
 
     if (field.default) {
@@ -180,7 +179,7 @@ function defineProperties(self, fields, data) {
         enumerable: false,
         configurable: true,
         set: setter,
-        get: getter
+        get: getter,
       });
     }
   });
@@ -210,7 +209,7 @@ function defineProperties(self, fields, data) {
       }
 
       // make sure all the items are buffers
-      data.forEach(function(d, i) {
+      data.forEach(function (d, i) {
         // handle array of Buffer
         let v;
         if (fields[i].bufferArray) {
@@ -225,7 +224,7 @@ function defineProperties(self, fields, data) {
       (typeof data === "undefined" ? "undefined" : _typeof(data)) === "object"
     ) {
       const keys = Object.keys(data);
-      fields.forEach(function(field) {
+      fields.forEach(function (field) {
         if (keys.indexOf(field.name) !== -1)
           self[field.name] = data[field.name];
         if (keys.indexOf(field.alias) !== -1)
@@ -240,5 +239,5 @@ function defineProperties(self, fields, data) {
 module.exports = {
   ...ethUtils,
   toBuffer,
-  defineProperties
+  defineProperties,
 };

@@ -21,7 +21,7 @@ const createEventEmitterContract = (privacyGroupId) => {
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
-  return node1.eea.sendRawTransaction(contractOptions);
+  return node1.priv.generateAndSendRawTransaction(contractOptions);
 };
 
 const getPrivateContractAddress = (transactionHash) => {

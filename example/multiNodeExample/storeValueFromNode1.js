@@ -9,7 +9,6 @@ const storeValueFromNode1 = (address, value) => {
   const web3 = new Web3Quorum(new Web3(network.node1.url));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === "store";
   });
@@ -24,14 +23,11 @@ const storeValueFromNode1 = (address, value) => {
     privateFor: [orion.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
-  return web3.eea
-    .sendRawTransaction(functionCall)
+  return web3.priv
+    .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
       console.log("Transaction Hash:", transactionHash);
-      return web3.priv.getTransactionReceipt(
-        transactionHash,
-        orion.node1.publicKey
-      );
+      return web3.priv.waitForTransactionReceipt(transactionHash);
     })
     .then((result) => {
       console.log("Event Emitted:", result.logs[0].data);
@@ -44,7 +40,6 @@ const getValue = (url, address, privateFrom, privateFor, privateKey) => {
 
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === "value";
   });
@@ -57,13 +52,10 @@ const getValue = (url, address, privateFrom, privateFor, privateKey) => {
     privateKey,
   };
 
-  return web3.eea
-    .sendRawTransaction(functionCall)
+  return web3.priv
+    .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
-      return web3.priv.getTransactionReceipt(
-        transactionHash,
-        orion.node1.publicKey
-      );
+      return web3.priv.waitForTransactionReceipt(transactionHash);
     })
     .then((result) => {
       console.log(`Get Value from ${url}:`, result.output);

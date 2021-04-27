@@ -1,6 +1,6 @@
-const createGroup = require("../../example/privacyGroupManagement/createPrivacyGroup");
-const findGroup = require("../../example/privacyGroupManagement/findPrivacyGroup");
-const deleteGroup = require("../../example/privacyGroupManagement/deletePrivacyGroup");
+const createGroup = require("../example/privacyGroupManagement/createPrivacyGroup");
+const findGroup = require("../example/privacyGroupManagement/findPrivacyGroup");
+const deleteGroup = require("../example/privacyGroupManagement/deletePrivacyGroup");
 
 describe("[MultiNodeExample]: Can manage privacy groups", () => {
   it("can create and find privacy group", async () => {

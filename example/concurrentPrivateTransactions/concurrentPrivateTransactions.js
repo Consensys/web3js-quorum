@@ -39,7 +39,7 @@ function getPublicNonce(account) {
 
 // distribute payload to participants
 function distributePayload(payload, nonce) {
-  return web3.priv.distributeRawTransaction({
+  return web3.priv.generateAndDistributeRawTransaction({
     ...privacyOptions,
     data: payload,
     nonce,

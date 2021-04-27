@@ -58,7 +58,7 @@ const createPrivateCrossContractReader = () => {
     privateFor: [orion.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
-  return web3.eea.sendRawTransaction(contractOptions);
+  return web3.priv.generateAndSendRawTransaction(contractOptions);
 };
 
 const getPrivateContractAddress = (transactionHash) => {

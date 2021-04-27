@@ -3,7 +3,7 @@ const path = require("path");
 
 const { ContractFactory } = require("./contractFactory");
 
-const artifactDir = path.join(__dirname, "../../../example/solidity");
+const artifactDir = path.join(__dirname, "../../example/solidity");
 const eventEmitterBytecode = fs.readFileSync(
   path.join(artifactDir, "EventEmitter/EventEmitter.bin")
 );
@@ -13,7 +13,7 @@ const eventEmitterArtifacts = JSON.parse(
 );
 const eventEmitterAbi = eventEmitterArtifacts.output.abi;
 
-const privacyArtifactDir = path.join(__dirname, "../../../src/solidity");
+const privacyArtifactDir = path.join(__dirname, "../../solidity");
 const privacyInterfaceAbi = JSON.parse(
   fs.readFileSync(path.join(privacyArtifactDir, "PrivacyInterface.abi"))
 );

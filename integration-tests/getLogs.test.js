@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const Web3Quorum = require("../../src");
+const Web3Quorum = require("../src");
 
 const { contracts, ContractFactory } = require("./support/helpers");
 const { network, orion } = require("./support/keys");
@@ -71,6 +71,7 @@ describe("getLogs", () => {
       const logs = await node1Client.priv.getLogs(privacyGroupId, {});
       expect(logs).toHaveLength(logCount);
     });
+
     it("member should get logs", async () => {
       const logs = await node2Client.priv.getLogs(privacyGroupId, {});
       expect(logs).toHaveLength(logCount);
@@ -132,7 +133,6 @@ describe("getLogs", () => {
     });
 
     it("should get logs by topic", async () => {
-      // eslint-disable-next-line no-underscore-dangle
       factory.contract._address = contract1Address;
       const filter = factory.contract.events.stored({});
       const { topics } = filter.arguments[0];

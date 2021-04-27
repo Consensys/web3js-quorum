@@ -27,8 +27,8 @@ async function run() {
   const to = contractAddress;
   const contract = new node.eth.Contract(abi);
 
-  const writeReceipt = await node.eea
-    .sendRawTransaction({
+  const writeReceipt = await node.priv
+    .generateAndSendRawTransaction({
       to,
       data: contract.methods.store([value]).encodeABI(),
       privateFrom: enclaveKey,

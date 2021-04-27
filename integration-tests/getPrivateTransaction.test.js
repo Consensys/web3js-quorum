@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const Web3Quorum = require("../../src");
+const Web3Quorum = require("../src");
 
 const { contracts } = require("./support/helpers");
 const { network, orion } = require("./support/keys");
@@ -18,18 +18,15 @@ describe("getPrivateTransaction", () => {
     });
 
     // deploy a contract and get the receipt
-    const receipt = await node1Client.eea
-      .sendRawTransaction({
+    const receipt = await node1Client.priv
+      .generateAndSendRawTransaction({
         data: `0x${contracts.eventEmitter.bytecode}`,
         privateFrom: orion.node1.publicKey,
         privacyGroupId,
         privateKey: network.node1.privateKey,
       })
       .then((hash) => {
-        return node1Client.priv.getTransactionReceipt(
-          hash,
-          orion.node1.publicKey
-        );
+        return node1Client.priv.waitForTransactionReceipt(hash);
       });
     publicHash = receipt.commitmentHash;
   });

@@ -4,7 +4,6 @@ const axios = require("axios");
 axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
   const { config } = err;
   if (!config || !config.retry) return Promise.reject(err);
-  /* eslint-disable no-underscore-dangle */
   config.__retryCount = config.__retryCount || 0;
 
   if (config.__retryCount >= config.retry) {

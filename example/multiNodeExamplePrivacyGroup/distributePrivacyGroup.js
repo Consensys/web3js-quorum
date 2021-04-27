@@ -27,7 +27,7 @@ const distributeRawContractCreation = (privacyGroupId) => {
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
-  return web3.priv.distributeRawTransaction(contractOptions);
+  return web3.priv.generateAndDistributeRawTransaction(contractOptions);
 };
 
 const sendPrivacyMarkerTransaction = (enclaveKey) => {

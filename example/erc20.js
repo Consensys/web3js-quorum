@@ -5,7 +5,7 @@ const Web3 = require("web3");
 const Web3Quorum = require("../src");
 const HumanStandardTokenAbi = require("./solidity/HumanStandardToken/HumanStandardToken.json")
   .output.abi;
-const ethUtil = require("../src/custom-ethjs-util");
+const ethUtil = require("../src/utils/custom-ethjs-util");
 const { orion, network } = require("./keys.js");
 
 const binary = fs.readFileSync(
@@ -17,7 +17,6 @@ const web3 = new Web3Quorum(new Web3(network.node1.url));
 const contract = new web3.eth.Contract(HumanStandardTokenAbi);
 
 // create HumanStandardToken constructor
-// eslint-disable-next-line no-underscore-dangle
 const constructorAbi = contract._jsonInterface.find((e) => {
   return e.type === "constructor";
 });
@@ -37,8 +36,8 @@ const contractOptions = {
   privateKey: network.node1.privateKey,
 };
 
-web3.eea
-  .sendRawTransaction(contractOptions)
+web3.priv
+  .generateAndSendRawTransaction(contractOptions)
   .then((hash) => {
     console.log(`Transaction Hash ${hash}`);
     return web3.priv.getTransactionReceipt(hash, orion.node1.publicKey);
@@ -54,7 +53,6 @@ web3.eea
     // contract.methods.transfer(["to", "value"]).send(??)
 
     // already 0x prefixed
-    // eslint-disable-next-line no-underscore-dangle
     const functionAbi = contract._jsonInterface.find((element) => {
       return element.name === "transfer";
     });
@@ -65,7 +63,7 @@ web3.eea
       .encodeParameters(functionAbi.inputs, [transferTo, 1])
       .slice(2);
 
-    return web3.eea.sendRawTransaction({
+    return web3.priv.generateAndSendRawTransaction({
       to: contractAddress,
       data: functionAbi.signature + functionArgs,
       privateFrom: orion.node1.publicKey,

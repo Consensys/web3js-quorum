@@ -19,13 +19,13 @@ const createPrivateEmitterContract = () => {
     privateFor: [orion.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
-  return web3.eea.sendRawTransaction(contractOptions);
+  return web3.priv.generateAndSendRawTransaction(contractOptions);
 };
 
 const getPrivateContractAddress = (transactionHash) => {
   console.log("Transaction Hash ", transactionHash);
   return web3.priv
-    .getTransactionReceipt(transactionHash, orion.node1.publicKey)
+    .waitForTransactionReceipt(transactionHash)
     .then((privateTransactionReceipt) => {
       console.log("Private Transaction Receipt\n", privateTransactionReceipt);
       console.log(

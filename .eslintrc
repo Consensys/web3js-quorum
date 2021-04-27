@@ -28,7 +28,7 @@
       "always"
     ],
     "class-methods-use-this": "warn",
-    "no-underscore-dangle": "warn",
+    "no-underscore-dangle": "off",
     "chai-expect/missing-assertion": 2,
     "chai-expect/terminating-properties": 1,
     "promise/always-return": "error",
@@ -43,7 +43,7 @@
     "promise/no-new-statics": "error",
     "promise/no-return-in-finally": "warn",
     "promise/valid-params": "warn",
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["test/**/*.js", "example/**/*.js"]}],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["integration-tests/**/*.js", "example/**/*.js"]}],
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
