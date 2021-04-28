@@ -12,8 +12,8 @@ const {
   CREATE_PRIVACY_GROUP_OBJECT,
   TRANSACTION_COUNT,
   FILTER_ID,
-} = require("./support/constants");
-const { mockHttpPost } = require("./support/httpMock");
+} = require("./tests-utils/constants");
+const { mockHttpPost } = require("./tests-utils/httpMock");
 
 describe("web3.priv", () => {
   const web3 = new Web3Quorum(new Web3(URL));
