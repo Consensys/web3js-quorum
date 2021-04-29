@@ -1,10 +1,11 @@
 const PrivateTransaction = require("./privateTransaction");
 const { privateToAddress } = require("./utils/custom-ethjs-util");
+const { PrivateSubscription } = require("./privateSubscription");
 
 function Priv(web3) {
   const GAS_PRICE = 0;
   const GAS_LIMIT = 3000000;
-  // web3.eth.extend({
+  let chainId = null;
   web3.extend({
     property: "priv",
     methods: [
@@ -122,14 +123,6 @@ function Priv(web3) {
     ],
   });
 
-  /**
-   * Returns the Private Marker transaction
-   * @param {string} txHash The transaction hash
-   * @param {int} retries Number of retries to be made to get the private marker transaction receipt
-   * @param {int} delay The delay between the retries
-   * @returns Promise to resolve the private marker transaction receipt
-   * @memberOf Web3Quorum
-   */
   const getMarkerTransaction = (txHash, retries, delay) => {
     /* eslint-disable promise/param-names */
     /* eslint-disable promise/avoid-new */
@@ -185,12 +178,11 @@ function Priv(web3) {
   };
 
   /**
-   * Get the private transaction Receipt.
+   * Get the private transaction Receipt with waiting until the receipt is ready.
    * @param {string} txHash Transaction Hash of the marker transaction
-   * @param {string} enclavePublicKey Public key used to start-up the Enclave
    * @param {int} retries Number of retries to be made to get the private marker transaction receipt
    * @param {int} delay The delay between the retries
-   * @returns {Promise<AxiosResponse<any> | never>}
+   * @returns {Promise<T>}
    */
   const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
     return getMarkerTransaction(txHash, retries, delay).then(() => {
@@ -198,28 +190,18 @@ function Priv(web3) {
     });
   };
 
-  /**
-   * Send a transaction to `eea_sendRawTransaction` or `priv_distributeRawTransaction`
-   * @param options Used to create the private transaction
-   * - options.privateKey
-   * - options.privateFrom
-   * - options.privacyGroupId
-   * - options.privateFor
-   * - options.nonce
-   * - options.to
-   * - options.data
-   */
-  const genericSendRawTransaction = (options, method) => {
+  const genericSendRawTransaction = async (options, method) => {
     if (options.privacyGroupId && options.privateFor) {
       throw Error("privacyGroupId and privateFor are mutually exclusive");
     }
+    chainId = chainId || (await web3.eth.getChainId());
     const tx = new PrivateTransaction();
     const privateKeyBuffer = Buffer.from(options.privateKey, "hex");
     const from = `0x${privateToAddress(privateKeyBuffer).toString("hex")}`;
     return web3.priv
       .getTransactionCount(
         from,
-        options.privacyGroupId || web3.priv.generatePrivacyGroup(options)
+        options.privacyGroupId || web3.utils.generatePrivacyGroup(options)
       )
       .then(async (transactionCount) => {
         tx.nonce = options.nonce || transactionCount;
@@ -228,7 +210,7 @@ function Priv(web3) {
         tx.to = options.to;
         tx.value = 0;
         tx.data = options.data;
-        tx._chainId = await web3.eth.getChainId();
+        tx._chainId = chainId;
         tx.privateFrom = options.privateFrom;
 
         if (options.privateFor) {
@@ -291,10 +273,38 @@ function Priv(web3) {
     return genericSendRawTransaction(options, "eea_sendRawTransaction");
   };
 
+  /**
+   * Subscribe to new logs matching a filter
+   *
+   * If the provider supports subscriptions, it uses `priv_subscribe`, otherwise
+   * it uses polling and `priv_getFilterChanges` to get new logs. Returns an
+   * error to the callback if there is a problem subscribing or creating the filter.
+   * @param {string} privacyGroupId
+   * @param {*} filter
+   * @param {function} callback returns the filter/subscription ID, or an error
+   * @return {PrivateSubscription} a subscription object that manages the
+   * lifecycle of the filter or subscription
+   */
+  const subscribeWithPooling = async (privacyGroupId, filter, callback) => {
+    const sub = new PrivateSubscription(web3, privacyGroupId, filter);
+
+    let filterId;
+    try {
+      filterId = await sub.subscribe();
+      callback(undefined, filterId);
+    } catch (error) {
+      callback(error);
+    }
+
+    return sub;
+  };
+
   Object.assign(web3.priv, {
+    subscriptionPollingInterval: 1000,
     waitForTransactionReceipt,
     generateAndDistributeRawTransaction,
     generateAndSendRawTransaction,
+    subscribeWithPooling,
   });
 
   return web3;
