@@ -56,13 +56,20 @@ commands:
             - ~/.npm
           key: node-cache-{{ checksum "package-lock.json" }}
 jobs:
-  build:
+  unitTests:
     executor: node_executor
     steps:
       - prepare_node
       - run:
-          name: build and unit tests
+          name: Run unit tests
           command: npm run test:unit
+  mockTests:
+    executor: node_executor
+    steps:
+      - prepare_node
+      - run:
+          name: Run mock tests
+          command: npm run test:mock
 
   integrationTests:
     executor: docker_tests_executor
@@ -84,10 +91,7 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - build
-      - integrationTests:
-          requires:
-            - build
-      - onChainTests:
-          requires:
-            - build
+      - unitTests
+      - mockTests
+      - integrationTests
+      - onChainTests
