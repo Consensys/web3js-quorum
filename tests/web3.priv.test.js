@@ -1,4 +1,5 @@
 const Web3 = require("web3");
+const waitForExpect = require("wait-for-expect");
 const Web3Quorum = require("../src/index");
 const {
   URL,
@@ -440,6 +441,62 @@ describe("web3.priv", () => {
       await expect(() => {
         return web3.priv.getPrivateTransaction();
       }).toThrow("Invalid number of parameters");
+    });
+  });
+
+  describe("web3.priv.subscribeWithPooling", () => {
+    let subscription;
+    it("should call priv_newFilter and then priv_getFilterChanges when using HTTP provider", async () => {
+      web3.priv.subscriptionPollingInterval = 99999;
+      let newFilterRequest;
+      let getFilterRequest;
+      let filterId;
+      mockHttpPost((data) => {
+        newFilterRequest = data;
+      }, FILTER_ID);
+      mockHttpPost(
+        (data) => {
+          getFilterRequest = data;
+        },
+        [LOG_OBJECT]
+      );
+      subscription = await web3.priv.subscribeWithPooling(
+        PRIVACY_GROUP_ID,
+        "logs",
+        (_, filter) => {
+          filterId = filter;
+        }
+      );
+      expect(filterId).toEqual(FILTER_ID);
+      expect(newFilterRequest.jsonrpc).toEqual("2.0");
+      expect(newFilterRequest.method).toEqual("priv_newFilter");
+      expect(newFilterRequest.params).toEqual([PRIVACY_GROUP_ID, "logs"]);
+      expect(subscription.privacyGroupId).toEqual(PRIVACY_GROUP_ID);
+      expect(subscription.filterId).toEqual(FILTER_ID);
+      expect(subscription.filter).toEqual("logs");
+      expect(subscription.protocol).toEqual("HTTP");
+      await waitForExpect(() => {
+        expect(getFilterRequest).toBeDefined();
+        expect(getFilterRequest.jsonrpc).toEqual("2.0");
+        expect(getFilterRequest.method).toEqual("priv_getFilterChanges");
+        expect(getFilterRequest.params).toEqual([PRIVACY_GROUP_ID, FILTER_ID]);
+      });
+    });
+
+    it("should call priv_uninstallFilter to unsubscribe from filter", async () => {
+      let request;
+      let isUninstalled = false;
+      mockHttpPost((data) => {
+        request = data;
+      });
+      const filterId = await subscription.unsubscribe((_, result) => {
+        isUninstalled = result;
+      });
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("priv_uninstallFilter");
+      expect(request.params).toEqual([PRIVACY_GROUP_ID, FILTER_ID]);
+      expect(filterId).toEqual(FILTER_ID);
+      expect(isUninstalled).toBeTruthy();
     });
   });
 });
