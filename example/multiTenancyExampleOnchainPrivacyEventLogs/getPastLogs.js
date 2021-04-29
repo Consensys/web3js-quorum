@@ -20,7 +20,7 @@ function run() {
     address,
   };
 
-  return node.priv.getPastLogs(privacyGroupId, filter).then((logs) => {
+  return node.priv.getLogs(privacyGroupId, filter).then((logs) => {
     console.log("Received logs\n", logs);
     return logs;
   });

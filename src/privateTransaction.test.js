@@ -1,7 +1,7 @@
 const utils = require("ethereumjs-util");
 
-const PrivateTransaction = require("../../src/privateTransaction.js");
-const txFixtures = require("./support/txs.json");
+const PrivateTransaction = require("./privateTransaction.js");
+const txFixtures = require("./test-utils/txs.json");
 
 describe("[Transaction]: Basic functions", () => {
   const transactions = [];
@@ -31,11 +31,9 @@ describe("[Transaction]: Basic functions", () => {
 
   it("should decode rlp", () => {
     transactions.forEach((tx, i) => {
-      if (txFixtures[i].rlp) {
-        expect(transactions[i].serialize()).toEqual(
-          new PrivateTransaction(txFixtures[i].rlp).serialize()
-        );
-      }
+      expect(transactions[i].serialize()).toEqual(
+        new PrivateTransaction(txFixtures[i].rlp).serialize()
+      );
     });
   });
 
@@ -47,32 +45,28 @@ describe("[Transaction]: Basic functions", () => {
 
   it("should sign tx", () => {
     transactions.forEach((tx, i) => {
-      if (txFixtures[i].privateKey) {
-        const privKey = Buffer.from(txFixtures[i].privateKey, "hex");
+      const privKey = Buffer.from(txFixtures[i].privateKey, "hex");
+      expect(() => {
         tx.sign(privKey);
-      }
+      }).not.toThrowError();
     });
   });
 
   it("should get sender's address after signing it", () => {
     transactions.forEach((tx, i) => {
-      if (txFixtures[i].privateKey) {
-        expect(tx.getSenderAddress().toString("hex")).toEqual(
-          txFixtures[i].sendersAddress
-        );
-      }
+      expect(tx.getSenderAddress().toString("hex")).toEqual(
+        txFixtures[i].sendersAddress
+      );
     });
   });
 
   it("should get sender's public key after signing it", () => {
     transactions.forEach((tx, i) => {
-      if (txFixtures[i].privateKey) {
-        expect(tx.getSenderPublicKey().toString("hex")).toEqual(
-          utils
-            .privateToPublic(Buffer.from(txFixtures[i].privateKey, "hex"))
-            .toString("hex")
-        );
-      }
+      expect(tx.getSenderPublicKey().toString("hex")).toEqual(
+        utils
+          .privateToPublic(Buffer.from(txFixtures[i].privateKey, "hex"))
+          .toString("hex")
+      );
     });
   });
 });

@@ -12,7 +12,6 @@ const storeValueFromNode1 = (address, value) => {
   const web3 = new Web3Quorum(new Web3(network.node1.url));
   const contract = new web3.eth.Contract(EventEmitter);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === "store";
   });
@@ -60,7 +59,6 @@ const getValue = (
 
   const contract = new web3.eth.Contract(CrossContractReader);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === "read";
   });
@@ -77,8 +75,8 @@ const getValue = (
     privateKey,
   };
 
-  return web3.eea
-    .sendRawTransaction(functionCall)
+  return web3.priv
+    .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
       return web3.priv.getTransactionReceipt(
         transactionHash,

@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const Web3Quorum = require("../../src");
+const Web3Quorum = require("../src");
 
 const { contracts } = require("./support/helpers");
 const { network, orion } = require("./support/keys");
@@ -18,53 +18,50 @@ describe("getPrivateTransaction", () => {
     });
 
     // deploy a contract and get the receipt
-    const receipt = await node1Client.eea
-      .sendRawTransaction({
+    const receipt = await node1Client.priv
+      .generateAndSendRawTransaction({
         data: `0x${contracts.eventEmitter.bytecode}`,
         privateFrom: orion.node1.publicKey,
         privacyGroupId,
         privateKey: network.node1.privateKey,
       })
       .then((hash) => {
-        return node1Client.priv.getTransactionReceipt(
-          hash,
-          orion.node1.publicKey
-        );
+        return node1Client.priv.waitForTransactionReceipt(hash);
       });
     publicHash = receipt.commitmentHash;
   });
 
   // group membership
   it("should get tx from originating node", async () => {
-    const result = await node1Client.priv.getTransaction(publicHash);
+    const result = await node1Client.priv.getPrivateTransaction(publicHash);
 
     expect(result.privateFrom).toEqual(orion.node1.publicKey);
     expect(result.privacyGroupId).toEqual(privacyGroupId);
   });
 
   it("should get tx from other member node", async () => {
-    const result = await node2Client.priv.getTransaction(publicHash);
+    const result = await node2Client.priv.getPrivateTransaction(publicHash);
 
     expect(result.privateFrom).toEqual(orion.node1.publicKey);
     expect(result.privacyGroupId).toEqual(privacyGroupId);
   });
 
   it("should get error from non-member node", async () => {
-    const result = await node3Client.priv.getTransaction(publicHash);
+    const result = await node3Client.priv.getPrivateTransaction(publicHash);
     expect(result).toBeNull();
   });
 
   // inputs
   it("should fail if the transaction hash is invalid", async () => {
     await expect(
-      node1Client.priv.getTransaction(undefined)
+      node1Client.priv.getPrivateTransaction(undefined)
     ).rejects.toThrowError("Invalid params");
   });
 
   it("should return null if the txHash does not exist", async () => {
     const invalidHash =
       "0x0000000000000000000000000000000000000000000000000000000000000000";
-    const result = await node3Client.priv.getTransaction(invalidHash);
+    const result = await node3Client.priv.getPrivateTransaction(invalidHash);
     expect(result).toBeNull();
   });
 });

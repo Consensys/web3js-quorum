@@ -62,7 +62,7 @@ PollingSubscription.prototype.subscribe = async function subscribe(
   blockId
 ) {
   // install filter
-  this.subscription.filterId = await this.web3.priv.createFilter(
+  this.subscription.filterId = await this.web3.priv.newFilter(
     privacyGroupId,
     filter,
     blockId
@@ -160,7 +160,7 @@ PubSubSubscription.prototype.subscribe = async function subscribe(
   });
 
   // start subscription
-  this.subscription.filterId = await this.web3.privInternal.subscribe(
+  this.subscription.filterId = await this.web3.priv.subscribe(
     privacyGroupId,
     "logs",
     filter
@@ -177,7 +177,7 @@ PubSubSubscription.prototype.unsubscribe = async function unsubscribe(
   filterId,
   callback
 ) {
-  return this.web3.privInternal
+  return this.web3.priv
     .unsubscribe(privacyGroupId, filterId)
     .then((result) => {
       this.subscription.reset();

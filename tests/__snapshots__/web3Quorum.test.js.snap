@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`web3Quorum should match the web3Quorum eth.flexiblePrivacyGroup namespace snapshot 1`] = `
+Object {
+  "findOnChainPrivacyGroup": [Function],
+}
+`;
+
+exports[`web3Quorum should match the web3Quorum priv namespace snapshot 1`] = `
+Object {
+  "call": [Function],
+  "createPrivacyGroup": [Function],
+  "debugGetStateRoot": [Function],
+  "deletePrivacyGroup": [Function],
+  "distributeRawTransaction": [Function],
+  "findPrivacyGroup": [Function],
+  "generateAndDistributeRawTransaction": [Function],
+  "generateAndSendRawTransaction": [Function],
+  "generatePrivacyGroup": [Function],
+  "getCode": [Function],
+  "getEeaTransactionCount": [Function],
+  "getFilterChanges": [Function],
+  "getFilterLogs": [Function],
+  "getLogs": [Function],
+  "getPrivacyPrecompileAddress": [Function],
+  "getPrivateTransaction": [Function],
+  "getTransactionCount": [Function],
+  "getTransactionReceipt": [Function],
+  "newFilter": [Function],
+  "sendRawTransaction": [Function],
+  "subscribe": [Function],
+  "subscribeWithPooling": [Function],
+  "subscriptionPollingInterval": 1000,
+  "uninstallFilter": [Function],
+  "unsubscribe": [Function],
+  "waitForTransactionReceipt": [Function],
+}
+`;

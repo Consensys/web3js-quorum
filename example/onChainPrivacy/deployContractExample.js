@@ -21,7 +21,7 @@ const createGreeterContract = (privacyGroupId) => {
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
-  return web3Node1.eea.sendRawTransaction(contractOptions);
+  return web3Node1.priv.generateAndSendRawTransaction(contractOptions);
 };
 
 const getPrivateContractAddress = (transactionHash) => {
@@ -43,7 +43,6 @@ const callGenericFunctionOnContract = (
 ) => {
   const contract = new web3.eth.Contract(greeterAbi);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === method;
   });
@@ -63,8 +62,8 @@ const callGenericFunctionOnContract = (
     privateKey,
     privacyGroupId,
   };
-  return web3.eea
-    .sendRawTransaction(functionCall)
+  return web3.priv
+    .generateAndSendRawTransaction(functionCall)
     .then((privateTxHash) => {
       console.log("Transaction Hash:", privateTxHash);
       return web3.priv.getTransactionReceipt(privateTxHash, privateFrom);

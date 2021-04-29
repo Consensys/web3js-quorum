@@ -15,7 +15,7 @@
 
 const RLP = require("rlp");
 const _ = require("lodash");
-const { keccak256 } = require("./custom-ethjs-util");
+const { keccak256 } = require("./utils/custom-ethjs-util");
 
 /**
  * Generate a privacyGroupId

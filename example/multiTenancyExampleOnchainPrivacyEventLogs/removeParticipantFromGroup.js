@@ -15,13 +15,9 @@ async function run() {
   const { privacyGroupId } = params;
   const addressToRemove = orion.node11.publicKey;
 
-  const findResultWithAddedNode = await node.privx.findOnChainPrivacyGroup({
-    addresses: [
-      orion.node1.publicKey,
-      orion.node2.publicKey,
-      orion.node11.publicKey,
-    ],
-  });
+  const findResultWithAddedNode = await node.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey, orion.node11.publicKey]
+  );
   console.log("Found privacy groups with added node:");
   logMatchingGroup(findResultWithAddedNode, privacyGroupId);
 
@@ -37,9 +33,9 @@ async function run() {
     `Removed third participant ${addressToRemove} from privacy group ${privacyGroupId}`
   );
 
-  const findResultWithRemovedNode = await node.privx.findOnChainPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-  });
+  const findResultWithRemovedNode = await node.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey]
+  );
   console.log("Found privacy groups with removed node:");
   logMatchingGroup(findResultWithRemovedNode, privacyGroupId);
 }

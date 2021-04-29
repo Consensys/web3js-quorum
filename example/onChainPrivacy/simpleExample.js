@@ -24,9 +24,9 @@ module.exports = async () => {
     orion.node2.publicKey
   );
 
-  const findResult = await node2.privx.findOnChainPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-  });
+  const findResult = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey]
+  );
   Utils.logMatchingGroup(
     findResult,
     onChainPrivacyGroupCreationResult.privacyGroupId

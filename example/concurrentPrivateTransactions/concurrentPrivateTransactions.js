@@ -26,10 +26,10 @@ const deployContractData =
 
 // get nonce of account in the privacy group
 function getPrivateNonce(account) {
-  return web3.priv.getTransactionCount({
-    ...privacyOptions,
-    from: account,
-  });
+  return web3.priv.getTransactionCount(
+    account,
+    web3.priv.generatePrivacyGroup(privacyOptions)
+  );
 }
 
 // get public nonce of account
@@ -39,7 +39,7 @@ function getPublicNonce(account) {
 
 // distribute payload to participants
 function distributePayload(payload, nonce) {
-  return web3.priv.distributeRawTransaction({
+  return web3.priv.generateAndDistributeRawTransaction({
     ...privacyOptions,
     data: payload,
     nonce,

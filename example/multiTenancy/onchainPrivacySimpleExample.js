@@ -28,18 +28,18 @@ module.exports = async () => {
     orion.node1.publicKey
   );
 
-  const findResult1 = await node1.privx.findOnChainPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-  });
+  const findResult1 = await node1.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey]
+  );
   console.log("finding groups on node1");
   logMatchingGroup(
     findResult1,
     onChainPrivacyGroupCreationResult.privacyGroupId
   );
 
-  const findResult2 = await node2.privx.findOnChainPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-  });
+  const findResult2 = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey]
+  );
   console.log("finding groups on node2");
   logMatchingGroup(
     findResult2,

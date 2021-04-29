@@ -13,8 +13,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* eslint-disable no-underscore-dangle */
-const ethUtil = require("./custom-ethjs-util");
+const ethUtil = require("./utils/custom-ethjs-util");
 
 const { BN } = ethUtil;
 

@@ -12,7 +12,6 @@ const storeValueFromNode2 = (address, value, privacyGroupId) => {
   );
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === "store";
   });
@@ -27,8 +26,8 @@ const storeValueFromNode2 = (address, value, privacyGroupId) => {
     privacyGroupId,
     privateKey: network.node2.privateKey,
   };
-  return web3.eea
-    .sendRawTransaction(functionCall)
+  return web3.priv
+    .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
       console.log("Transaction Hash:", transactionHash);
       return web3.priv.getTransactionReceipt(
@@ -46,7 +45,6 @@ const getValue = (url, jwt, address, privacyGroupId) => {
   const web3 = new Web3Quorum(new Web3(createHttpProvider(jwt, url)));
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
-  // eslint-disable-next-line no-underscore-dangle
   const functionAbi = contract._jsonInterface.find((e) => {
     return e.name === "value";
   });

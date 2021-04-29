@@ -45,8 +45,8 @@ async function run() {
   console.log(`with members ${addresses}`);
 
   // deploy contract
-  const deployReceipt = await node.eea
-    .sendRawTransaction({
+  const deployReceipt = await node.priv
+    .generateAndSendRawTransaction({
       data: `0x${bytecode}`,
       privateFrom: enclaveKey,
       privacyGroupId,

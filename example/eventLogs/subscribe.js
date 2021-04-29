@@ -23,7 +23,7 @@ async function run() {
 
   // Create subscription
   return node.priv
-    .subscribe(privacyGroupId, filter, (error, result) => {
+    .subscribeWithPooling(privacyGroupId, filter, (error, result) => {
       if (!error) {
         console.log("Installed filter", result);
       } else {

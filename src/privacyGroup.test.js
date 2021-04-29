@@ -1,5 +1,5 @@
-const { generatePrivacyGroup } = require("../../src/privacyGroup");
-const txFixtures = require("./support/keySets.json");
+const { generatePrivacyGroup } = require("./privacyGroup");
+const txFixtures = require("./test-utils/keySets.json");
 
 describe("[EEA]: Privacy Group Generation", () => {
   it("should generate correct privacy group id", () => {

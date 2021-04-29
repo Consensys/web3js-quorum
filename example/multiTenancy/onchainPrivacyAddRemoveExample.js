@@ -27,9 +27,9 @@ module.exports = async () => {
   console.log("Created new on-chain privacy group:");
   console.log(onChainPrivacyGroupCreationResult);
 
-  const findResult = await node2.privx.findOnChainPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-  });
+  const findResult = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey]
+  );
   console.log("Found privacy group results:");
   logMatchingGroup(
     findResult,
@@ -53,13 +53,9 @@ module.exports = async () => {
   console.log("Got transaction receipt from added node:");
   console.log(receiptFromNode3);
 
-  const findResultWithAddedNode = await node2.privx.findOnChainPrivacyGroup({
-    addresses: [
-      orion.node1.publicKey,
-      orion.node2.publicKey,
-      orion.node11.publicKey,
-    ],
-  });
+  const findResultWithAddedNode = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey, orion.node11.publicKey]
+  );
   console.log("Found privacy groups with added node:");
   logMatchingGroup(
     findResultWithAddedNode,
@@ -76,9 +72,9 @@ module.exports = async () => {
   console.log("Removed third participant from privacy group:");
   console.log(removeResult);
 
-  const findResultRemovedNode = await node2.privx.findOnChainPrivacyGroup({
-    addresses: [orion.node1.publicKey, orion.node2.publicKey],
-  });
+  const findResultRemovedNode = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
+    [orion.node1.publicKey, orion.node2.publicKey]
+  );
   logMatchingGroup(
     findResultRemovedNode,
     onChainPrivacyGroupCreationResult.privacyGroupId

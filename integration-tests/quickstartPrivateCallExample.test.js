@@ -1,11 +1,12 @@
-const deployContract = require("../../example/multiNodeExamplePrivacyGroup/deployContract");
-const node1Example = require("../../example/multiNodeExamplePrivacyGroup/storeValueFromNode1");
-const node2Example = require("../../example/multiNodeExamplePrivacyGroup/storeValueFromNode2");
+const deployContract = require("../example/multiNodeExamplePrivateCall/deployContract");
+const node1Example = require("../example/multiNodeExamplePrivateCall/storeValueFromNode1");
+const node2Example = require("../example/multiNodeExamplePrivateCall/storeValueFromNode2");
 
-describe("[MultiNodeExample]: Can run quickstart with privacyGroupId instead of privateFor", () => {
+describe("[MultiNodeExample]: Can run quickstart with privacyGroupId and private Call", () => {
   let contractAddress;
   let privacyGroupId;
-  beforeAll(async () => {
+  // deploy contract
+  beforeEach(async () => {
     const response = await deployContract();
     ({ contractAddress, privacyGroupId } = response);
   });
@@ -26,7 +27,7 @@ describe("[MultiNodeExample]: Can run quickstart with privacyGroupId instead of 
       privacyGroupId
     );
 
-    expect(getNode1.output).toEqual(
+    expect(getNode1).toEqual(
       "0x00000000000000000000000000000000000000000000000000000000000003e8"
     );
 
@@ -35,7 +36,7 @@ describe("[MultiNodeExample]: Can run quickstart with privacyGroupId instead of 
       privacyGroupId
     );
 
-    expect(getNode2.output).toEqual(
+    expect(getNode2).toEqual(
       "0x00000000000000000000000000000000000000000000000000000000000003e8"
     );
   });
@@ -56,7 +57,7 @@ describe("[MultiNodeExample]: Can run quickstart with privacyGroupId instead of 
       privacyGroupId
     );
 
-    expect(getNode1.output).toEqual(
+    expect(getNode1).toEqual(
       "0x000000000000000000000000000000000000000000000000000000000000002a"
     );
 
@@ -65,7 +66,7 @@ describe("[MultiNodeExample]: Can run quickstart with privacyGroupId instead of 
       privacyGroupId
     );
 
-    expect(getNode2.output).toEqual(
+    expect(getNode2).toEqual(
       "0x000000000000000000000000000000000000000000000000000000000000002a"
     );
   });

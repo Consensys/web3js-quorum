@@ -4,10 +4,11 @@
   "description": "Web3 JS Quorum - JSON-RPC API",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm run test:unit && npm run test:integration && npm run test:onchain",
-    "test:unit": "jest test/unit/*.js",
+    "test": "npm run test:unit && npm run test:mock && npm run test:integration && npm run test:onchain",
+    "test:unit": "jest src",
+    "test:mock": "jest ./tests",
     "pretest:integration": "BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=false npm run network:up",
-    "test:integration": "jest test/integration/*.test.js",
+    "test:integration": "jest integration-tests/*.test.js --runInBand",
     "posttest:integration": "npm run network:down",
     "cover": "npm run cover:unit && npm run cover:integration && npm run cover:onchain && npm run cover:report",
     "cover:unit": "npm run test:unit -- --coverage",
@@ -15,10 +16,10 @@
     "cover:onchain": "npm run test:onchain -- --coverage",
     "cover:report": "nyc report --reporter=lcov --reporter=text",
     "pretest:onchain": "BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=true npm run network:up",
-    "test:onchain": "jest test/integration/onchainPrivacy/*.test.js",
+    "test:onchain": "jest integration-tests/onchainPrivacy/*.test.js",
     "posttest:onchain": "npm run network:down",
-    "network:up": "node ./test/integration/support/after.js && node ./test/integration/support/before.js",
-    "network:down": "node ./test/integration/support/after.js",
+    "network:up": "node ./integration-tests/support/after.js && node ./integration-tests/support/before.js",
+    "network:down": "node ./integration-tests/support/after.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "generate:doc": "node_modules/.bin/jsdoc --configure jsdoc.json --verbose"
@@ -86,6 +87,7 @@
     "rlp": "2.2.4"
   },
   "devDependencies": {
+    "async-promise-pool": "^1.0.3",
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "docdash": "^1.2.0",
@@ -103,6 +105,7 @@
     "jsdoc": "^3.6.4",
     "lint-staged": "^10.5.4",
     "minimist": "^1.2.5",
+    "nock": "^13.0.11",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "web3": "^1.2.6"

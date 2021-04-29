@@ -23,7 +23,7 @@ const createPrivateEmitterContract = () => {
     privateFor: [orion.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
-  return web3.eea.sendRawTransaction(contractOptions);
+  return web3.priv.generateAndSendRawTransaction(contractOptions);
 };
 
 const getPrivateContractAddress = (transactionHash) => {
@@ -51,7 +51,7 @@ const storeValue = (contractAddress, value) => {
     privateFor: [orion.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
-  return web3.eea.sendRawTransaction(functionCall);
+  return web3.priv.generateAndSendRawTransaction(functionCall);
 };
 
 const getValue = (contractAddress) => {
@@ -67,8 +67,8 @@ const getValue = (contractAddress) => {
     privateKey: network.node1.privateKey,
   };
 
-  return web3.eea
-    .sendRawTransaction(functionCall)
+  return web3.priv
+    .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
       return web3.priv.getTransactionReceipt(
         transactionHash,
