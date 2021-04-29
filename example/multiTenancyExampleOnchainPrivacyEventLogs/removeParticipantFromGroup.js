@@ -21,7 +21,7 @@ async function run() {
   console.log("Found privacy groups with added node:");
   logMatchingGroup(findResultWithAddedNode, privacyGroupId);
 
-  const removeResult = await node.privx.removeFromPrivacyGroup({
+  const removeResult = await node.eth.flexiblePrivacyGroup.removeFrom({
     participant: addressToRemove,
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,

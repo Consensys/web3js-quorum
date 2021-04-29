@@ -79,12 +79,14 @@ const callGenericFunctionOnContract = (
 };
 
 module.exports = async () => {
-  const privacyGroupCreationResult = await node1.privx.createPrivacyGroup({
-    participants: [orion.node1.publicKey, orion.node2.publicKey],
-    enclaveKey: orion.node1.publicKey,
-    privateFrom: orion.node1.publicKey,
-    privateKey: network.node1.privateKey,
-  });
+  const privacyGroupCreationResult = await node1.eth.flexiblePrivacyGroup.create(
+    {
+      participants: [orion.node1.publicKey, orion.node2.publicKey],
+      enclaveKey: orion.node1.publicKey,
+      privateFrom: orion.node1.publicKey,
+      privateKey: network.node1.privateKey,
+    }
+  );
 
   console.log(privacyGroupCreationResult);
 
