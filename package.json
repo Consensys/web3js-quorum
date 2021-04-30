@@ -74,7 +74,8 @@
     "eea",
     "orion",
     "quorum",
-    "tessera"
+    "tessera",
+    "constellation"
   ],
   "author": "ConsenSys <quorum@consensys.net>",
   "license": "Apache-2.0",
