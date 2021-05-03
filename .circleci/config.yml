@@ -8,8 +8,8 @@ executors:
   docker_tests_executor:
     machine:
       image: ubuntu-1604:202004-01 #Ubuntu 16.04, docker 19.03.8, docker-compose 1.25.5
-      docker_layer_caching: false
-    resource_class: medium
+      docker_layer_caching: true
+    resource_class: xlarge
 
 commands:
   prepare_docker_machine:
@@ -56,13 +56,20 @@ commands:
             - ~/.npm
           key: node-cache-{{ checksum "package-lock.json" }}
 jobs:
-  build:
+  unitTests:
     executor: node_executor
     steps:
       - prepare_node
       - run:
-          name: build and unit tests
+          name: Run unit tests
           command: npm run test:unit
+  mockTests:
+    executor: node_executor
+    steps:
+      - prepare_node
+      - run:
+          name: Run mock tests
+          command: npm run test:mock
 
   integrationTests:
     executor: docker_tests_executor
@@ -84,10 +91,7 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - build
-      - integrationTests:
-          requires:
-            - build
-      - onChainTests:
-          requires:
-            - build
+      - unitTests
+      - mockTests
+      - integrationTests
+      - onChainTests

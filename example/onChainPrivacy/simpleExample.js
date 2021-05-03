@@ -8,7 +8,7 @@ const node1 = new Web3Quorum(new Web3(network.node1.url));
 const node2 = new Web3Quorum(new Web3(network.node2.url));
 
 module.exports = async () => {
-  const onChainPrivacyGroupCreationResult = await node1.privx.createPrivacyGroup(
+  const onChainPrivacyGroupCreationResult = await node1.eth.flexiblePrivacyGroup.create(
     {
       participants: [orion.node1.publicKey, orion.node2.publicKey],
       enclaveKey: orion.node1.publicKey,

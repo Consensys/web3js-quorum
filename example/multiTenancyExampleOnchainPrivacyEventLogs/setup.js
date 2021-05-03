@@ -23,7 +23,7 @@ async function run() {
   ];
 
   // create privacy group
-  const onChainPrivacyGroupCreationResult = await node.privx.createPrivacyGroup(
+  const onChainPrivacyGroupCreationResult = await node.eth.flexiblePrivacyGroup.create(
     {
       participants: addresses,
       enclaveKey: orion.node1.publicKey,

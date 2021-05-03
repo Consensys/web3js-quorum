@@ -28,7 +28,7 @@ const deployContractData =
 function getPrivateNonce(account) {
   return web3.priv.getTransactionCount(
     account,
-    web3.priv.generatePrivacyGroup(privacyOptions)
+    web3.utils.generatePrivacyGroup(privacyOptions)
   );
 }
 

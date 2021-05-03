@@ -58,14 +58,12 @@ PollingSubscription.prototype.constructor = PollingSubscription;
 
 PollingSubscription.prototype.subscribe = async function subscribe(
   privacyGroupId,
-  filter,
-  blockId
+  filter
 ) {
   // install filter
   this.subscription.filterId = await this.web3.priv.newFilter(
     privacyGroupId,
-    filter,
-    blockId
+    filter
   );
 
   // wait for new logs

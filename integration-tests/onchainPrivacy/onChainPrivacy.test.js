@@ -23,7 +23,7 @@ describe("On chain privacy", () => {
   };
   // createPrivacyGroup
   it("should create privacy group", async () => {
-    const receipt = await node1Client.privx.createPrivacyGroup({
+    const receipt = await node1Client.eth.flexiblePrivacyGroup.create({
       participants,
       enclaveKey: orion.node1.publicKey,
       privateKey: network.node1.privateKey,
@@ -44,7 +44,7 @@ describe("On chain privacy", () => {
     // Generate a privacyGroupId
     const id = crypto.randomBytes(32).toString("base64");
 
-    const receipt = await node1Client.privx.createPrivacyGroup({
+    const receipt = await node1Client.eth.flexiblePrivacyGroup.create({
       participants,
       ...privacyOptions,
       privacyGroupId: id,
@@ -85,7 +85,7 @@ describe("On chain privacy", () => {
   // addToPrivacyGroup
   it("should add a member to the group", async () => {
     // add node 2
-    const addReceipt = await node1Client.privx.addToPrivacyGroup({
+    const addReceipt = await node1Client.eth.flexiblePrivacyGroup.addTo({
       ...privacyOptions,
       participants: [orion.node2.publicKey],
     });
@@ -94,7 +94,7 @@ describe("On chain privacy", () => {
 
   it("non-member should not be able to add to the group", async () => {
     await expect(
-      node3Client.privx.addToPrivacyGroup({
+      node3Client.eth.flexiblePrivacyGroup.addTo({
         enclaveKey: orion.node3.publicKey,
         privateKey: network.node3.privateKey,
         privacyGroupId,
@@ -207,10 +207,12 @@ describe("On chain privacy", () => {
   // Remove
   describe("removeFromPrivacyGroup", () => {
     it("should remove a node from the privacy group", async () => {
-      const removeReceipt = await node1Client.privx.removeFromPrivacyGroup({
-        ...privacyOptions,
-        participant: orion.node2.publicKey,
-      });
+      const removeReceipt = await node1Client.eth.flexiblePrivacyGroup.removeFrom(
+        {
+          ...privacyOptions,
+          participant: orion.node2.publicKey,
+        }
+      );
       expect(removeReceipt.status).toEqual("0x1");
     });
 

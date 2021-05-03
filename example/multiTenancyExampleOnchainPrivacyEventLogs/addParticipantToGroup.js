@@ -15,7 +15,7 @@ async function run() {
   const { privacyGroupId } = params;
   const addressesToAdd = [orion.node11.publicKey];
 
-  const addResult = await node.privx.addToPrivacyGroup({
+  const addResult = await node.eth.flexiblePrivacyGroup.addTo({
     participants: addressesToAdd,
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,

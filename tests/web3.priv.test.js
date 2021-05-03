@@ -1,4 +1,5 @@
 const Web3 = require("web3");
+const waitForExpect = require("wait-for-expect");
 const Web3Quorum = require("../src/index");
 const {
   URL,
@@ -12,6 +13,9 @@ const {
   CREATE_PRIVACY_GROUP_OBJECT,
   TRANSACTION_COUNT,
   FILTER_ID,
+  PRIVATE_KEY,
+  CHAIN_ID,
+  TRANSACTION_RECEIPT,
 } = require("./tests-utils/constants");
 const { mockHttpPost } = require("./tests-utils/httpMock");
 
@@ -142,7 +146,7 @@ describe("web3.priv", () => {
       expect(data.logIndex).toEqual(11);
       expect(data.blockNumber).toEqual(11);
       expect(data.transactionIndex).toEqual(0);
-      expect(data.id).toEqual("log_6f6ab9a0");
+      expect(data.id).toEqual("log_51b0572c");
     });
 
     it("throw error when call priv_getFilterChanges with no param", async () => {
@@ -165,7 +169,7 @@ describe("web3.priv", () => {
       expect(data.logIndex).toEqual(11);
       expect(data.blockNumber).toEqual(11);
       expect(data.transactionIndex).toEqual(0);
-      expect(data.id).toEqual("log_6f6ab9a0");
+      expect(data.id).toEqual("log_51b0572c");
     });
 
     it("throw error when call priv_getFilterLogs with no param", async () => {
@@ -188,7 +192,7 @@ describe("web3.priv", () => {
       expect(data.logIndex).toEqual(11);
       expect(data.blockNumber).toEqual(11);
       expect(data.transactionIndex).toEqual(0);
-      expect(data.id).toEqual("log_6f6ab9a0");
+      expect(data.id).toEqual("log_51b0572c");
     });
 
     it("throw error when call priv_getLogs with no param", async () => {
@@ -440,6 +444,126 @@ describe("web3.priv", () => {
       await expect(() => {
         return web3.priv.getPrivateTransaction();
       }).toThrow("Invalid number of parameters");
+    });
+  });
+
+  describe("web3.priv.subscribeWithPooling", () => {
+    let subscription;
+    it("should call priv_newFilter and then priv_getFilterChanges when using HTTP provider", async () => {
+      web3.priv.subscriptionPollingInterval = 99999;
+      let newFilterRequest;
+      let getFilterRequest;
+      let filterId;
+      mockHttpPost((data) => {
+        newFilterRequest = data;
+      }, FILTER_ID);
+      mockHttpPost(
+        (data) => {
+          getFilterRequest = data;
+        },
+        [[LOG_OBJECT]]
+      );
+      subscription = await web3.priv.subscribeWithPooling(
+        PRIVACY_GROUP_ID,
+        "logs",
+        (_, filter) => {
+          filterId = filter;
+        }
+      );
+      expect(filterId).toEqual(FILTER_ID);
+      expect(newFilterRequest.jsonrpc).toEqual("2.0");
+      expect(newFilterRequest.method).toEqual("priv_newFilter");
+      expect(newFilterRequest.params).toEqual([PRIVACY_GROUP_ID, "logs"]);
+      expect(subscription.privacyGroupId).toEqual(PRIVACY_GROUP_ID);
+      expect(subscription.filterId).toEqual(FILTER_ID);
+      expect(subscription.filter).toEqual("logs");
+      expect(subscription.protocol).toEqual("HTTP");
+      await waitForExpect(() => {
+        expect(getFilterRequest).toBeDefined();
+        expect(getFilterRequest.jsonrpc).toEqual("2.0");
+        expect(getFilterRequest.method).toEqual("priv_getFilterChanges");
+        expect(getFilterRequest.params).toEqual([PRIVACY_GROUP_ID, FILTER_ID]);
+      });
+    });
+
+    it("should call priv_uninstallFilter to unsubscribe from filter", async () => {
+      let request;
+      let isUninstalled = false;
+      mockHttpPost((data) => {
+        request = data;
+      });
+      const filterId = await subscription.unsubscribe((_, result) => {
+        isUninstalled = result;
+      });
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("priv_uninstallFilter");
+      expect(request.params).toEqual([PRIVACY_GROUP_ID, FILTER_ID]);
+      expect(filterId).toEqual(FILTER_ID);
+      expect(isUninstalled).toBeTruthy();
+    });
+  });
+
+  describe("web3.priv.generateAndDistributeRawTransaction", () => {
+    it("should generate and call priv_distributeRawTransaction with param", async () => {
+      const requests = [];
+      mockHttpPost(
+        (data) => {
+          requests.push(data);
+        },
+        [CHAIN_ID, TRANSACTION_COUNT, TRANSACTION_HASH],
+        3
+      );
+      await web3.priv.generateAndDistributeRawTransaction({
+        privacyGroupId: PRIVACY_GROUP_ID,
+        privateKey: PRIVATE_KEY,
+        to: ADDRESS,
+      });
+      expect(requests[0].method).toEqual("eth_chainId");
+      expect(requests[1].method).toEqual("priv_getTransactionCount");
+      expect(requests[2].method).toEqual("priv_distributeRawTransaction");
+      expect(requests[0].params).toEqual([]);
+      expect(requests[1].params).toEqual([ADDRESS, PRIVACY_GROUP_ID]);
+      expect(requests[2].params).toEqual([expect.any(String)]);
+    });
+  });
+
+  describe("web3.priv.waitForTransactionReceipt", () => {
+    it("should generate and call priv_distributeRawTransaction with param", async () => {
+      const requests = [];
+      mockHttpPost(
+        (data) => {
+          requests.push(data);
+        },
+        [TRANSACTION_RECEIPT, TRANSACTION_RECEIPT],
+        2
+      );
+      await web3.priv.waitForTransactionReceipt(TRANSACTION_HASH);
+      expect(requests[0].method).toEqual("eth_getTransactionReceipt");
+      expect(requests[1].method).toEqual("priv_getTransactionReceipt");
+      expect(requests[0].params).toEqual([TRANSACTION_HASH]);
+      expect(requests[1].params).toEqual([TRANSACTION_HASH]);
+    });
+  });
+
+  describe("web3.priv.generateAndSendRawTransaction", () => {
+    it("should generate and call eea_sendRawTransaction with param", async () => {
+      const requests = [];
+      mockHttpPost(
+        (data) => {
+          requests.push(data);
+        },
+        [TRANSACTION_COUNT, TRANSACTION_HASH],
+        2
+      );
+      await web3.priv.generateAndSendRawTransaction({
+        privacyGroupId: PRIVACY_GROUP_ID,
+        privateKey: PRIVATE_KEY,
+        to: ADDRESS,
+      });
+      expect(requests[0].method).toEqual("priv_getTransactionCount");
+      expect(requests[1].method).toEqual("eea_sendRawTransaction");
+      expect(requests[0].params).toEqual([ADDRESS, PRIVACY_GROUP_ID]);
+      expect(requests[1].params).toEqual([expect.any(String)]);
     });
   });
 });

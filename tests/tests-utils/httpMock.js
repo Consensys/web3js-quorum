@@ -3,14 +3,15 @@ const { URL } = require("./constants");
 
 let id = 0;
 
-const mockHttpPost = (fn, result) => {
+const mockHttpPost = (fn, results, n = 1) => {
   nock(URL)
     .post("/")
-    .once()
+    .times(n)
     .reply((_, body) => {
       if (fn) {
         fn(body);
       }
+      const result = Array.isArray(results) ? results.shift() : results;
       id += 1;
       return [
         201,
@@ -23,6 +24,11 @@ const mockHttpPost = (fn, result) => {
     });
 };
 
+const resetMock = () => {
+  nock.cleanAll();
+};
+
 module.exports = {
   mockHttpPost,
+  resetMock,
 };

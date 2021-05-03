@@ -9,7 +9,7 @@ const node2 = new Web3Quorum(new Web3(network.node2.url));
 const node3 = new Web3Quorum(new Web3(network.node3.url));
 
 module.exports = async () => {
-  const onChainPrivacyGroupCreationResult = await node1.privx.createPrivacyGroup(
+  const onChainPrivacyGroupCreationResult = await node1.eth.flexiblePrivacyGroup.create(
     {
       participants: [orion.node1.publicKey, orion.node2.publicKey],
       enclaveKey: orion.node1.publicKey,
@@ -29,7 +29,7 @@ module.exports = async () => {
     onChainPrivacyGroupCreationResult.privacyGroupId
   );
 
-  const addResult = await node1.privx.addToPrivacyGroup({
+  const addResult = await node1.eth.flexiblePrivacyGroup.addTo({
     participants: [orion.node3.publicKey],
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
@@ -55,7 +55,7 @@ module.exports = async () => {
     onChainPrivacyGroupCreationResult.privacyGroupId
   );
 
-  const removeResult = await node1.privx.removeFromPrivacyGroup({
+  const removeResult = await node1.eth.flexiblePrivacyGroup.removeFrom({
     participant: orion.node3.publicKey,
     enclaveKey: orion.node1.publicKey,
     privateFrom: orion.node1.publicKey,
