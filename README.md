@@ -16,3 +16,20 @@ JSON-RPC calls.
 ```shell
 npm install web3js-quorum
 ```
+
+## Quickstart
+The Quorum client APIs methods provided by web3js-quorum are accessed like so: 
+### Extending web3 object
+```js
+const Web3 = require("web3");
+const Web3Quorum = require("web3js-quorum");
+const web3 = new Web3Quorum(new Web3("http://localhost:22000"));
+web3.priv.sendRawTransaction(signedRlpEncoded);
+```
+
+## Documentation
+
+For full usage and API details see the [documentation]() TBD.
+
+## Examples
+The [example](example) directory contains examples of web3js-quorum usage. 
