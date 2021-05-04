@@ -20,4 +20,26 @@ describe("web3Quorum", () => {
     expect(web3.utils).toMatchSnapshot();
     expect(typeof web3.utils.generatePrivacyGroup).toEqual("function");
   });
+
+  it("should match the web3Quorum eth namespace snapshot", () => {
+    const {
+      fillTransaction,
+      storageRoot,
+      getQuorumPayload,
+      sendTransactionAsync,
+      getContractPrivacyMetadata,
+    } = web3.eth;
+    expect({
+      fillTransaction,
+      storageRoot,
+      getQuorumPayload,
+      sendTransactionAsync,
+      getContractPrivacyMetadata,
+    }).toMatchSnapshot();
+    expect(typeof fillTransaction).toEqual("function");
+    expect(typeof storageRoot).toEqual("function");
+    expect(typeof getQuorumPayload).toEqual("function");
+    expect(typeof sendTransactionAsync).toEqual("function");
+    expect(typeof getContractPrivacyMetadata).toEqual("function");
+  });
 });

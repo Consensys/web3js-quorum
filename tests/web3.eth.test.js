@@ -1,0 +1,139 @@
+const Web3 = require("web3");
+const Web3Quorum = require("../src/index");
+const { mockHttpPost, resetMock } = require("./tests-utils/httpMock");
+const {
+  URL,
+  TRANSACTION_OBJECT,
+  ADDRESS,
+  BLOCK_NUMBER,
+} = require("./tests-utils/constants");
+
+describe("web3.eth", () => {
+  const web3 = new Web3Quorum(new Web3(URL));
+
+  afterEach(() => {
+    resetMock();
+  });
+
+  describe("web3.eth.fillTransaction", () => {
+    it("should call eth_fillTransaction", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.fillTransaction(TRANSACTION_OBJECT);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_fillTransaction");
+      expect(request.params).toEqual([TRANSACTION_OBJECT]);
+    });
+
+    it("throw error when call eth_fillTransaction with no param", async () => {
+      await expect(() => {
+        return web3.eth.fillTransaction();
+      }).toThrow("Cannot read property 'to' of undefined");
+    });
+  });
+
+  describe("web3.eth.storageRoot", () => {
+    it("should call eth_storageRoot", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.storageRoot(ADDRESS, 11);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_storageRoot");
+      expect(request.params).toEqual([ADDRESS, BLOCK_NUMBER]);
+    });
+
+    it("should call eth_storageRoot with latest block", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.storageRoot(ADDRESS);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_storageRoot");
+      expect(request.params).toEqual([ADDRESS, "latest"]);
+    });
+
+    it("throw error when call eth_storageRoot with no param", async () => {
+      await expect(() => {
+        return web3.eth.storageRoot();
+      }).toThrow(
+        'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
+      );
+    });
+  });
+
+  describe("web3.eth.getQuorumPayload", () => {
+    it("should call eth_getQuorumPayload", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.getQuorumPayload(ADDRESS);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_getQuorumPayload");
+      expect(request.params).toEqual([ADDRESS]);
+    });
+
+    it("throw error when call eth_getQuorumPayload with no param", async () => {
+      await expect(() => {
+        return web3.eth.getQuorumPayload();
+      }).toThrow("Invalid number of parameters");
+    });
+  });
+
+  describe("web3.eth.sendTransactionAsync", () => {
+    it("should call eth_sendTransactionAsync", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.sendTransactionAsync(TRANSACTION_OBJECT);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_sendTransactionAsync");
+      expect(request.params).toEqual([TRANSACTION_OBJECT]);
+    });
+
+    it("throw error when call eth_sendTransactionAsync with no param", async () => {
+      await expect(() => {
+        return web3.eth.sendTransactionAsync();
+      }).toThrow("Cannot read property 'to' of undefined");
+    });
+  });
+
+  describe("web3.eth.getContractPrivacyMetadata", () => {
+    it("should call eth_getContractPrivacyMetadata", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.getContractPrivacyMetadata(ADDRESS);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_getContractPrivacyMetadata");
+      expect(request.params).toEqual([ADDRESS]);
+    });
+
+    it("throw error when call eth_getContractPrivacyMetadata with no param", async () => {
+      await expect(() => {
+        return web3.eth.getContractPrivacyMetadata();
+      }).toThrow(
+        'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
+      );
+    });
+  });
+});
