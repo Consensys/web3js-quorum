@@ -1,6 +1,7 @@
 module.exports = {
   URL: "http://localhost:20000",
   CHAIN_ID: "0x7E2",
+  BLOCK_NUMBER: "0xb",
   PRIVACY_GROUP_ID: "xQdJRZp0ejzJRqU6N3+EsFo+qTIcdWX50V6YTyvBepw=",
   ADDRESS: "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
   ORION_ADDRESS: "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",

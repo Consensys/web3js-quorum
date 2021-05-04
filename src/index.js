@@ -16,6 +16,7 @@
 const Utils = require("./utils");
 const Priv = require("./priv");
 const FlexiblePrivacyGroup = require("./flexiblePrivacyGroup");
+const Eth = require("./eth");
 
 /**
  * Handles elements
@@ -33,6 +34,8 @@ function Web3Quorum(web3) {
   FlexiblePrivacyGroup(web3);
   // Extend the flexiblePrivacyGroup namespace methods
   Utils(web3);
+  // Extend the eth namespace methods with GoQuorum methods
+  Eth(web3);
 
   return web3;
 }

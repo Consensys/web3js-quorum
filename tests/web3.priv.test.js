@@ -16,6 +16,7 @@ const {
   PRIVATE_KEY,
   CHAIN_ID,
   TRANSACTION_RECEIPT,
+  BLOCK_NUMBER,
 } = require("./tests-utils/constants");
 const { mockHttpPost } = require("./tests-utils/httpMock");
 
@@ -53,7 +54,7 @@ describe("web3.priv", () => {
       expect(request.params).toEqual([
         PRIVACY_GROUP_ID,
         TRANSACTION_OBJECT,
-        "0xb",
+        BLOCK_NUMBER,
       ]);
     });
 

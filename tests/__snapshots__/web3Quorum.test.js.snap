@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`web3Quorum should match the web3Quorum eth namespace snapshot 1`] = `
+Object {
+  "fillTransaction": [Function],
+  "getContractPrivacyMetadata": [Function],
+  "getQuorumPayload": [Function],
+  "sendTransactionAsync": [Function],
+  "storageRoot": [Function],
+}
+`;
+
 exports[`web3Quorum should match the web3Quorum eth.flexiblePrivacyGroup namespace snapshot 1`] = `
 Object {
   "addTo": [Function],
