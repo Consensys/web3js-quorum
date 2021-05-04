@@ -1,8 +1,6 @@
 const nock = require("nock");
 const { URL } = require("./constants");
 
-let id = 0;
-
 const mockHttpPost = (fn, results, n = 1) => {
   nock(URL)
     .post("/")
@@ -12,12 +10,11 @@ const mockHttpPost = (fn, results, n = 1) => {
         fn(body);
       }
       const result = Array.isArray(results) ? results.shift() : results;
-      id += 1;
       return [
         201,
         {
           jsonrpc: "2.0",
-          id,
+          id: body.id,
           result: result || "0x0",
         },
       ];
