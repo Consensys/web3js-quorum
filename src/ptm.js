@@ -10,13 +10,21 @@ function ptm(web3, { ipcPath, privateUrl, tlsSettings }) {
   web3.ptm = {};
 
   // tls settings fot https connections
-  if (ipcPath === undefined) {
+  if (ipcPath === undefined && privateEndpoint) {
     const { protocol } = new URL(privateEndpoint);
-    if (protocol === "https:") {
-      tlsOptions.clientKey = tlsSettings.key || null;
-      tlsOptions.clientCert = tlsSettings.clcert || null;
-      tlsOptions.ca = tlsSettings.cacert || null;
-      tlsOptions.rejectInsecure = !tlsSettings.allowInsecure || null;
+    if (protocol === "https:" && tlsSettings) {
+      if (tlsSettings.key) {
+        tlsOptions.clientKey = tlsSettings.key;
+      }
+      if (tlsSettings.clcert) {
+        tlsOptions.clientCert = tlsSettings.clcert;
+      }
+      if (tlsSettings.cacert) {
+        tlsOptions.ca = tlsSettings.cacert;
+      }
+      if (tlsSettings.allowInsecure) {
+        tlsOptions.rejectInsecure = tlsSettings.allowInsecure;
+      }
     }
   }
 
