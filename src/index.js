@@ -17,13 +17,24 @@ const Utils = require("./utils");
 const Priv = require("./priv");
 const FlexiblePrivacyGroup = require("./flexiblePrivacyGroup");
 const Eth = require("./eth");
+const Ptm = require("./ptm");
 
 /**
  * Handles elements
  * @name Web3Quorum
  * @class Web3Quorum
+ *
+ * @param {Object}  web3 instance of the web3.js library
+ * @param {Object}  enclaveOptions configs of the transaction manager required for GoQuorum case only
+ * @param {string}  enclaveOptions.ipcPath     absolute file path to the ipc of the transaction manager
+ * @param {string}  enclaveOptions.privateUrl  http url to the transaction manager
+ * @param {Object}  enclaveOptions.tlsSettings TLS configuration for the transaction manager when using HTTPS in privateUrl
+ * @param {Buffer}  enclaveOptions.tlsSettings.key           client key buffer
+ * @param {Buffer}  enclaveOptions.tlsSettings.clcert        client certificate buffer
+ * @param {Buffer}  enclaveOptions.tlsSettings.cacert        CA certificate buffer
+ * @param {Boolean} enclaveOptions.tlsSettings.allowInsecure
  */
-function Web3Quorum(web3) {
+function Web3Quorum(web3, enclaveOptions = {}) {
   if (web3.currentProvider == null) {
     throw new Error("Missing provider");
   }
@@ -32,10 +43,12 @@ function Web3Quorum(web3) {
   Priv(web3);
   // Extend the flexiblePrivacyGroup namespace methods
   FlexiblePrivacyGroup(web3);
-  // Extend the flexiblePrivacyGroup namespace methods
+  // Extend the utils namespace methods
   Utils(web3);
+
   // Extend the eth namespace methods with GoQuorum methods
   Eth(web3);
+  Ptm(web3, enclaveOptions);
 
   return web3;
 }
