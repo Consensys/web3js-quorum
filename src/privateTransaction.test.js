@@ -7,7 +7,7 @@ describe("[Transaction]: Basic functions", () => {
   const transactions = [];
 
   it("should decode transactions", () => {
-    txFixtures.slice(0, 3).forEach((tx) => {
+    txFixtures.forEach((tx) => {
       const pt = new PrivateTransaction(tx.raw);
       expect(`0x${pt.nonce.toString("hex")}`).toEqual(tx.raw[0]);
       expect(`0x${pt.gasPrice.toString("hex")}`).toEqual(tx.raw[1]);

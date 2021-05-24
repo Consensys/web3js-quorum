@@ -11,13 +11,13 @@ const ipcConfig = require("./helpers/ipcConfig");
     config: ipcConfig,
   },
 ].forEach((testCase) => {
-  const { enclave } = testCase.config;
+  const { web3 } = testCase.config;
 
-  describe(testCase.name, () => {
-    it("can connect to upcheck", () => {
-      return enclave.upCheck("9001").then((res) => {
-        return expect(res).to.equal("I'm up!");
-      });
+  describe(`${testCase.name}`, () => {
+    it("can connect to upcheck", async () => {
+      const data = await web3.ptm.upCheck();
+
+      expect(data).toEqual("I'm up!");
     });
   });
 });

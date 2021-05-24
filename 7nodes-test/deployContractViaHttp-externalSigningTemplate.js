@@ -85,8 +85,8 @@ const rawTransactionManager = quorumjs.RawTransactionManager(web3, {
   privateUrl: "http://localhost:9081",
 });
 
-rawTransactionManager
-  .storeRawRequest(
+web3.ptm
+  .storeRaw(
     bytecodeWithInitParam,
     "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo="
   )

@@ -7,6 +7,7 @@
     "test": "npm run test:unit && npm run test:mock && npm run test:integration && npm run test:onchain",
     "test:unit": "jest src",
     "test:mock": "jest ./tests",
+    "test:quorum": "jest integration-tests/quorum-privacy/*.test.js --runInBand",
     "pretest:integration": "BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=false npm run network:up",
     "test:integration": "jest integration-tests/*.test.js --runInBand",
     "posttest:integration": "npm run network:down",
@@ -84,8 +85,10 @@
   },
   "homepage": "https://github.com/ConsenSysQuorum/web3js-quorum#readme",
   "dependencies": {
+    "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "6.1.0",
     "lodash": "4.17.19",
+    "request-promise-native": "^1.0.9",
     "rlp": "2.2.4"
   },
   "devDependencies": {
@@ -101,7 +104,6 @@
     "eslint-plugin-jest": "^24.3.5",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.3.1",
-    "ethereumjs-tx": "^1.3.7",
     "husky": "^6.0.0",
     "jest": "^26.6.3",
     "jsdoc": "^3.6.4",
