@@ -1,5 +1,6 @@
 const rp = require("request-promise-native");
 const { URL } = require("url");
+const { hexToBase64, base64toHex } = require("./util");
 
 function ptm(web3, { ipcPath, privateUrl, tlsSettings }) {
   const socketRoot = `http://unix:${ipcPath}:`;
@@ -28,24 +29,48 @@ function ptm(web3, { ipcPath, privateUrl, tlsSettings }) {
     }
   }
 
-  const send = (payload, from, to) => {
-    return rp({
+  /**
+   * Calls Tessera’s ThirdParty /send API to encrypts a payload, stores result in database, and publishes result to recipients.
+   * @param {Object} options
+   * @param {String} options.data        Hex encoded private transaction data (value of data/input field in the transaction)
+   * @param {String} options.privateFrom Sending party’s base64-encoded public key
+   * @param {String} options.privateFor  public keys identifying the recipients of the payload
+   * @returns   A promise that resolves to the hex-encoded hash of the encrypted data (key field) that should be used to replace the data field of a transaction if externally signing.
+   */
+  const send = async ({ data, privateFrom, privateFor }) => {
+    const response = await rp({
       method: "POST",
       uri: `${privateEndpoint}/send`,
       json: true,
-      body: { payload, from, to },
+      body: {
+        payload: hexToBase64(data.substring(2)),
+        from: privateFrom,
+        to: privateFor,
+      },
       ...tlsOptions,
     });
+    return base64toHex(response.key);
   };
 
-  const storeRaw = (payload, from) => {
-    return rp({
+  /**
+   * Calls Tessera’s ThirdParty /storeraw API to encrypt the provided data and store in preparation for a eth_sendRawPrivateTransaction.
+   * @param {Object} options
+   * @param {String} options.data        Hex encoded private transaction data (value of data/input field in the transaction)
+   * @param {String} options.privateFrom Sending party’s base64-encoded public key
+   * @returns   A promise that resolves to the hex-encoded hash of the encrypted data (key field) that should be used to replace the data field of a transaction if externally signing.
+   */
+  const storeRaw = async ({ data, privateFrom }) => {
+    const response = await rp({
       method: "POST",
       uri: `${privateEndpoint}/storeraw`,
       json: true,
-      body: { payload, from },
+      body: {
+        payload: hexToBase64(data.substring(2)),
+        from: privateFrom,
+      },
       ...tlsOptions,
     });
+    return base64toHex(response.key);
   };
 
   const keys = () => {
