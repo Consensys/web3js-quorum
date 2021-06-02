@@ -1,10 +1,19 @@
 const Web3 = require("web3");
+const EthereumTx = require("ethereumjs-tx").Transaction;
+const Web3Quorum = require("../src");
+const { intToHex } = require("../src/util");
 
-const web3 = new Web3(
-  new Web3.providers.HttpProvider("http://localhost:22000")
+const ipcPath = process.env.IPC_PATH;
+
+if (ipcPath == null) {
+  console.log("Please specify tessera ipc path");
+  process.exit();
+}
+const web3 = new Web3Quorum(
+  new Web3("http://localhost:22000"),
+  { ipcPath },
+  true
 );
-
-const quorumjs = require("../lib/index.js");
 
 const accAddress = "ed9d02e382b34818e88b88a309c7fe71e65f419d";
 
@@ -73,37 +82,51 @@ const simpleContract = new web3.eth.Contract(abi);
 const bytecodeWithInitParam = simpleContract
   .deploy({ data: bytecode, arguments: [42] })
   .encodeABI();
+(async () => {
+  try {
+    const txCount = await web3.eth.getTransactionCount(`0x${accAddress}`);
+    const options = {
+      gasPrice: 0,
+      gasLimit: 4300000,
+      value: 0,
+      data: bytecodeWithInitParam,
+      from: signAcct,
+      isPrivate: true,
+      privateFrom: "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
+      privateFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="],
+      nonce: txCount,
+    };
+    const transactionPayload = await web3.ptm.send(options);
+    const rawTransaction = {
+      nonce: intToHex(options.nonce),
+      from: options.from,
+      to: options.to,
+      value: intToHex(options.value),
+      gasLimit: intToHex(options.gasLimit),
+      gasPrice: intToHex(options.gasPrice),
+      data: `0x${transactionPayload}`,
+    };
 
-const ipcPath = process.env.IPC_PATH;
+    const tx = new EthereumTx(rawTransaction, {
+      chain: "mainnet",
+      hardfork: "homestead",
+    });
+    tx.sign(Buffer.from(options.from.privateKey.substring(2), "hex"));
 
-if (ipcPath == null) {
-  console.log("Please specify tessera ipc path");
-  process.exit();
-}
+    const serializedTx = tx.serialize();
+    const serializedTxHex = `0x${serializedTx.toString("hex")}`;
 
-const rawTransactionManager = quorumjs.RawTransactionManager(web3, {
-  ipcPath,
-});
-
-web3.eth.getTransactionCount(`0x${accAddress}`).then((txCount) => {
-  const newTx = rawTransactionManager.sendRawTransactionViaSendAPI({
-    gasPrice: 0,
-    gasLimit: 4300000,
-    value: 0,
-    data: bytecodeWithInitParam,
-    from: signAcct,
-    isPrivate: true,
-    privateFrom: "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
-    privateFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="],
-    nonce: txCount,
-  });
-
-  newTx
-    .then((tx) => {
-      console.log("Contract address: ", tx.contractAddress);
-      const simpleContract2 = new web3.eth.Contract(abi, tx.contractAddress);
-      simpleContract2.methods.get().call().then(console.log).catch(console.log);
-      return simpleContract2;
-    })
-    .catch(console.log);
-});
+    const privateTx = web3.utils.setPrivate(serializedTxHex);
+    const receipt = await web3.eth.sendSignedTransaction(
+      `0x${privateTx.toString("hex")}`,
+      options.privateFor
+    );
+    console.log("Contract address: ", receipt.contractAddress);
+    const simpleContract2 = new web3.eth.Contract(abi, receipt.contractAddress);
+    simpleContract2.methods.get().call().then(console.log).catch(console.log);
+    return simpleContract2;
+  } catch (error) {
+    console.log("error :>> ", error);
+    return error;
+  }
+})();

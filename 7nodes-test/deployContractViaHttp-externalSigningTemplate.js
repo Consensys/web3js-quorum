@@ -1,11 +1,15 @@
 const Web3 = require("web3");
 const EthereumTx = require("ethereumjs-tx").Transaction;
 
-const web3 = new Web3(
-  new Web3.providers.HttpProvider("http://localhost:22000")
-);
+const Web3Quorum = require("../src");
 
-const quorumjs = require("../lib/index.js");
+const web3 = new Web3Quorum(
+  new Web3("http://localhost:22000"),
+  {
+    privateUrl: "http://localhost:9081",
+  },
+  true
+);
 
 const accAddress = "ed9d02e382b34818e88b88a309c7fe71e65f419d";
 
@@ -74,60 +78,47 @@ const simpleContract = new web3.eth.Contract(abi);
 const bytecodeWithInitParam = simpleContract
   .deploy({ data: bytecode, arguments: [42] })
   .encodeABI();
-
-// const tessera = quorumjs.enclaves.Tessera(
-//   web3,
-//   "http://localhost:9081",
-//   "http://localhost:9081"
-// );
-
-const rawTransactionManager = quorumjs.RawTransactionManager(web3, {
-  privateUrl: "http://localhost:9081",
-});
-
-web3.ptm
-  .storeRaw(
-    bytecodeWithInitParam,
-    "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo="
-  )
-  .then((txHash) => {
+(async () => {
+  try {
+    const txHash = await web3.ptm.storeRaw({
+      data: bytecodeWithInitParam,
+      privateFrom: "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
+    });
     // BEGIN EXTERNAL SIGNING
     // REPLACE this with your preferred method for signing
     // Keep in mind that for signing *private* transactions you need to use the *Homestead/Frontier* signer.
 
-    web3.eth
-      .getTransactionCount(accAddress)
-      .then((nonce) => {
-        const rawTransaction = {
-          nonce: `0x${nonce.toString(16)}`,
-          from: accAddress,
-          value: `0x${(0).toString(16)}`,
-          gasLimit: `0x${(4300000).toString(16)}`,
-          gasPrice: `0x${(0).toString(16)}`,
-          data: `0x${txHash}`,
-        };
+    const nonce = await web3.eth.getTransactionCount(accAddress);
+    const rawTransaction = {
+      nonce: `0x${nonce.toString(16)}`,
+      from: accAddress,
+      value: `0x${(0).toString(16)}`,
+      gasLimit: `0x${(4300000).toString(16)}`,
+      gasPrice: `0x${(0).toString(16)}`,
+      data: `0x${txHash}`,
+    };
 
-        const tx = new EthereumTx(rawTransaction, {
-          chain: "mainnet",
-          hardfork: "homestead",
-        });
-        tx.sign(Buffer.from(signAcct.privateKey.substring(2), "hex"));
+    const tx = new EthereumTx(rawTransaction, {
+      chain: "mainnet",
+      hardfork: "homestead",
+    });
+    tx.sign(Buffer.from(signAcct.privateKey.substring(2), "hex"));
 
-        const serializedTx = tx.serialize();
-        const serializedTxHex = `0x${serializedTx.toString("hex")}`;
-        // END EXTERNAL SIGNING
+    const serializedTx = tx.serialize();
+    const serializedTxHex = `0x${serializedTx.toString("hex")}`;
+    // END EXTERNAL SIGNING
+    const privateTx = web3.utils.setPrivate(serializedTxHex);
+    const privateTxHex = `0x${privateTx.toString("hex")}`;
 
-        const privateTx = rawTransactionManager.setPrivate(serializedTxHex);
-        const privateTxHex = `0x${privateTx.toString("hex")}`;
+    const hash = await web3.eth.sendRawPrivateTransaction(privateTxHex, {
+      privateFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="],
+    });
 
-        return rawTransactionManager
-          .sendRawRequest(privateTxHex, [
-            "QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc=",
-          ])
-          .then(console.log)
-          .catch(console.log);
-      })
-      .catch(console.log);
-    return txHash;
-  })
-  .catch(console.log);
+    const receipt = await web3.priv.waitForTransactionReceipt(hash);
+    console.log("receipt :>> ", receipt);
+    return receipt;
+  } catch (error) {
+    console.error("error :>> ", error);
+    return error;
+  }
+})();

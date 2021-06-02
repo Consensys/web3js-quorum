@@ -1,13 +1,14 @@
 const Web3 = require("web3");
 
-const web3 = new Web3(
-  new Web3.providers.HttpProvider("http://localhost:22000")
+const Web3Quorum = require("../src");
+
+const web3 = new Web3Quorum(
+  new Web3("http://localhost:22000"),
+  {
+    privateUrl: "http://localhost:9081",
+  },
+  true
 );
-
-const quorumjs = require("../lib/index.js");
-
-// Call extend to add Quorum into web3 instance
-quorumjs.extend(web3);
 
 const accAddress = "ed9d02e382b34818e88b88a309c7fe71e65f419d";
 
@@ -77,52 +78,34 @@ const bytecodeWithInitParam = simpleContract
   .deploy({ data: bytecode, arguments: [42] })
   .encodeABI();
 
-// const tessera = quorumjs.enclaves.Tessera(
-//   web3,
-//   "http://localhost:9081",
-//   "http://localhost:9081"
-// );
+(async () => {
+  try {
+    const txCount = await web3.eth.getTransactionCount(`0x${accAddress}`);
+    const tx = await web3.priv.generateAndSendRawTransaction({
+      gasPrice: 0,
+      gasLimit: 4300000,
+      value: 0,
+      data: bytecodeWithInitParam,
+      from: signAcct,
+      isPrivate: true,
+      privateFrom: "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
+      privateFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="],
+      nonce: txCount,
+      privacyFlag: 1,
+    });
 
-const rawTransactionManager = quorumjs.RawTransactionManager(web3, {
-  privateUrl: "http://localhost:9081",
-});
+    console.log("Contract address: ", tx.contractAddress);
+    const simpleContract2 = new web3.eth.Contract(abi, tx.contractAddress);
 
-web3.eth.getTransactionCount(`0x${accAddress}`).then((txCount) => {
-  const newTx = rawTransactionManager.sendRawTransaction({
-    gasPrice: 0,
-    gasLimit: 4300000,
-    value: 0,
-    data: bytecodeWithInitParam,
-    from: signAcct,
-    isPrivate: true,
-    privateFrom: "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
-    privateFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="],
-    nonce: txCount,
-    privacyFlag: 1,
-  });
+    const val = await simpleContract2.methods.get().call();
+    console.log(`Value: ${val}`);
 
-  const res = newTx
-    .then((tx) => {
-      console.log("Contract address: ", tx.contractAddress);
-      const simpleContract2 = new web3.eth.Contract(abi, tx.contractAddress);
-      return simpleContract2.methods
-        .get()
-        .call()
-        .then((val) => {
-          console.log(`Value: ${val}`);
-          return tx;
-        })
-        .catch(console.log);
-    })
-    .catch(console.log);
-
-  res
-    .then((tx) => {
-      console.log("Privacy metadata for address: ", tx.contractAddress);
-      web3.eth
-        .getContractPrivacyMetadata(tx.contractAddress)
-        .then(console.log)
-        .catch(console.log);
-    })
-    .catch(console.log);
-});
+    console.log("Privacy metadata for address: ", tx.contractAddress);
+    const meta = await web3.eth.getContractPrivacyMetadata(tx.contractAddress);
+    console.log("meta :>> ", meta);
+    return tx;
+  } catch (error) {
+    console.log("error :>> ", error);
+    return error;
+  }
+})();

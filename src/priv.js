@@ -245,11 +245,11 @@ function Priv(web3) {
     if (typeof privacyFlag !== "undefined") {
       privacyParams.privacyFlag = privacyFlag;
     }
-    const res = await web3.eth.sendRawPrivateTransaction(
+    const txHash = await web3.eth.sendRawPrivateTransaction(
       payload,
       privacyParams
     );
-    return waitForTransactionReceipt(res.result);
+    return waitForTransactionReceipt(txHash);
   };
 
   const genericSendRawTransaction = async (options, method) => {
