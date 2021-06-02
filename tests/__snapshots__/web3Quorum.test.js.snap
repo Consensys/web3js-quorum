@@ -50,6 +50,18 @@ Object {
 }
 `;
 
+exports[`web3Quorum should match the web3Quorum raft namespace snapshot 1`] = `
+Object {
+  "addLearner": [Function],
+  "addPeer": [Function],
+  "cluster": [Function],
+  "leader": [Function],
+  "promoteToPeer": [Function],
+  "removePeer": [Function],
+  "role": [Function],
+}
+`;
+
 exports[`web3Quorum should match the web3Quorum utils namespace snapshot 1`] = `
 Object {
   "BN": [Function],

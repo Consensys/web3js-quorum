@@ -18,6 +18,7 @@ const Priv = require("./priv");
 const FlexiblePrivacyGroup = require("./flexiblePrivacyGroup");
 const Eth = require("./eth");
 const Ptm = require("./ptm");
+const Raft = require("./raft");
 
 /**
  * Handles elements
@@ -52,6 +53,9 @@ function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
 
   // Extend the eth namespace methods with GoQuorum methods
   Eth(web3);
+
+  // Extend the raft namespace methods
+  Raft(web3);
 
   return web3;
 }
