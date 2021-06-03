@@ -50,4 +50,8 @@ describe("web3Quorum", () => {
   it("should match the web3Quorum Istanbul namespace snapshot", () => {
     expect(web3.istanbul).toMatchSnapshot();
   });
+
+  it("should match the web3Quorum Permission namespace snapshot", () => {
+    expect(web3.permission).toMatchSnapshot();
+  });
 });

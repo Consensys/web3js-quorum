@@ -20,6 +20,7 @@ const Eth = require("./eth");
 const Ptm = require("./ptm");
 const Raft = require("./raft");
 const Istanbul = require("./istanbul");
+const Permission = require("./permission");
 
 /**
  * Handles elements
@@ -60,6 +61,9 @@ function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
 
   // Extend the Istanbul namespace methods
   Istanbul(web3);
+
+  // Extend the Permission namespace methods
+  Permission(web3);
 
   return web3;
 }
