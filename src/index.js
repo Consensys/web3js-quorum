@@ -19,6 +19,7 @@ const FlexiblePrivacyGroup = require("./flexiblePrivacyGroup");
 const Eth = require("./eth");
 const Ptm = require("./ptm");
 const Raft = require("./raft");
+const Istanbul = require("./istanbul");
 
 /**
  * Handles elements
@@ -56,6 +57,9 @@ function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
 
   // Extend the raft namespace methods
   Raft(web3);
+
+  // Extend the Istanbul namespace methods
+  Istanbul(web3);
 
   return web3;
 }

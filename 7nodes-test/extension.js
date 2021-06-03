@@ -1,15 +1,14 @@
 const Web3 = require("web3");
 
-const web3 = new Web3(
-  new Web3.providers.HttpProvider("http://localhost:22000")
+const Web3Quorum = require("../src");
+
+const web3 = new Web3Quorum(
+  new Web3("http://localhost:22000"),
+  {
+    privateUrl: "http://localhost:9081",
+  },
+  true
 );
 
-const quorumjs = require("../lib/index.js");
-
-// Call extend to add Quorum into web3 instance
-quorumjs.extend(web3);
-
 // Example of calling Quorum specific API
-web3.quorum.raft.leader().then((o, e) => {
-  console.log(o, e);
-});
+web3.raft.leader().then(console.log).catch(console.log);

@@ -46,4 +46,8 @@ describe("web3Quorum", () => {
   it("should match the web3Quorum raft namespace snapshot", () => {
     expect(web3.raft).toMatchSnapshot();
   });
+
+  it("should match the web3Quorum Istanbul namespace snapshot", () => {
+    expect(web3.istanbul).toMatchSnapshot();
+  });
 });

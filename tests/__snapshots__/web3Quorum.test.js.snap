@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`web3Quorum should match the web3Quorum Istanbul namespace snapshot 1`] = `
+Object {
+  "candidates": [Function],
+  "discard": [Function],
+  "getSignersFromBlock": [Function],
+  "getSignersFromBlockByHash": [Function],
+  "getSnapshot": [Function],
+  "getSnapshotAtHash": [Function],
+  "getValidators": [Function],
+  "getValidatorsAtHash": [Function],
+  "isValidator": [Function],
+  "nodeAddress": [Function],
+  "propose": [Function],
+  "status": [Function],
+}
+`;
+
 exports[`web3Quorum should match the web3Quorum eth namespace snapshot 1`] = `
 Object {
   "fillTransaction": [Function],
