@@ -5,7 +5,7 @@ const { PrivateSubscription } = require("./privateSubscription");
 const { intToHex } = require("./util");
 
 /**
- * @module
+ * @module priv
  */
 function Priv(web3) {
   const GAS_PRICE = 0;
@@ -32,69 +32,145 @@ function Priv(web3) {
           web3.extend.formatters.inputDefaultBlockNumberFormatter,
         ],
       },
+      /**
+       * @function debugGetStateRoot
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String|Number} blockNumber
+       * @return {String} 32-byte state root
+       */
       {
         name: "debugGetStateRoot",
         call: "priv_debugGetStateRoot",
         params: 2,
       },
+      /**
+       * @function distributeRawTransaction
+       * @param {String} transaction signed RLP-encoded private transaction
+       * @return {String} 32-byte enclave key
+       */
       {
         name: "distributeRawTransaction",
         call: "priv_distributeRawTransaction",
         params: 1,
       },
+      /**
+       * @function getEeaTransactionCount
+       * @param {String} address account address
+       * @param {String} sender base64-encoded Orion address of the sender
+       * @param {String[]} recipients base64-encoded Orion addresses of recipients
+       * @return {String} integer representing the number of private transactions sent from the address to the specified group of sender and recipients
+       */
       {
         name: "getEeaTransactionCount",
         call: "priv_getEeaTransactionCount",
         params: 3,
       },
+      /**
+       * @function getFilterChanges
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String} filterId filter ID
+       * @return {Object[]} list of log objects, or an empty list if nothing has changed since the last poll
+       */
       {
         name: "getFilterChanges",
         call: "priv_getFilterChanges",
         params: 2,
         outputFormatter: web3.extend.formatters.outputLogFormatter,
       },
+      /**
+       * @function getFilterLogs
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String} filterId filter ID
+       * @return {Object[]} list of log objects
+       */
       {
         name: "getFilterLogs",
         call: "priv_getFilterLogs",
         params: 2,
         outputFormatter: web3.extend.formatters.outputLogFormatter,
       },
+      /**
+       * @function getLogs
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {Object} filterOptions filter options object
+       * @return {Object[]} list of log objects
+       */
       {
         name: "getLogs",
         call: "priv_getLogs",
         params: 2,
         outputFormatter: web3.extend.formatters.outputLogFormatter,
       },
+      /**
+       * @function getPrivacyPrecompileAddress
+       * @return {String} address of the privacy precompile
+       */
       {
         name: "getPrivacyPrecompileAddress",
         call: "priv_getPrivacyPrecompileAddress",
         params: 0,
       },
+      /**
+       * @function getPrivateTransaction
+       * @param {String} transaction transaction hash returned by eea_sendRawTransaction or eea_sendTransaction.
+       * @return {Object} private transaction object, or null if not a participant in the private transaction
+       */
       {
         name: "getPrivateTransaction",
         call: "priv_getPrivateTransaction",
         params: 1,
       },
+      /**
+       * @function createPrivacyGroup
+       * @param {Object} options request options object with the following fields:
+       * @param {String[]} options.addresses list of nodes specified by Orion public keys
+       * @param {String} options.name (optional) privacy group name
+       * @param {String} options.description (optional) privacy group description
+       * @return {String} privacy group ID
+       */
       {
         name: "createPrivacyGroup",
         call: "priv_createPrivacyGroup",
         params: 1,
       },
+      /**
+       * @function deletePrivacyGroup
+       * @param {String} privacyGroupId privacy group ID
+       * @return {String} deleted privacy group ID
+       */
       {
         name: "deletePrivacyGroup",
         call: "priv_deletePrivacyGroup",
         params: 1,
       },
+      /**
+       * @function findPrivacyGroup
+       * @param {String[]} members members specified by Orion public keys
+       * @return {Object[]} privacy group objects
+       */
       {
         name: "findPrivacyGroup",
         call: "priv_findPrivacyGroup",
         params: 1,
       },
+      /**
+       * @function getCode
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String} address 20-byte contract address
+       * @param {String|Number} blockNumber
+       * @return {String} code stored at the specified address
+       */
       {
         name: "getCode",
         call: "priv_getCode",
         params: 3,
       },
+      /**
+       * @function getTransactionCount
+       * @param {String} address account address
+       * @param {String} privacyGroupId privacy group ID
+       * @return {String} integer representing the number of private transactions sent from the address to the specified privacy group
+       */
       {
         name: "getTransactionCount",
         call: "priv_getTransactionCount",
@@ -103,35 +179,70 @@ function Priv(web3) {
           return parseInt(output, 16);
         },
       },
+      /**
+       * @function getTransactionReceipt
+       * @param {String} transaction 32-byte hash of a transaction
+       * @return {Object} private Transaction receipt object, or null if no receipt found
+       */
       {
         name: "getTransactionReceipt",
         call: "priv_getTransactionReceipt",
         params: 1,
       },
+      /**
+       * @function newFilter
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {Object} filterOptions filter options object
+       * @return {String} filter ID
+       */
       {
         name: "newFilter",
         call: "priv_newFilter",
         params: 2,
       },
+      /**
+       * @function uninstallFilter
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {Object} filterOptions filter options object
+       * @return {Boolean} indicates if the filter is successfully uninstalled
+       */
       {
         name: "uninstallFilter",
         call: "priv_uninstallFilter",
         params: 2,
       },
+      /**
+       * @function sendRawTransaction
+       * @param {String} transaction signed RLP-encoded private transaction
+       * @return {String} 32-byte transaction hash of the Privacy Marker Transaction
+       */
       {
         name: "sendRawTransaction",
         call: "eea_sendRawTransaction",
         params: 1,
       },
+      /**
+       * @function subscribe
+       * @param {String} privacyGroupId
+       * @param {String} type
+       * @param {Object} filter
+       * @return {Sting} Subscription ID
+       */
       {
         name: "subscribe",
         call: "priv_subscribe",
-        params: 3, // type, privacyGroupId, filter
+        params: 3, // privacyGroupId, type, filter
       },
+      /**
+       * @function unsubscribe
+       * @param {String} privacyGroupId
+       * @param {String} subscriptionId
+       * @return {Boolean} true if subscription successfully unsubscribed; otherwise, returns an error.
+       */
       {
         name: "unsubscribe",
         call: "priv_unsubscribe",
-        params: 2, // privacyGroupId, filterId
+        params: 2, // privacyGroupId, subscriptionId
       },
     ],
   });
@@ -192,9 +303,10 @@ function Priv(web3) {
 
   /**
    * Get the private transaction Receipt with waiting until the receipt is ready.
+   * @function waitForTransactionReceipt
    * @param {string} txHash Transaction Hash of the marker transaction
-   * @param {int} retries Number of retries to be made to get the private marker transaction receipt
-   * @param {int} delay The delay between the retries
+   * @param {int} [retries=300] Number of retries to be made to get the private marker transaction receipt
+   * @param {int} [delay=1000] The delay between the retries in milliseconds
    * @returns {Promise<T>}
    */
   const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
@@ -317,6 +429,7 @@ function Priv(web3) {
 
   /**
    * Generate and distribute the Raw transaction to the Besu node using the `priv_distributeRawTransaction` JSON-RPC call
+   * @function generateAndDistributeRawTransaction
    * @param {object} options Map to send a raw transaction to besu
    * @param {string} options.privateKey : Private Key used to sign transaction with
    * @param {string} options.privateFrom : Enclave public key
@@ -334,6 +447,7 @@ function Priv(web3) {
 
   /**
    * Generate and send the Raw transaction to the Besu node using the `eea_sendRawTransaction` JSON-RPC call
+   * @function generateAndSendRawTransaction
    * @param {object} options Map to send a raw transaction to besu
    * @param {string} options.privateKey : Private Key used to sign transaction with
    * @param {string} options.privateFrom : Enclave public key
@@ -355,6 +469,7 @@ function Priv(web3) {
    * If the provider supports subscriptions, it uses `priv_subscribe`, otherwise
    * it uses polling and `priv_getFilterChanges` to get new logs. Returns an
    * error to the callback if there is a problem subscribing or creating the filter.
+   * @function subscribeWithPooling
    * @param {string} privacyGroupId
    * @param {*} filter
    * @param {function} callback returns the filter/subscription ID, or an error
