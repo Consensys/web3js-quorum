@@ -29,12 +29,7 @@ const options = {
   },
 ].forEach((testCase) => {
   describe(`${testCase.name}`, () => {
-    const {
-      web3,
-      toPublicKey,
-      fromPublicKey,
-      rawTransactionManager,
-    } = testCase.config;
+    const { web3, toPublicKey, fromPublicKey } = testCase.config;
 
     describe("Human Standard Contract", () => {
       const transferQty = 160;
@@ -50,7 +45,7 @@ const options = {
 
       it("can transfer funds with private payload", async () => {
         let nonce = await web3.eth.getTransactionCount(fromAddress);
-        const result = await rawTransactionManager.sendRawTransaction({
+        const result = await web3.priv.generateAndSendRawTransaction({
           gasPrice: 0,
           gasLimit: 4300000,
           to: "",
@@ -85,7 +80,7 @@ const options = {
           .encodeABI();
 
         nonce = await web3.eth.getTransactionCount(fromAddress);
-        await rawTransactionManager.sendRawTransaction({
+        await web3.priv.generateAndSendRawTransaction({
           gasPrice: 0,
           gasLimit: 4300000,
           to: token.options.address,

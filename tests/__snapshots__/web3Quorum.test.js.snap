@@ -89,6 +89,7 @@ Object {
   "padRight": [Function],
   "randomHex": [Function],
   "rightPad": [Function],
+  "setPrivate": [Function],
   "sha3": [Function],
   "sha3Raw": [Function],
   "soliditySha3": [Function],

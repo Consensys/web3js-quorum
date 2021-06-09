@@ -6,6 +6,9 @@ const Ptm = require("./ptm");
 describe("Private Transaction Manager", () => {
   const privateUrl = "https://localhost:22000";
   const web3 = new Ptm({}, { privateUrl });
+  rp.mockResolvedValue({
+    key: "asdasd",
+  });
 
   it("should use the ipcPath passed", async () => {
     const { ptm } = new Ptm(
@@ -59,10 +62,14 @@ describe("Private Transaction Manager", () => {
   });
 
   it("should call send api with the right payload", async () => {
-    await web3.ptm.send("payload", "from", "to");
+    await web3.ptm.send({
+      data: "0x123123123",
+      privateFrom: "from",
+      privateFor: "to",
+    });
 
     expect(rp).toBeCalledWith({
-      body: { from: "from", payload: "payload", to: "to" },
+      body: { from: "from", payload: "EjEjEg==", to: "to" },
       json: true,
       method: "POST",
       uri: `${privateUrl}/send`,
@@ -70,10 +77,13 @@ describe("Private Transaction Manager", () => {
   });
 
   it("should call storeRaw api with the right payload", async () => {
-    await web3.ptm.storeRaw("payload", "from");
+    await web3.ptm.storeRaw({
+      data: "0x123123123",
+      privateFrom: "from",
+    });
 
     expect(rp).toBeCalledWith({
-      body: { from: "from", payload: "payload" },
+      body: { from: "from", payload: "EjEjEg==" },
       json: true,
       method: "POST",
       uri: `${privateUrl}/storeraw`,

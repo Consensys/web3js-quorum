@@ -2,6 +2,11 @@ function Eth(web3) {
   web3.eth.extend({
     methods: [
       {
+        name: "sendRawPrivateTransaction",
+        call: "eth_sendRawPrivateTransaction",
+        params: 2,
+      },
+      {
         name: "fillTransaction",
         call: "eth_fillTransaction",
         params: 1,

@@ -5,7 +5,7 @@ const Web3 = require("web3");
 const Web3Quorum = require("../src");
 const HumanStandardTokenAbi = require("./solidity/HumanStandardToken/HumanStandardToken.json")
   .output.abi;
-const ethUtil = require("../src/utils/custom-ethjs-util");
+const ethUtil = require("../src/util/custom-ethjs-util");
 const { orion, network } = require("./keys.js");
 
 const binary = fs.readFileSync(

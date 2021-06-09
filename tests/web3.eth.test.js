@@ -6,6 +6,8 @@ const {
   TRANSACTION_OBJECT,
   ADDRESS,
   BLOCK_NUMBER,
+  SIGNED_RLP,
+  ORION_ADDRESS,
 } = require("./tests-utils/constants");
 
 describe("web3.eth", () => {
@@ -13,6 +15,34 @@ describe("web3.eth", () => {
 
   afterEach(() => {
     resetMock();
+  });
+
+  describe("web3.eth.sendRawPrivateTransaction", () => {
+    it("should call eth_sendRawPrivateTransaction", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.sendRawPrivateTransaction(SIGNED_RLP, {
+        privateFor: [ORION_ADDRESS],
+      });
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_sendRawPrivateTransaction");
+      expect(request.params).toEqual([
+        SIGNED_RLP,
+        {
+          privateFor: [ORION_ADDRESS],
+        },
+      ]);
+    });
+
+    it("throw error when call eth_sendRawPrivateTransaction with no param", async () => {
+      await expect(() => {
+        return web3.eth.sendRawPrivateTransaction();
+      }).toThrow("Invalid number of parameters");
+    });
   });
 
   describe("web3.eth.fillTransaction", () => {

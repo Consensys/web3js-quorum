@@ -34,21 +34,24 @@ const Ptm = require("./ptm");
  * @param {Buffer}  enclaveOptions.tlsSettings.cacert        CA certificate buffer
  * @param {Boolean} enclaveOptions.tlsSettings.allowInsecure
  */
-function Web3Quorum(web3, enclaveOptions = {}) {
+function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
   if (web3.currentProvider == null) {
     throw new Error("Missing provider");
   }
+  // TODO: to be updated by a method call web3_clientVersion
+  web3.isQuorum = isQuorum;
 
+  // Extend the utils namespace methods
+  Utils(web3);
+
+  Ptm(web3, enclaveOptions);
   // Extend the priv namespace methods
   Priv(web3);
   // Extend the flexiblePrivacyGroup namespace methods
   FlexiblePrivacyGroup(web3);
-  // Extend the utils namespace methods
-  Utils(web3);
 
   // Extend the eth namespace methods with GoQuorum methods
   Eth(web3);
-  Ptm(web3, enclaveOptions);
 
   return web3;
 }

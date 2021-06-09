@@ -15,7 +15,7 @@
 
 const RLP = require("rlp");
 const _ = require("lodash");
-const { keccak256 } = require("./utils/custom-ethjs-util");
+const { keccak256 } = require("./util/custom-ethjs-util");
 
 function Utils(web3) {
   /**
@@ -52,8 +52,18 @@ function Utils(web3) {
     return Buffer.from(keccak256(rlp)).toString("base64");
   };
 
+  const setPrivate = (rawTransaction) => {
+    const decoded = RLP.decode(rawTransaction);
+    const compareTo = Buffer.from("1c", "hex");
+    if (decoded[6].compare(compareTo) === 0)
+      decoded[6] = Buffer.from("26", "hex");
+    else decoded[6] = Buffer.from("25", "hex");
+    return RLP.encode(decoded);
+  };
+
   Object.assign(web3.utils, {
     generatePrivacyGroup,
+    setPrivate,
   });
   return web3;
 }

@@ -24,12 +24,7 @@ const options = {
     config: ipcConfig,
   },
 ].forEach((testCase) => {
-  const {
-    web3,
-    toPublicKey,
-    fromPublicKey,
-    rawTransactionManager,
-  } = testCase.config;
+  const { web3, toPublicKey, fromPublicKey } = testCase.config;
 
   const tokenContract = new web3.eth.Contract(abi, null, options);
 
@@ -44,7 +39,7 @@ const options = {
 
       it("can be deployed and executed", async () => {
         const nonce = await web3.eth.getTransactionCount(fromAddress);
-        const result = await rawTransactionManager.sendRawTransaction({
+        const result = await web3.priv.generateAndSendRawTransaction({
           gasPrice: 0,
           gasLimit: 4300000,
           to: "",

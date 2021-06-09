@@ -1,7 +1,12 @@
+const { Transaction } = require("ethereumjs-tx");
 const PrivateTransaction = require("./privateTransaction");
-const { privateToAddress } = require("./utils/custom-ethjs-util");
+const { privateToAddress } = require("./util/custom-ethjs-util");
 const { PrivateSubscription } = require("./privateSubscription");
+const { intToHex } = require("./util");
 
+/**
+ * @module
+ */
 function Priv(web3) {
   const GAS_PRICE = 0;
   const GAS_LIMIT = 3000000;
@@ -9,6 +14,14 @@ function Priv(web3) {
   web3.extend({
     property: "priv",
     methods: [
+      /**
+       * Invokes a private contract function locally and does not change the privacy group state.
+       * @function call
+       * @param {String} privacyGroupId privacy group ID
+       * @param {Object} call transaction call object
+       * @param {String} blockNumber integer representing a block number or one of the string tags latest, earliest, or pending
+       * @return {Data} result return value of the executed contract
+       */
       {
         name: "call",
         call: "priv_call",
@@ -154,7 +167,7 @@ function Priv(web3) {
                 );
               }
             } else {
-              return resolve();
+              return resolve(result);
             }
           })
           .catch((reason) => {
@@ -185,12 +198,75 @@ function Priv(web3) {
    * @returns {Promise<T>}
    */
   const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
-    return getMarkerTransaction(txHash, retries, delay).then(() => {
+    return getMarkerTransaction(txHash, retries, delay).then((receipt) => {
+      if (web3.isQuorum) {
+        return receipt;
+      }
       return web3.priv.getTransactionReceipt(txHash);
     });
   };
 
+  const getTransactionPayload = (options) => {
+    if (options.isPrivate) {
+      return web3.ptm.storeRaw(options);
+    }
+    return options.data;
+  };
+
+  const serializeSignedTransaction = (options, data) => {
+    const rawTransaction = {
+      nonce: intToHex(options.nonce),
+      from: options.from,
+      to: options.to,
+      value: intToHex(options.value),
+      gasLimit: intToHex(options.gasLimit),
+      gasPrice: intToHex(options.gasPrice),
+      data: `0x${data}`,
+    };
+
+    const tx = new Transaction(rawTransaction, {
+      chain: "mainnet",
+      hardfork: "homestead",
+    });
+    tx.sign(Buffer.from(options.from.privateKey.substring(2), "hex"));
+
+    const serializedTx = tx.serialize();
+    return `0x${serializedTx.toString("hex")}`;
+  };
+
+  const sendRawRequest = async (
+    payload,
+    privateFor,
+    privacyFlag = undefined
+  ) => {
+    const privacyParams = {
+      privateFor,
+    };
+    if (typeof privacyFlag !== "undefined") {
+      privacyParams.privacyFlag = privacyFlag;
+    }
+    const txHash = await web3.eth.sendRawPrivateTransaction(
+      payload,
+      privacyParams
+    );
+    return waitForTransactionReceipt(txHash);
+  };
+
   const genericSendRawTransaction = async (options, method) => {
+    if (web3.isQuorum) {
+      const transactionPayload = await getTransactionPayload(options);
+      const serializedTx = serializeSignedTransaction(
+        options,
+        transactionPayload
+      );
+
+      const privateTx = web3.utils.setPrivate(serializedTx);
+      return sendRawRequest(
+        `0x${privateTx.toString("hex")}`,
+        options.privateFor,
+        options.privacyFlag
+      );
+    }
     if (options.privacyGroupId && options.privateFor) {
       throw Error("privacyGroupId and privateFor are mutually exclusive");
     }
