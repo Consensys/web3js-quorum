@@ -17,9 +17,13 @@ const RLP = require("rlp");
 const _ = require("lodash");
 const { keccak256 } = require("./util/custom-ethjs-util");
 
+/**
+ * @module utils
+ */
 function Utils(web3) {
   /**
    * Generate a privacyGroupId
+   * @function generatePrivacyGroup
    * @param {Object} options
    * @param {string} options.privateFor
    * @param {string} options.privateFrom
@@ -52,6 +56,11 @@ function Utils(web3) {
     return Buffer.from(keccak256(rlp)).toString("base64");
   };
 
+  /**
+   * @function setPrivate
+   * @param {String} rawTransaction
+   * @return {Buffer} encoded data
+   */
   const setPrivate = (rawTransaction) => {
     const decoded = RLP.decode(rawTransaction);
     const compareTo = Buffer.from("1c", "hex");

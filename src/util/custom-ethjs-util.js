@@ -15,8 +15,8 @@
 
 /* eslint-disable */
 const assert = require("assert");
-
 const ethUtils = require("ethereumjs-util");
+
 const { BN, rlp } = ethUtils;
 
 const _typeof =
@@ -35,6 +35,7 @@ const _typeof =
 
 /**
  * Attempts to turn a value into a `Buffer`. As input it supports `Buffer`, `String`, `Number`, null/undefined, `BN` and other objects with a `toArray()` method.
+ * @ignore
  * @param {*} v the value
  */
 function toBuffer(v) {
@@ -86,6 +87,7 @@ function toBuffer(v) {
 
 /**
  * Defines properties on a `Object`. It make the assumption that underlying data is binary.
+ * @ignore
  * @param {Object} self the `Object` to define properties on
  * @param {Array} fields an array fields to define. Fields can contain:
  * * `name` - the name of the properties

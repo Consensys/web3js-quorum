@@ -26,6 +26,7 @@ const N_DIV_2 = new BN(
 /**
  * Creates a new private transaction object.
  *
+ * @ignore
  * @example
  * var rawTx = {
  *   nonce: '0x00',

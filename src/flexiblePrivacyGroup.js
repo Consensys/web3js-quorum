@@ -2,10 +2,19 @@ const crypto = require("crypto");
 
 const privacyProxyAbi = require("../solidity/PrivacyProxy.json").output.abi;
 
+/**
+ *
+ * @module flexiblePrivacyGroup
+ */
 function FlexiblePrivacyGroup(web3) {
   web3.eth.extend({
     property: "flexiblePrivacyGroup",
     methods: [
+      /**
+       * @function findOnChainPrivacyGroup
+       * @param {String[]} addresses
+       * @return {Object}
+       */
       {
         name: "findOnChainPrivacyGroup",
         call: "privx_findOnChainPrivacyGroup",
@@ -16,13 +25,13 @@ function FlexiblePrivacyGroup(web3) {
 
   /**
    * Create an on chain privacy group
+   * @function create
    * @param {Object}   options Map to add the members
    * @param {string}   options.privacyGroupId Privacy group ID to add to
    * @param {string}   options.privateKey Private Key used to sign transaction with
    * @param {string}   options.enclaveKey Orion public key
    * @param {string[]} options.participants list of enclaveKey to pass to the contract to add to the group
-   *
-   * @returns {Promise<T>}
+   * @return {Promise<T>}
    */
   const create = (options) => {
     const contract = new web3.eth.Contract(privacyProxyAbi);
@@ -57,7 +66,8 @@ function FlexiblePrivacyGroup(web3) {
 
   /**
    * Remove a member from an on-chain privacy group
-   * @param {object}   options Map to add the members
+   * @function removeFrom
+   * @param {Object}   options Map to add the members
    * @param {string}   options.privacyGroupId Privacy group ID to add to
    * @param {string}   options.privateKey Private Key used to sign transaction with
    * @param {string}   options.enclaveKey Orion public key
@@ -91,7 +101,8 @@ function FlexiblePrivacyGroup(web3) {
 
   /**
    * Either lock or unlock the privacy group for member adding
-   * @param {object} options Map to lock the group
+   * @function setLockState
+   * @param {Object} options Map to lock the group
    * @param {string} options.privacyGroupId Privacy group ID to lock/unlock
    * @param {string} options.privateKey Private Key used to sign transaction with
    * @param {string} options.enclaveKey Orion public key
@@ -121,11 +132,12 @@ function FlexiblePrivacyGroup(web3) {
 
   /**
    * Add to an existing on-chain privacy group
-   * @param {object}   options Map to add the members
-   * @param {string}   options.privacyGroupId:** Privacy group ID to add to
-   * @param {string}   options.privateKey:** Private Key used to sign transaction with
-   * @param {string}   options.enclaveKey:** Orion public key
-   * @param {string[]} options.participants:** list of enclaveKey to pass to the contract to add to the group
+   * @function addTo
+   * @param {Object}   options Map to add the members
+   * @param {string}   options.privacyGroupId Privacy group ID to add to
+   * @param {string}   options.privateKey Private Key used to sign transaction with
+   * @param {string}   options.enclaveKey Orion public key
+   * @param {string[]} options.participants list of enclaveKey to pass to the contract to add to the group
    * @returns {Promise<T>}
    */
   const addTo = (options) => {

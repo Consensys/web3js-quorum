@@ -28,6 +28,7 @@ const Event = {
 
 /**
  * Manage a specific type of subscription
+ * @ignore
  * @param {PrivateSubscription} subscription
  */
 function SubscriptionManager(subscription) {
@@ -40,6 +41,7 @@ function SubscriptionManager(subscription) {
 /**
  * Manage creating/destroying filter and polling for new logs
  * using `priv_getFilterChanges`
+ * @ignore
  * @param {PrivateSubscription} subscription
  */
 function PollingSubscription(subscription, pollingInterval) {
@@ -130,6 +132,7 @@ PollingSubscription.prototype.unsubscribe = async function unsubscribe(
 
 /**
  * Manage persistent pub-sub subscriptions over WebSocket
+ * @ignore
  * @param {PrivateSubscription} subscription
  */
 function PubSubSubscription(subscription) {
@@ -193,6 +196,7 @@ PubSubSubscription.prototype.unsubscribe = async function unsubscribe(
 
 /**
  * Controls the lifecycle of a private subscription
+ * @ignore
  * @param {*} web3
  * @param {*} privacyGroupId
  * @param {*} filter
