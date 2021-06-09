@@ -19,9 +19,8 @@ module.exports = async () => {
   console.log("CREATION RESULT");
   console.log(onChainPrivacyGroupCreationResult);
 
-  await node2.priv.getTransactionReceipt(
-    onChainPrivacyGroupCreationResult.commitmentHash,
-    orion.node2.publicKey
+  await node2.priv.waitForTransactionReceipt(
+    onChainPrivacyGroupCreationResult.commitmentHash
   );
 
   const findResult = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(

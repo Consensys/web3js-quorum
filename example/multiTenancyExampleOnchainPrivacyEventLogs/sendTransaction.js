@@ -36,7 +36,7 @@ async function run() {
       privateKey: network.node1.privateKey,
     })
     .then((transactionHash) => {
-      return node.priv.getTransactionReceipt(transactionHash);
+      return node.priv.waitForTransactionReceipt(transactionHash);
     });
 
   console.log(writeReceipt);

@@ -29,7 +29,7 @@ async function run() {
       privateKey: network.node1.privateKey,
     })
     .then((hash) => {
-      return node.priv.getTransactionReceipt(hash, enclaveKey);
+      return node.priv.waitForTransactionReceipt(hash);
     });
 
   const { contractAddress, blockNumber } = deployReceipt;

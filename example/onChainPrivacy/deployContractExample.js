@@ -66,7 +66,7 @@ const callGenericFunctionOnContract = (
     .generateAndSendRawTransaction(functionCall)
     .then((privateTxHash) => {
       console.log("Transaction Hash:", privateTxHash);
-      return web3.priv.getTransactionReceipt(privateTxHash, privateFrom);
+      return web3.priv.waitForTransactionReceipt(privateTxHash);
     })
     .then((result) => {
       return result;

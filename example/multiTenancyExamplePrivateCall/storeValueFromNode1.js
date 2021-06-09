@@ -30,10 +30,7 @@ const storeValueFromNode1 = (address, value, privacyGroupId) => {
     .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
       console.log("Transaction Hash:", transactionHash);
-      return web3.priv.getTransactionReceipt(
-        transactionHash,
-        orion.node1.publicKey
-      );
+      return web3.priv.waitForTransactionReceipt(transactionHash);
     })
     .then((result) => {
       console.log("Event Emitted:", result.logs[0].data);

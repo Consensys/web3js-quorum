@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const Tx = require("ethereumjs-tx");
+const Tx = require("ethereumjs-tx").Transaction;
 
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
@@ -48,7 +48,10 @@ const sendPrivacyMarkerTransaction = (enclaveKey) => {
           gasPrice: "0xFFFFF",
           gasLimit: "0xFFFFF",
         };
-        const tx = new Tx(rawTx);
+        const tx = new Tx(rawTx, {
+          chain: "mainnet",
+          hardfork: "homestead",
+        });
         tx.sign(Buffer.from(network.node1.privateKey, "hex"));
         const serializedTx = tx.serialize();
         return web3.eth
@@ -72,14 +75,14 @@ const getTransactionReceipts = (txHash) => {
 
 const fetchFromOrion = (txHash) => {
   web3.priv
-    .getTransactionReceipt(txHash, orion.node1.publicKey)
+    .waitForTransactionReceipt(txHash)
     .then((result) => {
       console.log("Got transaction receipt from orion node 1");
       return console.log(result);
     })
     .catch(console.error);
   web3Node2.priv
-    .getTransactionReceipt(txHash, orion.node2.publicKey)
+    .waitForTransactionReceipt(txHash)
     .then((result) => {
       console.log("Got transaction receipt from orion node 2");
       return console.log(result);
