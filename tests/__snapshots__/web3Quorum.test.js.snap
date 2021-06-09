@@ -1,5 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`web3Quorum should match the web3Quorum Istanbul namespace snapshot 1`] = `
+Object {
+  "candidates": [Function],
+  "discard": [Function],
+  "getSignersFromBlock": [Function],
+  "getSignersFromBlockByHash": [Function],
+  "getSnapshot": [Function],
+  "getSnapshotAtHash": [Function],
+  "getValidators": [Function],
+  "getValidatorsAtHash": [Function],
+  "isValidator": [Function],
+  "nodeAddress": [Function],
+  "propose": [Function],
+  "status": [Function],
+}
+`;
+
+exports[`web3Quorum should match the web3Quorum Permission namespace snapshot 1`] = `
+Object {
+  "acctList": [Function],
+  "addAccountToOrg": [Function],
+  "addNewRole": [Function],
+  "addNode": [Function],
+  "addOrg": [Function],
+  "addSubOrg": [Function],
+  "approveAdminRole": [Function],
+  "approveBlackListedAccountRecovery": [Function],
+  "approveBlackListedNodeRecovery": [Function],
+  "approveOrg": [Function],
+  "approveOrgStatus": [Function],
+  "assignAdminRole": [Function],
+  "changeAccountRole": [Function],
+  "connectionAllowed": [Function],
+  "getOrgDetails": [Function],
+  "nodeList": [Function],
+  "orgList": [Function],
+  "recoverBlackListedAccount": [Function],
+  "recoverBlackListedNode": [Function],
+  "removeRole": [Function],
+  "roleList": [Function],
+  "transactionAllowed": [Function],
+  "updateAccountStatus": [Function],
+  "updateNodeStatus": [Function],
+  "updateOrgStatus": [Function],
+}
+`;
+
 exports[`web3Quorum should match the web3Quorum eth namespace snapshot 1`] = `
 Object {
   "fillTransaction": [Function],
@@ -47,6 +94,18 @@ Object {
   "uninstallFilter": [Function],
   "unsubscribe": [Function],
   "waitForTransactionReceipt": [Function],
+}
+`;
+
+exports[`web3Quorum should match the web3Quorum raft namespace snapshot 1`] = `
+Object {
+  "addLearner": [Function],
+  "addPeer": [Function],
+  "cluster": [Function],
+  "leader": [Function],
+  "promoteToPeer": [Function],
+  "removePeer": [Function],
+  "role": [Function],
 }
 `;
 

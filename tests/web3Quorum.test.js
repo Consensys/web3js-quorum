@@ -42,4 +42,16 @@ describe("web3Quorum", () => {
     expect(typeof sendTransactionAsync).toEqual("function");
     expect(typeof getContractPrivacyMetadata).toEqual("function");
   });
+
+  it("should match the web3Quorum raft namespace snapshot", () => {
+    expect(web3.raft).toMatchSnapshot();
+  });
+
+  it("should match the web3Quorum Istanbul namespace snapshot", () => {
+    expect(web3.istanbul).toMatchSnapshot();
+  });
+
+  it("should match the web3Quorum Permission namespace snapshot", () => {
+    expect(web3.permission).toMatchSnapshot();
+  });
 });
