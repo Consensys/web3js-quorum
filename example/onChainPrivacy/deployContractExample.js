@@ -26,7 +26,7 @@ const createGreeterContract = (privacyGroupId) => {
 
 const getPrivateContractAddress = (transactionHash) => {
   return web3Node1.priv
-    .getTransactionReceipt(transactionHash, orion.node1.publicKey)
+    .waitForTransactionReceipt(transactionHash)
     .then((privateTransactionReceipt) => {
       return privateTransactionReceipt.contractAddress;
     });

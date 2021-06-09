@@ -386,58 +386,56 @@ function Priv(web3) {
     const tx = new PrivateTransaction();
     const privateKeyBuffer = Buffer.from(options.privateKey, "hex");
     const from = `0x${privateToAddress(privateKeyBuffer).toString("hex")}`;
-    return web3.priv
-      .getTransactionCount(
-        from,
-        options.privacyGroupId || web3.utils.generatePrivacyGroup(options)
-      )
-      .then(async (transactionCount) => {
-        tx.nonce = options.nonce || transactionCount;
-        tx.gasPrice = GAS_PRICE;
-        tx.gasLimit = GAS_LIMIT;
-        tx.to = options.to;
-        tx.value = 0;
-        tx.data = options.data;
-        tx._chainId = chainId;
-        tx.privateFrom = options.privateFrom;
+    const privacyGroupId =
+      options.privacyGroupId || web3.utils.generatePrivacyGroup(options);
+    const transactionCount =
+      options.nonce ||
+      (await web3.priv.getTransactionCount(from, privacyGroupId));
+    tx.nonce = options.nonce || transactionCount;
+    tx.gasPrice = GAS_PRICE;
+    tx.gasLimit = GAS_LIMIT;
+    tx.to = options.to;
+    tx.value = 0;
+    tx.data = options.data;
+    tx._chainId = chainId;
+    tx.privateFrom = options.privateFrom;
 
-        if (options.privateFor) {
-          tx.privateFor = options.privateFor;
-        }
-        if (options.privacyGroupId) {
-          tx.privacyGroupId = options.privacyGroupId;
-        }
-        tx.restriction = "restricted";
+    if (options.privateFor) {
+      tx.privateFor = options.privateFor;
+    }
+    if (options.privacyGroupId) {
+      tx.privacyGroupId = options.privacyGroupId;
+    }
+    tx.restriction = "restricted";
 
-        tx.sign(privateKeyBuffer);
+    tx.sign(privateKeyBuffer);
 
-        const signedRlpEncoded = tx.serialize().toString("hex");
+    const signedRlpEncoded = tx.serialize().toString("hex");
 
-        let result;
-        if (method === "eea_sendRawTransaction") {
-          result = web3.priv.sendRawTransaction(signedRlpEncoded);
-        } else if (method === "priv_distributeRawTransaction") {
-          result = web3.priv.distributeRawTransaction(signedRlpEncoded);
-        }
-        if (result != null) {
-          return result;
-        }
+    let result;
+    if (method === "eea_sendRawTransaction") {
+      result = web3.priv.sendRawTransaction(signedRlpEncoded);
+    } else if (method === "priv_distributeRawTransaction") {
+      result = web3.priv.distributeRawTransaction(signedRlpEncoded);
+    }
+    if (result != null) {
+      return result;
+    }
 
-        throw new Error(`Unknown method ${method}`);
-      });
+    throw new Error(`Unknown method ${method}`);
   };
 
   /**
    * Generate and distribute the Raw transaction to the Besu node using the `priv_distributeRawTransaction` JSON-RPC call
    * @function generateAndDistributeRawTransaction
    * @param {object} options Map to send a raw transaction to besu
-   * @param {string} options.privateKey : Private Key used to sign transaction with
-   * @param {string} options.privateFrom : Enclave public key
-   * @param {string} options.privateFor : Enclave keys to send the transaction to
-   * @param {string} options.privacyGroupId : Enclave id representing the receivers of the transaction
-   * @param {string} options.nonce(Optional) : If not provided, will be calculated using `eea_getTransctionCount`
-   * @param {string} options.to : The address to send the transaction
-   * @param {string} options.data : Data to be sent in the transaction
+   * @param {string} options.privateKey Private Key used to sign transaction with
+   * @param {string} options.privateFrom Enclave public key
+   * @param {string} options.privateFor Enclave keys to send the transaction to
+   * @param {string} options.privacyGroupId Enclave id representing the receivers of the transaction
+   * @param {string} [options.nonce] If not provided, will be calculated using `priv_getTransactionCount`
+   * @param {string} options.to The address to send the transaction
+   * @param {string} options.data Data to be sent in the transaction
    *
    * @returns {Promise<T>}
    */
@@ -449,13 +447,13 @@ function Priv(web3) {
    * Generate and send the Raw transaction to the Besu node using the `eea_sendRawTransaction` JSON-RPC call
    * @function generateAndSendRawTransaction
    * @param {object} options Map to send a raw transaction to besu
-   * @param {string} options.privateKey : Private Key used to sign transaction with
-   * @param {string} options.privateFrom : Enclave public key
-   * @param {string} options.privateFor : Enclave keys to send the transaction to
-   * @param {string} options.privacyGroupId : Enclave id representing the receivers of the transaction
-   * @param {string} options.nonce(Optional) : If not provided, will be calculated using `eea_getTransctionCount`
-   * @param {string} options.to : The address to send the transaction
-   * @param {string} options.data : Data to be sent in the transaction
+   * @param {string} options.privateKey Private Key used to sign transaction with
+   * @param {string} options.privateFrom Enclave public key
+   * @param {string} options.privateFor Enclave keys to send the transaction to
+   * @param {string} options.privacyGroupId Enclave id representing the receivers of the transaction
+   * @param {string} [options.nonce] If not provided, will be calculated using `priv_getTransactionCount`
+   * @param {string} options.to The address to send the transaction
+   * @param {string} options.data Data to be sent in the transaction
    *
    * @returns {Promise<T>}
    */
