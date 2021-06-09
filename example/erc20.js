@@ -3,8 +3,11 @@ const path = require("path");
 
 const Web3 = require("web3");
 const Web3Quorum = require("../src");
-const HumanStandardTokenAbi = require("./solidity/HumanStandardToken/HumanStandardToken.json")
-  .output.abi;
+const contractMeta = require("../solidity/HumanStandardToken/HumanStandardToken.json")
+  .contracts["HumanStandardToken.sol:HumanStandardToken"];
+
+const HumanStandardTokenAbi = JSON.parse(contractMeta.interface);
+
 const ethUtil = require("../src/util/custom-ethjs-util");
 const { orion, network } = require("./keys.js");
 
@@ -40,7 +43,7 @@ web3.priv
   .generateAndSendRawTransaction(contractOptions)
   .then((hash) => {
     console.log(`Transaction Hash ${hash}`);
-    return web3.priv.getTransactionReceipt(hash, orion.node1.publicKey);
+    return web3.priv.waitForTransactionReceipt(hash);
   })
   .then((privateTransactionReceipt) => {
     console.log("Private Transaction Receipt");
@@ -73,10 +76,7 @@ web3.priv
   })
   .then((transactionHash) => {
     console.log(`Transaction Hash ${transactionHash}`);
-    return web3.priv.getTransactionReceipt(
-      transactionHash,
-      orion.node1.publicKey
-    );
+    return web3.priv.waitForTransactionReceipt(transactionHash);
   })
   .then((privateTransactionReceipt) => {
     console.log("Private Transaction Receipt");
