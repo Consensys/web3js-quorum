@@ -94,7 +94,8 @@ const bytecodeWithInitParam = simpleContract
 
     console.log("Contract address: ", tx.contractAddress);
     const simpleContract2 = new web3.eth.Contract(abi, tx.contractAddress);
-    simpleContract2.methods.get().call().then(console.log).catch(console.log);
+    const result = await simpleContract2.methods.get().call();
+    console.log("result :>> ", result);
     return simpleContract2;
   } catch (error) {
     console.error("error :>> ", error);
