@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const Web3 = require("web3");
-const Tx = require("ethereumjs-tx");
+const Tx = require("ethereumjs-tx").Transaction;
 const Web3Quorum = require("../../src");
 
 const { orion, network } = require("../keys.js");
@@ -37,7 +37,10 @@ const createPublicEventEmitter = () => {
         gasPrice: "0xFFFFF",
         gasLimit: "0xFFFFFF",
       };
-      const tx = new Tx(rawTx);
+      const tx = new Tx(rawTx, {
+        chain: "mainnet",
+        hardfork: "homestead",
+      });
       tx.sign(Buffer.from(network.node1.privateKey, "hex"));
       const serializedTx = tx.serialize();
       return web3.eth.sendSignedTransaction(
@@ -64,7 +67,7 @@ const createPrivateCrossContractReader = () => {
 const getPrivateContractAddress = (transactionHash) => {
   console.log("Transaction Hash ", transactionHash);
   return web3.priv
-    .getTransactionReceipt(transactionHash, orion.node1.publicKey)
+    .waitForTransactionReceipt(transactionHash)
     .then((privateTransactionReceipt) => {
       console.log("Private Transaction Receipt\n", privateTransactionReceipt);
       logBuffer += ` export PRIVATE_CONTRACT_ADDRESS=${privateTransactionReceipt.contractAddress}`;

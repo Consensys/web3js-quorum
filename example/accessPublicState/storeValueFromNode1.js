@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const Tx = require("ethereumjs-tx");
+const Tx = require("ethereumjs-tx").Transaction;
 const Web3Quorum = require("../../src");
 const EventEmitter = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
@@ -34,7 +34,10 @@ const storeValueFromNode1 = (address, value) => {
         gasPrice: "0xFFFFFF",
         gasLimit: "0xFFFFFFF",
       };
-      const tx = new Tx(rawTx);
+      const tx = new Tx(rawTx, {
+        chain: "mainnet",
+        hardfork: "homestead",
+      });
       tx.sign(Buffer.from(network.node1.privateKey, "hex"));
       const serializedTx = tx.serialize();
       return web3.eth.sendSignedTransaction(
@@ -78,10 +81,7 @@ const getValue = (
   return web3.priv
     .generateAndSendRawTransaction(functionCall)
     .then((transactionHash) => {
-      return web3.priv.getTransactionReceipt(
-        transactionHash,
-        orion.node1.publicKey
-      );
+      return web3.priv.waitForTransactionReceipt(transactionHash);
     })
     .then((result) => {
       console.log(`Get Value from ${url}:`, result.output);
