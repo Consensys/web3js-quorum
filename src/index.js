@@ -28,7 +28,7 @@ const Permission = require("./permission");
  * @class Web3Quorum
  *
  * @param {Object}  web3 instance of the web3.js library
- * @param {Object}  enclaveOptions configs of the transaction manager required for GoQuorum case only
+ * @param {Object}  [enclaveOptions] configs of the transaction manager required for GoQuorum case only
  * @param {string}  enclaveOptions.ipcPath     absolute file path to the ipc of the transaction manager
  * @param {string}  enclaveOptions.privateUrl  http url to the transaction manager
  * @param {Object}  enclaveOptions.tlsSettings TLS configuration for the transaction manager when using HTTPS in privateUrl
@@ -36,6 +36,7 @@ const Permission = require("./permission");
  * @param {Buffer}  enclaveOptions.tlsSettings.clcert        client certificate buffer
  * @param {Buffer}  enclaveOptions.tlsSettings.cacert        CA certificate buffer
  * @param {Boolean} enclaveOptions.tlsSettings.allowInsecure
+ * @param {Boolean} [isQuorum=false] indicates if the connected to client is quorum or besu
  */
 function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
   if (web3.currentProvider == null) {

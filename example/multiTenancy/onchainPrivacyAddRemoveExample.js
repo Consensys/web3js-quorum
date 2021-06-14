@@ -46,9 +46,8 @@ module.exports = async () => {
   console.log("Added new node to privacy group:");
   console.log(addResult);
 
-  const receiptFromNode3 = await node3.priv.getTransactionReceipt(
-    addResult.commitmentHash,
-    orion.node11.publicKey
+  const receiptFromNode3 = await node3.priv.waitForTransactionReceipt(
+    addResult.commitmentHash
   );
   console.log("Got transaction receipt from added node:");
   console.log(receiptFromNode3);

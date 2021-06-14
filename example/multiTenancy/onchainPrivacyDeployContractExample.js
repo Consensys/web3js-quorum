@@ -31,7 +31,7 @@ const createGreeterContract = (privacyGroupId) => {
 
 const getPrivateContractAddress = (transactionHash) => {
   return node1.priv
-    .getTransactionReceipt(transactionHash, orion.node1.publicKey)
+    .waitForTransactionReceipt(transactionHash)
     .then((privateTransactionReceipt) => {
       return privateTransactionReceipt.contractAddress;
     });
@@ -71,7 +71,7 @@ const callGenericFunctionOnContract = (
     .generateAndSendRawTransaction(functionCall)
     .then((privateTxHash) => {
       console.log("Transaction Hash:", privateTxHash);
-      return web3.priv.getTransactionReceipt(privateTxHash, privateFrom);
+      return web3.priv.waitForTransactionReceipt(privateTxHash);
     })
     .then((result) => {
       return result;

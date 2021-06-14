@@ -7,9 +7,8 @@ const {
 const httpConfig = require("./helpers/httpConfig");
 const ipcConfig = require("./helpers/ipcConfig");
 
-const contract = require("../../solidity/HumanStandardToken.json").contracts[
-  "HumanStandardToken.sol:HumanStandardToken"
-];
+const contract = require("../../solidity/HumanStandardToken/HumanStandardToken.json")
+  .contracts["HumanStandardToken.sol:HumanStandardToken"];
 
 const abi = JSON.parse(contract.interface);
 const code = `0x${contract.bytecode}`;

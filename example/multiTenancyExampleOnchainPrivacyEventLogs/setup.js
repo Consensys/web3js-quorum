@@ -34,9 +34,8 @@ async function run() {
   console.log("Creation result");
   console.log(onChainPrivacyGroupCreationResult);
 
-  await node.priv.getTransactionReceipt(
-    onChainPrivacyGroupCreationResult.commitmentHash,
-    orion.node1.publicKey
+  await node.priv.waitForTransactionReceipt(
+    onChainPrivacyGroupCreationResult.commitmentHash
   );
 
   const { privacyGroupId } = onChainPrivacyGroupCreationResult;
@@ -53,7 +52,7 @@ async function run() {
       privateKey: network.node1.privateKey,
     })
     .then((hash) => {
-      return node.priv.getTransactionReceipt(hash, enclaveKey);
+      return node.priv.waitForTransactionReceipt(hash);
     });
 
   const { contractAddress, blockNumber } = deployReceipt;

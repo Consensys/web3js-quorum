@@ -15,5 +15,5 @@ Individual Contributor License Agreement.
 If you have any questions, you can reach us on [RocketChat].
 
 [GitHub]: https://github.com/
-[the current version of the CLA]: https://gist.github.com/rojotek/978b48a5e8b68836856a8961d6887992
+[the current version of the CLA]: https://gist.github.com/ConsensysOps/a6a59bf512fc4cfdf08890aa8d3d89c9
 [RocketChat]: https://chat.hyperledger.org/channel/besu

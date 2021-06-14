@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const Tx = require("ethereumjs-tx");
+const Tx = require("ethereumjs-tx").Transaction;
 const PromisePool = require("async-promise-pool");
 const Web3Quorum = require("../../src");
 const { orion, network } = require("../keys.js");
@@ -56,7 +56,10 @@ function sendPMT(sender, enclaveKey, nonce) {
     gasLimit: "0x5a88",
   };
 
-  const tx = new Tx(rawTx);
+  const tx = new Tx(rawTx, {
+    chain: "mainnet",
+    hardfork: "homestead",
+  });
   tx.sign(Buffer.from(network.node1.privateKey, "hex"));
 
   const hexTx = `0x${tx.serialize().toString("hex")}`;
@@ -76,7 +79,7 @@ function sendPMT(sender, enclaveKey, nonce) {
 
 function printPrivTxDetails(pmtRcpt) {
   return web3.priv
-    .getTransactionReceipt(pmtRcpt.transactionHash, network.node1.privateKey)
+    .waitForTransactionReceipt(pmtRcpt.transactionHash)
     .then((privTxRcpt) => {
       console.log(
         `=== Private TX ${privTxRcpt.transactionHash}\n` +

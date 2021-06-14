@@ -30,11 +30,6 @@ function Eth(web3) {
        * @return {Object} raw: RLP encoded bytes for the passed transaction object and tx : transaction object
        */
       {
-        name: "sendRawPrivateTransaction",
-        call: "eth_sendRawPrivateTransaction",
-        params: 2,
-      },
-      {
         name: "fillTransaction",
         call: "eth_fillTransaction",
         params: 1,
