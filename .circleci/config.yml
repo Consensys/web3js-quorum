@@ -87,6 +87,73 @@ jobs:
           name: On chain tests
           command: npm run test:onchain
 
+  generateDoc:
+    executor: node_executor
+    steps:
+    - prepare_node
+    - run:
+        name: build doc
+        command: npm run generate:doc
+    - run:
+        name: archive doc
+        command: tar -czf web3js-quorum-sdk-doc.tgz ./docs/out/web3js-quorum
+    - store_artifacts:
+        path: ./web3js-quorum-sdk-doc.tgz
+    - run:
+        name: organize doc dirs
+        command: node .circleci/organise_doc.js --rootdir=$(pwd) --tag="${CIRCLE_TAG}"
+    - persist_to_workspace:
+        root: ~/project
+        paths:
+          - ./docs
+
+  publishDoc:
+    executor: node_executor
+    steps:
+    - checkout
+    - attach_workspace:
+        at: /tmp/workspace
+    - add_ssh_keys:
+        fingerprints:
+          - '8c:7f:3d:66:05:d9:12:a2:af:58:59:bf:97:c1:c7:84'
+    - run:
+        name: Set Git user params
+        command: |
+          git config --global user.name $CIRCLE_USERNAME
+          git config --global user.email "${CIRCLE_USERNAME}@users.noreply.github.com"
+    - deploy:
+        name: Commit and push docs changes
+        command: |
+          # publishing happens by pushing files to gh-pages branch
+          # retrieve branch to publish to from CIrcle CI env vars and fallback on test-gh-pages
+          # if no var defined
+          [ -n "$BRANCH_OVERRIDE" ] && readonly BRANCH="$BRANCH_OVERRIDE" || readonly BRANCH='test-gh-pages'
+
+          # switch to the publishing branch
+          git checkout "$BRANCH"
+
+          # copy the content of the docs folder built on the previous job and attached
+          # using workspace on temp location
+          # cp with T option to override existing content, specially usefull for latest
+          cp -aT /tmp/workspace/docs/. .
+
+          # add a readme to make sure devs understand that this publishing branch is generated
+          # by CI (use template readme), mv replaces the current readme that is only for source dir
+          mv TARGET_README.md README.md
+
+          # add all new copied content of the workspace to git
+          git add .
+
+          # commit with infos on the triggering task and branch
+          # use [skip ci] to prevent CI from runnning on this branch as no CI is configured
+          git commit -m "Automated SDK documentation update" \
+                     -m "[ci skip] Circle CI build ${CIRCLE_BUILD_NUM}, see ${CIRCLE_BUILD_URL}" \
+                     -m "Branch: ${CIRCLE_BRANCH}, commit: ${CIRCLE_SHA1}, tag:${CIRCLE_TAG-none}"
+
+          # push changes to the Github Pages publishing branch on origin repos
+          git push --set-upstream origin $BRANCH
+          git push origin
+
 workflows:
   version: 2
   workflow:
@@ -95,3 +162,16 @@ workflows:
       - mockTests
       - integrationTests
       - onChainTests
+      - generateDoc
+      - publishDoc:
+          requires:
+            - unitTests
+            - mockTests
+            - integrationTests
+            - onChainTests
+            - generateDoc
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /.*/
