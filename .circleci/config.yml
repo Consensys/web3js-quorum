@@ -96,9 +96,9 @@ jobs:
         command: npm run generate:doc
     - run:
         name: archive doc
-        command: tar -czf web3-quorum-sdk-doc.tgz ./docs/out/web3-quorum
+        command: tar -czf web3js-quorum-sdk-doc.tgz ./docs/out/web3js-quorum
     - store_artifacts:
-        path: ./web3-quorum-sdk-doc.tgz
+        path: ./web3js-quorum-sdk-doc.tgz
     - run:
         name: organize doc dirs
         command: node .circleci/organise_doc.js --rootdir=$(pwd) --tag="${CIRCLE_TAG}"
