@@ -165,7 +165,7 @@ workflows:
       - generateDoc
       - publishDoc:
           requires:
-      	    - unitTests
+            - unitTests
             - mockTests
             - integrationTests
             - onChainTests
