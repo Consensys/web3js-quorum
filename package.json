@@ -87,7 +87,7 @@
   "dependencies": {
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "6.1.0",
-    "lodash": "4.17.19",
+    "lodash": "^4.17.21",
     "request-promise-native": "^1.0.9",
     "rlp": "2.2.4"
   },
@@ -106,7 +106,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "husky": "^6.0.0",
     "jest": "^26.6.3",
-    "jsdoc": "^3.6.4",
+    "jsdoc": "^3.6.7",
     "lint-staged": "^10.5.4",
     "minimist": "^1.2.5",
     "nock": "^13.0.11",
