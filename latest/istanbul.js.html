@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>istanbul.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Web3Quorum.html">Web3Quorum</a></li></ul><h3>Modules</h3><ul><li><a href="module-eth.html">eth</a><ul class='methods'><li data-type='method'><a href="module-eth.html#~fillTransaction">fillTransaction</a></li><li data-type='method'><a href="module-eth.html#~getContractPrivacyMetadata">getContractPrivacyMetadata</a></li><li data-type='method'><a href="module-eth.html#~getQuorumPayload">getQuorumPayload</a></li><li data-type='method'><a href="module-eth.html#~sendRawPrivateTransaction">sendRawPrivateTransaction</a></li><li data-type='method'><a href="module-eth.html#~sendTransactionAsync">sendTransactionAsync</a></li><li data-type='method'><a href="module-eth.html#~storageRoot">storageRoot</a></li></ul></li><li><a href="module-flexiblePrivacyGroup.html">flexiblePrivacyGroup</a><ul class='methods'><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~addTo">addTo</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~create">create</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~findOnChainPrivacyGroup">findOnChainPrivacyGroup</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~removeFrom">removeFrom</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~setLockState">setLockState</a></li></ul></li><li><a href="module-Istanbul.html">Istanbul</a><ul class='methods'><li data-type='method'><a href="module-Istanbul.html#~candidates">candidates</a></li><li data-type='method'><a href="module-Istanbul.html#~discard">discard</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlock">getSignersFromBlock</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlockByHash">getSignersFromBlockByHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshot">getSnapshot</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshotAtHash">getSnapshotAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidators">getValidators</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidatorsAtHash">getValidatorsAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~isValidator">isValidator</a></li><li data-type='method'><a href="module-Istanbul.html#~nodeAddress">nodeAddress</a></li><li data-type='method'><a href="module-Istanbul.html#~status">status</a></li></ul></li><li><a href="module-Permission.html">Permission</a><ul class='methods'><li data-type='method'><a href="module-Permission.html#~acctList">acctList</a></li><li data-type='method'><a href="module-Permission.html#~addAccountToOrg">addAccountToOrg</a></li><li data-type='method'><a href="module-Permission.html#~addNewRole">addNewRole</a></li><li data-type='method'><a href="module-Permission.html#~addNode">addNode</a></li><li data-type='method'><a href="module-Permission.html#~addOrg">addOrg</a></li><li data-type='method'><a href="module-Permission.html#~addSubOrg">addSubOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveAdminRole">approveAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedAccountRecovery">approveBlackListedAccountRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedNodeRecovery">approveBlackListedNodeRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveOrg">approveOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveOrgStatus">approveOrgStatus</a></li><li data-type='method'><a href="module-Permission.html#~assignAdminRole">assignAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~changeAccountRole">changeAccountRole</a></li><li data-type='method'><a href="module-Permission.html#~connectionAllowed">connectionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~getOrgDetails">getOrgDetails</a></li><li data-type='method'><a href="module-Permission.html#~nodeList">nodeList</a></li><li data-type='method'><a href="module-Permission.html#~orgList">orgList</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedAccount">recoverBlackListedAccount</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedNode">recoverBlackListedNode</a></li><li data-type='method'><a href="module-Permission.html#~removeRole">removeRole</a></li><li data-type='method'><a href="module-Permission.html#~roleList">roleList</a></li><li data-type='method'><a href="module-Permission.html#~transactionAllowed">transactionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~updateAccountStatus">updateAccountStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateNodeStatus">updateNodeStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateOrgStatus">updateOrgStatus</a></li></ul></li><li><a href="module-priv.html">priv</a><ul class='methods'><li data-type='method'><a href="module-priv.html#~call">call</a></li><li data-type='method'><a href="module-priv.html#~createPrivacyGroup">createPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~debugGetStateRoot">debugGetStateRoot</a></li><li data-type='method'><a href="module-priv.html#~deletePrivacyGroup">deletePrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~distributeRawTransaction">distributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~findPrivacyGroup">findPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~generateAndDistributeRawTransaction">generateAndDistributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~generateAndSendRawTransaction">generateAndSendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~getCode">getCode</a></li><li data-type='method'><a href="module-priv.html#~getEeaTransactionCount">getEeaTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getFilterChanges">getFilterChanges</a></li><li data-type='method'><a href="module-priv.html#~getFilterLogs">getFilterLogs</a></li><li data-type='method'><a href="module-priv.html#~getLogs">getLogs</a></li><li data-type='method'><a href="module-priv.html#~getPrivacyPrecompileAddress">getPrivacyPrecompileAddress</a></li><li data-type='method'><a href="module-priv.html#~getPrivateTransaction">getPrivateTransaction</a></li><li data-type='method'><a href="module-priv.html#~getTransactionCount">getTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getTransactionReceipt">getTransactionReceipt</a></li><li data-type='method'><a href="module-priv.html#~newFilter">newFilter</a></li><li data-type='method'><a href="module-priv.html#~sendRawTransaction">sendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~subscribe">subscribe</a></li><li data-type='method'><a href="module-priv.html#~subscribeWithPooling">subscribeWithPooling</a></li><li data-type='method'><a href="module-priv.html#~uninstallFilter">uninstallFilter</a></li><li data-type='method'><a href="module-priv.html#~unsubscribe">unsubscribe</a></li><li data-type='method'><a href="module-priv.html#~waitForTransactionReceipt">waitForTransactionReceipt</a></li></ul></li><li><a href="module-ptm.html">ptm</a><ul class='methods'><li data-type='method'><a href="module-ptm.html#~keys">keys</a></li><li data-type='method'><a href="module-ptm.html#~partyInfoKeys">partyInfoKeys</a></li><li data-type='method'><a href="module-ptm.html#~send">send</a></li><li data-type='method'><a href="module-ptm.html#~storeRaw">storeRaw</a></li><li data-type='method'><a href="module-ptm.html#~upCheck">upCheck</a></li></ul></li><li><a href="module-Raft.html">Raft</a><ul class='methods'><li data-type='method'><a href="module-Raft.html#~addLearner">addLearner</a></li><li data-type='method'><a href="module-Raft.html#~addPeer">addPeer</a></li><li data-type='method'><a href="module-Raft.html#~cluster">cluster</a></li><li data-type='method'><a href="module-Raft.html#~leader">leader</a></li><li data-type='method'><a href="module-Raft.html#~promoteToPeer">promoteToPeer</a></li><li data-type='method'><a href="module-Raft.html#~removePeer">removePeer</a></li><li data-type='method'><a href="module-Raft.html#~role">role</a></li></ul></li><li><a href="module-utils.html">utils</a><ul class='methods'><li data-type='method'><a href="module-utils.html#~generatePrivacyGroup">generatePrivacyGroup</a></li><li data-type='method'><a href="module-utils.html#~setPrivate">setPrivate</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">istanbul.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * For more details about the {@link https://docs.goquorum.consensys.net/en/stable/Reference/Consensus/IBFT-RPC-API/ Istanbul JSON-RPC APIs}
+ * @module Istanbul
+ */
+function Istanbul(web3) {
+  web3.extend({
+    property: "istanbul",
+    methods: [
+      /**
+       * @function candidates
+       * @return {Object} The current candidates map
+       */
+      {
+        name: "candidates",
+        call: "istanbul_candidates",
+        params: 0,
+      },
+      /**
+       * @function discard
+       * @param {String} address the address of the candidate
+       */
+      {
+        name: "discard",
+        call: "istanbul_discard",
+        params: 1,
+      },
+      /**
+       * @function getSnapshot
+       * @param {String|Number} blockHashOrBlockNumber The block number, the string “latest” or nil. nil is the same with string “latest” and means the latest block
+       * @return {Object} The snapshot object
+       */
+      {
+        name: "getSnapshot",
+        call: "istanbul_getSnapshot",
+        params: 1,
+        inputFormatter: [
+          web3.extend.formatters.inputDefaultBlockNumberFormatter,
+        ],
+      },
+      /**
+       * @function getSnapshotAtHash
+       * @param {String} blockHash The block hash
+       * @return {Object} The snapshot object
+       */
+      {
+        name: "getSnapshotAtHash",
+        call: "istanbul_getSnapshotAtHash",
+        params: 1,
+      },
+      /**
+       * @function getValidators
+       * @param {String|Number} blockHashOrBlockNumber The block number, the string “latest” or nil. nil is the same with string “latest” and means the latest block
+       * @return {String[]}  The validator address array
+       */
+      {
+        name: "getValidators",
+        call: "istanbul_getValidators",
+        params: 1,
+        inputFormatter: [
+          web3.extend.formatters.inputDefaultBlockNumberFormatter,
+        ],
+      },
+      /**
+       * @function getValidatorsAtHash
+       * @param {String} blockHash The block hash
+       * @return {String[]} The validator address array
+       */
+      {
+        name: "getValidatorsAtHash",
+        call: "istanbul_getValidatorsAtHash",
+        params: 1,
+      },
+      /**
+       * @function
+       * @param {String} address The address of candidate bool - true votes in and false votes out
+       * @param {Boolean} auth true votes in and false votes out
+       */
+      {
+        name: "propose",
+        call: "istanbul_propose",
+        params: 2,
+      },
+      /**
+       * @function nodeAddress
+       * @return {String} The nodes public signing address
+       */
+      {
+        name: "nodeAddress",
+        call: "istanbul_nodeAddress",
+        params: 0,
+      },
+      /**
+       * @function getSignersFromBlock
+       * @param {Number} blockNumber The block number to retrieve
+       * @return {Object}
+       */
+      {
+        name: "getSignersFromBlock",
+        call: "istanbul_getSignersFromBlock",
+        params: 1,
+        inputFormatter: [web3.extend.formatters.inputBlockNumberFormatter],
+      },
+      /**
+       * @function getSignersFromBlockByHash
+       * @param {String} blockHash The hash of the block to retrieve
+       * @return {Object}
+       */
+      {
+        name: "getSignersFromBlockByHash",
+        call: "istanbul_getSignersFromBlockByHash",
+        params: 1,
+      },
+      /**
+       * @function status
+       * @param {Number} startBlockNumber start block number
+       * @param {Number} endBlockNumber   end block number
+       * @return {Object}
+       */
+      {
+        name: "status",
+        call: "istanbul_status",
+        params: 2,
+      },
+      /**
+       * @function isValidator
+       * @param {Number} blockNumber block number
+       * @return {Boolean} validator status of this node for the given blockNumber.
+       */
+      {
+        name: "isValidator",
+        call: "istanbul_isValidator",
+        params: 1,
+        inputFormatter: [
+          web3.extend.formatters.inputDefaultBlockNumberFormatter,
+        ],
+      },
+    ],
+  });
+  return web3;
+}
+
+module.exports = Istanbul;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Tue Jun 15 2021 07:23:04 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
