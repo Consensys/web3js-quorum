@@ -175,10 +175,10 @@ workflows:
   workflow:
     jobs:
       - lintCheck
-      - unitTests
+      - unitTests:
           requires:
             - lintCheck
-      - mockTests
+      - mockTests:
           requires:
             - lintCheck
       - integrationTests
