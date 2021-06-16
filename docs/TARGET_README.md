@@ -5,4 +5,4 @@
 Sources for this content can be found on /docs directory on
 [master](https://github.com/ConsenSysQuorum/web3js-quorum/tree/master) and its children branches.
 
-The actual up to date generated doc is available at [`https://consensys.github.io/web3js-eea/`](https://consensys.github.io/web3js-eea/)
+The actual up to date generated doc is available at [`https://consensys.github.io/web3js-quorum/`](https://consensys.github.io/web3js-quorum/)

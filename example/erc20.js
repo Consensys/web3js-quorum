@@ -51,7 +51,6 @@ web3.priv
     return privateTransactionReceipt.contractAddress;
   })
   .then((contractAddress) => {
-    // can we do a web3.eea.Contract? somehow need to override to use the eea.sendRawTransaction when invoking contract methods
     // const contract = web3.eth.Contract(HumandStandartTokenAbi, contractAddress);
     // contract.methods.transfer(["to", "value"]).send(??)
 

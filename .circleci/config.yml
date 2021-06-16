@@ -56,6 +56,13 @@ commands:
             - ~/.npm
           key: node-cache-{{ checksum "package-lock.json" }}
 jobs:
+  lintCheck:
+    executor: node_executor
+    steps:
+      - prepare_node
+      - run:
+          name: Check linting
+          command: npm run lint
   unitTests:
     executor: node_executor
     steps:
@@ -154,12 +161,26 @@ jobs:
           git push --set-upstream origin $BRANCH
           git push origin
 
+  publishNPM:
+    executor: node_executor
+    steps:
+      - prepare_node
+      - deploy:
+          name: Publish package on NPM
+          command: |
+            echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
+            npm publish --access public
 workflows:
   version: 2
   workflow:
     jobs:
+      - lintCheck
       - unitTests
+          requires:
+            - lintCheck
       - mockTests
+          requires:
+            - lintCheck
       - integrationTests
       - onChainTests
       - generateDoc
@@ -175,3 +196,15 @@ workflows:
               only: master
             tags:
               only: /.*/
+      - publishNPM:
+          requires:
+            - unitTests
+            - mockTests
+            - integrationTests
+            - onChainTests
+            - generateDoc
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
