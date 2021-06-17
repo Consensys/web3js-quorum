@@ -88,6 +88,7 @@ function printPrivTxDetails(pmtRcpt) {
           `  > PMT Index #${pmtRcpt.transactionIndex}\n` +
           `  > PMT Hash ${pmtRcpt.transactionHash}\n`
       );
+      // eslint-disable-next-line promise/no-return-wrap
       return Promise.resolve();
     });
 }

@@ -2,7 +2,7 @@ const Utils = require("./utils");
 const txFixtures = require("./test-utils/keySets.json");
 
 describe("Utils", () => {
-  describe("[EEA]: Privacy Group Generation", () => {
+  describe("Privacy Group Generation", () => {
     it("should generate correct privacy group id", () => {
       const { generatePrivacyGroup } = new Utils({ utils: {} }).utils;
       txFixtures.forEach((pg) => {

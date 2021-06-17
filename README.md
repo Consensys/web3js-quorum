@@ -4,7 +4,7 @@ Web3js-Quorum is an Ethereum JavaScript library extending [web3.js](https://gith
 
 Web3js-Quorum gather all features from [quorum.js](https://github.com/ConsenSys/quorum.js) and [web3js-eea](https://github.com/ConsenSys/web3js-eea.js) in a single library.
 
-Please read the [documentation]() for more.
+Please read the [documentation](https://consensys.github.io/web3js-quorum/latest/index.html) for more.
 
 ## Features
 
@@ -28,17 +28,18 @@ The Quorum client APIs methods provided by web3js-quorum are accessed like so:
 const Web3 = require("web3");
 const Web3Quorum = require("web3js-quorum");
 const web3 = new Web3Quorum(new Web3("http://localhost:22000"));
-web3.priv.sendRawTransaction(signedRlpEncoded);
+web3.priv.generateAndSendRawTransaction(options);
 ```
 
 ## Documentation
 
-For full usage and API details see the [documentation]().
+For full usage and API details see the [documentation](https://consensys.github.io/web3js-quorum/latest/index.html).
 
 ## Examples
 
-The [example](example) directory contains examples of web3js-quorum usage. 
+The [example](example) directory contains examples of web3js-quorum usage with Besu as a Quorum client.
+The [7nodes-test](7nodes-test) directory contains examples of web3js-quorum usage with GoQuorum as a Quorum client.
 
 ## Contributing
 
-Please follow the [Contribution Guidelines]() and Review Guidelines.
+Please follow the [Contribution Guidelines](CONTRIBUTING.md) and Review Guidelines.

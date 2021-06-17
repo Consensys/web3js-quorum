@@ -43,6 +43,7 @@ function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
     throw new Error("Missing provider");
   }
   // TODO: to be updated by a method call web3_clientVersion
+  // eslint-disable-next-line no-param-reassign
   web3.isQuorum = isQuorum;
 
   // Extend the utils namespace methods

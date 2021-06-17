@@ -7,4 +7,4 @@ This directory contains base files to generate SDK doc with CI.
 - README.md will not be copied, it's this file.
 - .circleci directory contains a configuration for CircleCI that does nothing but prevents CI to fail.
 
-The actual up to date generated doc is available at [`https://consensys.github.io/web3js-eea/`](https://consensys.github.io/web3js-eea/)
+The actual up to date generated doc is available at [`https://consensys.github.io/web3js-quorum/`](https://consensys.github.io/web3js-quorum/)

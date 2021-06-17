@@ -1,6 +1,6 @@
 /**
  * Interacts with a private contract
- * @param {EEAClient} client
+ * @param {Client} client
  * @param {Contract} contract
  * @param {String} address
  * @param {object} options
