@@ -174,16 +174,46 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - lintCheck
+      - lintCheck: 
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
       - unitTests:
           requires:
-            - lintCheck
+            - lintCheck 
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
       - mockTests:
           requires:
-            - lintCheck
-      - integrationTests
-      - onChainTests
-      - generateDoc
+            - lintCheck 
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
+      - integrationTests:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
+      - onChainTests:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
+      - generateDoc:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
       - publishDoc:
           requires:
             - unitTests
