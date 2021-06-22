@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>permission.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Web3Quorum.html">Web3Quorum</a></li></ul><h3>Modules</h3><ul><li><a href="module-eth.html">eth</a><ul class='methods'><li data-type='method'><a href="module-eth.html#~fillTransaction">fillTransaction</a></li><li data-type='method'><a href="module-eth.html#~getContractPrivacyMetadata">getContractPrivacyMetadata</a></li><li data-type='method'><a href="module-eth.html#~getQuorumPayload">getQuorumPayload</a></li><li data-type='method'><a href="module-eth.html#~sendRawPrivateTransaction">sendRawPrivateTransaction</a></li><li data-type='method'><a href="module-eth.html#~sendTransactionAsync">sendTransactionAsync</a></li><li data-type='method'><a href="module-eth.html#~storageRoot">storageRoot</a></li></ul></li><li><a href="module-flexiblePrivacyGroup.html">flexiblePrivacyGroup</a><ul class='methods'><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~addTo">addTo</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~create">create</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~findOnChainPrivacyGroup">findOnChainPrivacyGroup</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~removeFrom">removeFrom</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~setLockState">setLockState</a></li></ul></li><li><a href="module-Istanbul.html">Istanbul</a><ul class='methods'><li data-type='method'><a href="module-Istanbul.html#~candidates">candidates</a></li><li data-type='method'><a href="module-Istanbul.html#~discard">discard</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlock">getSignersFromBlock</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlockByHash">getSignersFromBlockByHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshot">getSnapshot</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshotAtHash">getSnapshotAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidators">getValidators</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidatorsAtHash">getValidatorsAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~isValidator">isValidator</a></li><li data-type='method'><a href="module-Istanbul.html#~nodeAddress">nodeAddress</a></li><li data-type='method'><a href="module-Istanbul.html#~status">status</a></li></ul></li><li><a href="module-Permission.html">Permission</a><ul class='methods'><li data-type='method'><a href="module-Permission.html#~acctList">acctList</a></li><li data-type='method'><a href="module-Permission.html#~addAccountToOrg">addAccountToOrg</a></li><li data-type='method'><a href="module-Permission.html#~addNewRole">addNewRole</a></li><li data-type='method'><a href="module-Permission.html#~addNode">addNode</a></li><li data-type='method'><a href="module-Permission.html#~addOrg">addOrg</a></li><li data-type='method'><a href="module-Permission.html#~addSubOrg">addSubOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveAdminRole">approveAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedAccountRecovery">approveBlackListedAccountRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedNodeRecovery">approveBlackListedNodeRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveOrg">approveOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveOrgStatus">approveOrgStatus</a></li><li data-type='method'><a href="module-Permission.html#~assignAdminRole">assignAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~changeAccountRole">changeAccountRole</a></li><li data-type='method'><a href="module-Permission.html#~connectionAllowed">connectionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~getOrgDetails">getOrgDetails</a></li><li data-type='method'><a href="module-Permission.html#~nodeList">nodeList</a></li><li data-type='method'><a href="module-Permission.html#~orgList">orgList</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedAccount">recoverBlackListedAccount</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedNode">recoverBlackListedNode</a></li><li data-type='method'><a href="module-Permission.html#~removeRole">removeRole</a></li><li data-type='method'><a href="module-Permission.html#~roleList">roleList</a></li><li data-type='method'><a href="module-Permission.html#~transactionAllowed">transactionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~updateAccountStatus">updateAccountStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateNodeStatus">updateNodeStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateOrgStatus">updateOrgStatus</a></li></ul></li><li><a href="module-priv.html">priv</a><ul class='methods'><li data-type='method'><a href="module-priv.html#~call">call</a></li><li data-type='method'><a href="module-priv.html#~createPrivacyGroup">createPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~debugGetStateRoot">debugGetStateRoot</a></li><li data-type='method'><a href="module-priv.html#~deletePrivacyGroup">deletePrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~distributeRawTransaction">distributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~findPrivacyGroup">findPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~generateAndDistributeRawTransaction">generateAndDistributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~generateAndSendRawTransaction">generateAndSendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~getCode">getCode</a></li><li data-type='method'><a href="module-priv.html#~getEeaTransactionCount">getEeaTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getFilterChanges">getFilterChanges</a></li><li data-type='method'><a href="module-priv.html#~getFilterLogs">getFilterLogs</a></li><li data-type='method'><a href="module-priv.html#~getLogs">getLogs</a></li><li data-type='method'><a href="module-priv.html#~getPrivacyPrecompileAddress">getPrivacyPrecompileAddress</a></li><li data-type='method'><a href="module-priv.html#~getPrivateTransaction">getPrivateTransaction</a></li><li data-type='method'><a href="module-priv.html#~getTransactionCount">getTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getTransactionReceipt">getTransactionReceipt</a></li><li data-type='method'><a href="module-priv.html#~newFilter">newFilter</a></li><li data-type='method'><a href="module-priv.html#~sendRawTransaction">sendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~subscribe">subscribe</a></li><li data-type='method'><a href="module-priv.html#~subscribeWithPooling">subscribeWithPooling</a></li><li data-type='method'><a href="module-priv.html#~uninstallFilter">uninstallFilter</a></li><li data-type='method'><a href="module-priv.html#~unsubscribe">unsubscribe</a></li><li data-type='method'><a href="module-priv.html#~waitForTransactionReceipt">waitForTransactionReceipt</a></li></ul></li><li><a href="module-ptm.html">ptm</a><ul class='methods'><li data-type='method'><a href="module-ptm.html#~keys">keys</a></li><li data-type='method'><a href="module-ptm.html#~partyInfoKeys">partyInfoKeys</a></li><li data-type='method'><a href="module-ptm.html#~send">send</a></li><li data-type='method'><a href="module-ptm.html#~storeRaw">storeRaw</a></li><li data-type='method'><a href="module-ptm.html#~upCheck">upCheck</a></li></ul></li><li><a href="module-Raft.html">Raft</a><ul class='methods'><li data-type='method'><a href="module-Raft.html#~addLearner">addLearner</a></li><li data-type='method'><a href="module-Raft.html#~addPeer">addPeer</a></li><li data-type='method'><a href="module-Raft.html#~cluster">cluster</a></li><li data-type='method'><a href="module-Raft.html#~leader">leader</a></li><li data-type='method'><a href="module-Raft.html#~promoteToPeer">promoteToPeer</a></li><li data-type='method'><a href="module-Raft.html#~removePeer">removePeer</a></li><li data-type='method'><a href="module-Raft.html#~role">role</a></li></ul></li><li><a href="module-utils.html">utils</a><ul class='methods'><li data-type='method'><a href="module-utils.html#~generatePrivacyGroup">generatePrivacyGroup</a></li><li data-type='method'><a href="module-utils.html#~setPrivate">setPrivate</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-Migrate from quorum.js.html">Migrate from quorum.js</a></li><li><a href="tutorial-Migrate from web3js-eea.html">Migrate from web3js-eea</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">permission.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * For more details about the {@link https://docs.goquorum.consensys.net/en/stable/Reference/APIs/PermissioningAPIs/ Quorum permissions JSON-RPC APIs}
+ * @module Permission
+ */
+function Permission(web3) {
+  web3.extend({
+    property: "permission",
+    methods: [
+      /**
+       * @function orgList
+       * @return {Object[]} The list of all organizations with the status of each organization in the network
+       */
+      {
+        name: "orgList",
+        call: "quorumPermission_orgList",
+        params: 0,
+      },
+      /**
+       * @function acctList
+       * @return {Object[]} The list of accounts permissioned in the network
+       */
+      {
+        name: "acctList",
+        call: "quorumPermission_acctList",
+        params: 0,
+      },
+      /**
+       * @function nodeList
+       * @return {Object[]} The list of nodes permissioned in the network
+       */
+      {
+        name: "nodeList",
+        call: "quorumPermission_nodeList",
+        params: 0,
+      },
+      /**
+       * @function roleList
+       * @return {Object[]} The list of roles in the network
+       */
+      {
+        name: "roleList",
+        call: "quorumPermission_roleList",
+        params: 0,
+      },
+      /**
+       * @function getOrgDetails
+       * @param {String} orgId org or sub org id
+       * @return {Object[]} The list of accounts, nodes, roles, and sub organizations linked to an organization
+       */
+      {
+        name: "getOrgDetails",
+        call: "quorumPermission_getOrgDetails",
+        params: 1,
+      },
+      /**
+       * @function addOrg
+       * @param {String} orgId      unique org identfier
+       * @param {String} enodeId    complete enode id
+       * @param {String} accountId  account which will be the org admin account
+       * @return {String} response message
+       */
+      {
+        name: "addOrg",
+        call: "quorumPermission_addOrg",
+        params: 3,
+      },
+      /**
+       * @function approveOrg
+       * @param {String} orgId      unique org identfier
+       * @param {String} enodeId    complete enode id
+       * @param {String} accountId  account which will be the org admin account
+       * @return {String} response message
+       */
+      {
+        name: "approveOrg",
+        call: "quorumPermission_approveOrg",
+        params: 3,
+      },
+      /**
+       * @function updateOrgStatus
+       * @param {String} orgId
+       * @param {Number} action 1 - for suspending a org, 2 - for activating a suspended organization
+       * @return {String} response message
+       */
+      {
+        name: "updateOrgStatus",
+        call: "quorumPermission_updateOrgStatus",
+        params: 2,
+      },
+      /**
+       * @function approveOrgStatus
+       * @param {String} orgId
+       * @param {Number} action 1 - for approving org suspension, 2 - for approving activation of suspended org
+       * @return {String} response message
+       */
+      {
+        name: "approveOrgStatus",
+        call: "quorumPermission_approveOrgStatus",
+        params: 2,
+      },
+      /**
+       * @function addSubOrg
+       * @param {String} parentOrgId: parent org id
+       * @param {String} subOrgId: sub org identifier
+       * @param {String} enodeId: complete enode id of the node linked to the sub org id
+       * @return {String} response message
+       */
+      {
+        name: "addSubOrg",
+        call: "quorumPermission_addSubOrg",
+        params: 3,
+      },
+      /**
+       * @function addNewRole
+       * @param {String} orgId org id for which the role is being created
+       * @param {String} roleId unique role identifier
+       * @param {String} accountAccess account level access. Refer for complete list
+       * @param {Boolean} isVoter bool indicates if its a voting role
+       * @param {Boolean} isAdminRole bool indicates if its an admin role
+       * @return {String} response message
+       */
+      {
+        name: "addNewRole",
+        call: "quorumPermission_addNewRole",
+        params: 5,
+      },
+      /**
+       * @function removeRole
+       * @param {String} orgId org or sub org id to which the role belongs
+       * @param {String} roleId role id
+       * @return {String} response message
+       */
+      {
+        name: "removeRole",
+        call: "quorumPermission_removeRole",
+        params: 2,
+      },
+      /**
+       * @function addAccountToOrg
+       * @param {String} acctId org or sub org id to which the role belongs
+       * @param {String} orgId org id
+       * @param {String} roleId role id
+       * @return {String} response message
+       */
+      {
+        name: "addAccountToOrg",
+        call: "quorumPermission_addAccountToOrg",
+        params: 3,
+      },
+      /**
+       * @function changeAccountRole
+       * @param {String} acctId account id
+       * @param {String} orgId org id
+       * @param {String} roleId new role id to be assigned to the account
+       * @return {String} response message
+       */
+      {
+        name: "changeAccountRole",
+        call: "quorumPermission_changeAccountRole",
+        params: 3,
+      },
+      /**
+       * @function updateAccountStatus
+       * @param {String} orgId org id
+       * @param {String} acctId org or sub org id to which the role belongs
+       * @param {String} action 1 - for suspending the account, 2 - for activating a suspended account, 3 - for blacklisting an account
+       * @return {String} response message
+       */
+      {
+        name: "updateAccountStatus",
+        call: "quorumPermission_updateAccountStatus",
+        params: 3,
+      },
+      /**
+       * @function recoverBlackListedAccount
+       * @param {String} orgId org or sub org id to which the node belongs
+       * @param {String} acctId blacklisted account id
+       * @return {String} response message
+       */
+      {
+        name: "recoverBlackListedAccount",
+        call: "quorumPermission_recoverBlackListedAccount",
+        params: 2,
+      },
+      /**
+       * @function approveBlackListedAccountRecovery
+       * @param {String} orgId org or sub org id to which the node belongs
+       * @param {String} acctId blacklisted account id
+       * @return {String} response message
+       */
+      {
+        name: "approveBlackListedAccountRecovery",
+        call: "quorumPermission_approveBlackListedAccountRecovery",
+        params: 2,
+      },
+      /**
+       * @function assignAdminRole
+       * @param {String} orgId org id to which the account belongs
+       * @param {String} acctId account id
+       * @param {String} roleId new role id to be assigned to the account. This can be the network admin role or org admin role only
+       * @return {}
+       */
+      {
+        name: "assignAdminRole",
+        call: "quorumPermission_assignAdminRole",
+        params: 3,
+      },
+      /**
+       * @function approveAdminRole
+       * @param {String} orgId org or sub org id to which the node belongs
+       * @param {String} acctId blacklisted account id
+       * @return {String} response message
+       */
+      {
+        name: "approveAdminRole",
+        call: "quorumPermission_approveAdminRole",
+        params: 2,
+      },
+      /**
+       * @function addNode
+       * @param {String} orgId org or sub org id to which the node belongs
+       * @param {String} enodeId complete enode id
+       * @return {String} response message
+       */
+      {
+        name: "addNode",
+        call: "quorumPermission_addNode",
+        params: 2,
+      },
+      /**
+       * @function updateNodeStatus
+       * @param {String} orgId org id
+       * @param {String} enodeId complete enode id
+       * @param {String} action 1 - for deactivating the node, 2 - for activating a deactivated node, 3 - for blacklisting a node
+       * @return {String} response message
+       */
+      {
+        name: "updateNodeStatus",
+        call: "quorumPermission_updateNodeStatus",
+        params: 3,
+      },
+      /**
+       * @function recoverBlackListedNode
+       * @param {String} orgId org or sub org id to which the node belongs
+       * @param {String} enodeId complete enode id
+       * @return {String} response message
+       */
+      {
+        name: "recoverBlackListedNode",
+        call: "quorumPermission_recoverBlackListedNode",
+        params: 2,
+      },
+      /**
+       * @function approveBlackListedNodeRecovery
+       * @param {String} orgId org or sub org id to which the node belongs
+       * @param {String} enodeId complete enode id
+       * @return {String} response message
+       */
+      {
+        name: "approveBlackListedNodeRecovery",
+        call: "quorumPermission_approveBlackListedNodeRecovery",
+        params: 3,
+      },
+      /**
+       * @function transactionAllowed
+       * @param {Object} txArgs: transaction arguments object
+       * @return {Boolean} status indicating if transaction is allowed or not
+       */
+      {
+        name: "transactionAllowed",
+        call: "quorumPermission_transactionAllowed",
+        params: 1,
+      },
+      /**
+       * @function connectionAllowed
+       * @param {String} enodeId enode id
+       * @param {String} ipAddress IP address of the node
+       * @param {Number} portNum port number
+       * @return {Boolean} status indicating if connection is allowed or not
+       */
+      {
+        name: "connectionAllowed",
+        call: "quorumPermission_connectionAllowed",
+        params: 3,
+      },
+    ],
+  });
+  return web3;
+}
+
+module.exports = Permission;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 22 2021 14:18:13 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

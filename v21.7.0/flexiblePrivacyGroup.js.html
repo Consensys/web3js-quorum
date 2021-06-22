@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>flexiblePrivacyGroup.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Web3Quorum.html">Web3Quorum</a></li></ul><h3>Modules</h3><ul><li><a href="module-eth.html">eth</a><ul class='methods'><li data-type='method'><a href="module-eth.html#~fillTransaction">fillTransaction</a></li><li data-type='method'><a href="module-eth.html#~getContractPrivacyMetadata">getContractPrivacyMetadata</a></li><li data-type='method'><a href="module-eth.html#~getQuorumPayload">getQuorumPayload</a></li><li data-type='method'><a href="module-eth.html#~sendRawPrivateTransaction">sendRawPrivateTransaction</a></li><li data-type='method'><a href="module-eth.html#~sendTransactionAsync">sendTransactionAsync</a></li><li data-type='method'><a href="module-eth.html#~storageRoot">storageRoot</a></li></ul></li><li><a href="module-flexiblePrivacyGroup.html">flexiblePrivacyGroup</a><ul class='methods'><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~addTo">addTo</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~create">create</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~findOnChainPrivacyGroup">findOnChainPrivacyGroup</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~removeFrom">removeFrom</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~setLockState">setLockState</a></li></ul></li><li><a href="module-Istanbul.html">Istanbul</a><ul class='methods'><li data-type='method'><a href="module-Istanbul.html#~candidates">candidates</a></li><li data-type='method'><a href="module-Istanbul.html#~discard">discard</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlock">getSignersFromBlock</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlockByHash">getSignersFromBlockByHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshot">getSnapshot</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshotAtHash">getSnapshotAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidators">getValidators</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidatorsAtHash">getValidatorsAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~isValidator">isValidator</a></li><li data-type='method'><a href="module-Istanbul.html#~nodeAddress">nodeAddress</a></li><li data-type='method'><a href="module-Istanbul.html#~status">status</a></li></ul></li><li><a href="module-Permission.html">Permission</a><ul class='methods'><li data-type='method'><a href="module-Permission.html#~acctList">acctList</a></li><li data-type='method'><a href="module-Permission.html#~addAccountToOrg">addAccountToOrg</a></li><li data-type='method'><a href="module-Permission.html#~addNewRole">addNewRole</a></li><li data-type='method'><a href="module-Permission.html#~addNode">addNode</a></li><li data-type='method'><a href="module-Permission.html#~addOrg">addOrg</a></li><li data-type='method'><a href="module-Permission.html#~addSubOrg">addSubOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveAdminRole">approveAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedAccountRecovery">approveBlackListedAccountRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedNodeRecovery">approveBlackListedNodeRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveOrg">approveOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveOrgStatus">approveOrgStatus</a></li><li data-type='method'><a href="module-Permission.html#~assignAdminRole">assignAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~changeAccountRole">changeAccountRole</a></li><li data-type='method'><a href="module-Permission.html#~connectionAllowed">connectionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~getOrgDetails">getOrgDetails</a></li><li data-type='method'><a href="module-Permission.html#~nodeList">nodeList</a></li><li data-type='method'><a href="module-Permission.html#~orgList">orgList</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedAccount">recoverBlackListedAccount</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedNode">recoverBlackListedNode</a></li><li data-type='method'><a href="module-Permission.html#~removeRole">removeRole</a></li><li data-type='method'><a href="module-Permission.html#~roleList">roleList</a></li><li data-type='method'><a href="module-Permission.html#~transactionAllowed">transactionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~updateAccountStatus">updateAccountStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateNodeStatus">updateNodeStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateOrgStatus">updateOrgStatus</a></li></ul></li><li><a href="module-priv.html">priv</a><ul class='methods'><li data-type='method'><a href="module-priv.html#~call">call</a></li><li data-type='method'><a href="module-priv.html#~createPrivacyGroup">createPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~debugGetStateRoot">debugGetStateRoot</a></li><li data-type='method'><a href="module-priv.html#~deletePrivacyGroup">deletePrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~distributeRawTransaction">distributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~findPrivacyGroup">findPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~generateAndDistributeRawTransaction">generateAndDistributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~generateAndSendRawTransaction">generateAndSendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~getCode">getCode</a></li><li data-type='method'><a href="module-priv.html#~getEeaTransactionCount">getEeaTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getFilterChanges">getFilterChanges</a></li><li data-type='method'><a href="module-priv.html#~getFilterLogs">getFilterLogs</a></li><li data-type='method'><a href="module-priv.html#~getLogs">getLogs</a></li><li data-type='method'><a href="module-priv.html#~getPrivacyPrecompileAddress">getPrivacyPrecompileAddress</a></li><li data-type='method'><a href="module-priv.html#~getPrivateTransaction">getPrivateTransaction</a></li><li data-type='method'><a href="module-priv.html#~getTransactionCount">getTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getTransactionReceipt">getTransactionReceipt</a></li><li data-type='method'><a href="module-priv.html#~newFilter">newFilter</a></li><li data-type='method'><a href="module-priv.html#~sendRawTransaction">sendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~subscribe">subscribe</a></li><li data-type='method'><a href="module-priv.html#~subscribeWithPooling">subscribeWithPooling</a></li><li data-type='method'><a href="module-priv.html#~uninstallFilter">uninstallFilter</a></li><li data-type='method'><a href="module-priv.html#~unsubscribe">unsubscribe</a></li><li data-type='method'><a href="module-priv.html#~waitForTransactionReceipt">waitForTransactionReceipt</a></li></ul></li><li><a href="module-ptm.html">ptm</a><ul class='methods'><li data-type='method'><a href="module-ptm.html#~keys">keys</a></li><li data-type='method'><a href="module-ptm.html#~partyInfoKeys">partyInfoKeys</a></li><li data-type='method'><a href="module-ptm.html#~send">send</a></li><li data-type='method'><a href="module-ptm.html#~storeRaw">storeRaw</a></li><li data-type='method'><a href="module-ptm.html#~upCheck">upCheck</a></li></ul></li><li><a href="module-Raft.html">Raft</a><ul class='methods'><li data-type='method'><a href="module-Raft.html#~addLearner">addLearner</a></li><li data-type='method'><a href="module-Raft.html#~addPeer">addPeer</a></li><li data-type='method'><a href="module-Raft.html#~cluster">cluster</a></li><li data-type='method'><a href="module-Raft.html#~leader">leader</a></li><li data-type='method'><a href="module-Raft.html#~promoteToPeer">promoteToPeer</a></li><li data-type='method'><a href="module-Raft.html#~removePeer">removePeer</a></li><li data-type='method'><a href="module-Raft.html#~role">role</a></li></ul></li><li><a href="module-utils.html">utils</a><ul class='methods'><li data-type='method'><a href="module-utils.html#~generatePrivacyGroup">generatePrivacyGroup</a></li><li data-type='method'><a href="module-utils.html#~setPrivate">setPrivate</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-Migrate from quorum.js.html">Migrate from quorum.js</a></li><li><a href="tutorial-Migrate from web3js-eea.html">Migrate from web3js-eea</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">flexiblePrivacyGroup.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const crypto = require("crypto");
+
+const privacyProxyAbi = require("../solidity/PrivacyProxy.json").output.abi;
+
+/**
+ *
+ * @module flexiblePrivacyGroup
+ */
+function FlexiblePrivacyGroup(web3) {
+  web3.eth.extend({
+    property: "flexiblePrivacyGroup",
+    methods: [
+      /**
+       * @function findOnChainPrivacyGroup
+       * @param {String[]} addresses
+       * @return {Object}
+       */
+      {
+        name: "findOnChainPrivacyGroup",
+        call: "privx_findOnChainPrivacyGroup",
+        params: 1,
+      },
+    ],
+  });
+
+  /**
+   * Create an on chain privacy group
+   * @function create
+   * @param {Object}   options Map to add the members
+   * @param {string}   options.privacyGroupId Privacy group ID to add to
+   * @param {string}   options.privateKey Private Key used to sign transaction with
+   * @param {string}   options.enclaveKey Orion public key
+   * @param {string[]} options.participants list of enclaveKey to pass to the contract to add to the group
+   * @return {Promise&lt;T>}
+   */
+  const create = (options) => {
+    const contract = new web3.eth.Contract(privacyProxyAbi);
+    const functionAbi = contract._jsonInterface.find((e) => {
+      return e.name === "addParticipants";
+    });
+    const functionArgs = web3.eth.abi
+      .encodeParameters(functionAbi.inputs, [
+        options.participants.map((e) => {
+          return Buffer.from(e, "base64");
+        }),
+      ])
+      .slice(2);
+
+    // Generate a random ID if one was not passed in
+    const privacyGroupId =
+      options.privacyGroupId || crypto.randomBytes(32).toString("base64");
+
+    const functionCall = {
+      to: "0x000000000000000000000000000000000000007c",
+      data: functionAbi.signature + functionArgs,
+      privateFrom: options.enclaveKey,
+      privacyGroupId,
+      privateKey: options.privateKey,
+    };
+    return web3.priv
+      .generateAndSendRawTransaction(functionCall)
+      .then((transactionHash) => {
+        return web3.priv.waitForTransactionReceipt(transactionHash);
+      });
+  };
+
+  /**
+   * Remove a member from an on-chain privacy group
+   * @function removeFrom
+   * @param {Object}   options Map to add the members
+   * @param {string}   options.privacyGroupId Privacy group ID to add to
+   * @param {string}   options.privateKey Private Key used to sign transaction with
+   * @param {string}   options.enclaveKey Orion public key
+   * @param {string[]} options.participant single enclaveKey to pass to the contract to add to the group
+   * @returns {Promise&lt;T>}
+   */
+  const removeFrom = (options) => {
+    const contract = new web3.eth.Contract(privacyProxyAbi);
+    const functionAbi = contract._jsonInterface.find((e) => {
+      return e.name === "removeParticipant";
+    });
+    const functionArgs = web3.eth.abi
+      .encodeParameters(functionAbi.inputs, [
+        Buffer.from(options.participant, "base64"),
+      ])
+      .slice(2);
+
+    const functionCall = {
+      to: "0x000000000000000000000000000000000000007c",
+      data: functionAbi.signature + functionArgs,
+      privateFrom: options.enclaveKey,
+      privacyGroupId: options.privacyGroupId,
+      privateKey: options.privateKey,
+    };
+    return web3.priv
+      .generateAndSendRawTransaction(functionCall)
+      .then((transactionHash) => {
+        return web3.priv.waitForTransactionReceipt(transactionHash);
+      });
+  };
+
+  /**
+   * Either lock or unlock the privacy group for member adding
+   * @function setLockState
+   * @param {Object} options Map to lock the group
+   * @param {string} options.privacyGroupId Privacy group ID to lock/unlock
+   * @param {string} options.privateKey Private Key used to sign transaction with
+   * @param {string} options.enclaveKey Orion public key
+   * @param {boolean} options.lock boolean indicating whether to lock or unlock
+   * @returns {Promise&lt;T>}
+   */
+  const setLockState = (options) => {
+    const contract = new web3.eth.Contract(privacyProxyAbi);
+    const functionAbi = contract._jsonInterface.find((e) => {
+      return e.name === (options.lock ? "lock" : "unlock");
+    });
+
+    const functionCall = {
+      to: "0x000000000000000000000000000000000000007c",
+      data: functionAbi.signature,
+      privateFrom: options.enclaveKey,
+      privacyGroupId: options.privacyGroupId,
+      privateKey: options.privateKey,
+    };
+
+    return web3.priv
+      .generateAndSendRawTransaction(functionCall)
+      .then(async (transactionHash) => {
+        return web3.priv.waitForTransactionReceipt(transactionHash);
+      });
+  };
+
+  /**
+   * Add to an existing on-chain privacy group
+   * @function addTo
+   * @param {Object}   options Map to add the members
+   * @param {string}   options.privacyGroupId Privacy group ID to add to
+   * @param {string}   options.privateKey Private Key used to sign transaction with
+   * @param {string}   options.enclaveKey Orion public key
+   * @param {string[]} options.participants list of enclaveKey to pass to the contract to add to the group
+   * @returns {Promise&lt;T>}
+   */
+  const addTo = (options) => {
+    return setLockState(Object.assign(options, { lock: true })).then(
+      (receipt) => {
+        if (receipt.status === "0x1") {
+          return create(options);
+        }
+        throw Error(
+          `Locking the privacy group failed, receipt: ${JSON.stringify(
+            receipt
+          )}`
+        );
+      }
+    );
+  };
+
+  Object.assign(web3.eth.flexiblePrivacyGroup, {
+    create,
+    removeFrom,
+    setLockState,
+    addTo,
+  });
+  return web3;
+}
+
+module.exports = FlexiblePrivacyGroup;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 22 2021 14:18:13 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
