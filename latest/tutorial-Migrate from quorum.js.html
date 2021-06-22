@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>eth.js - Documentation</title>
+    <title>Tutorial: Migrate from quorum.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,112 +32,327 @@
 
 <div id="main">
     
-    <h1 class="page-title">eth.js</h1>
+    <h1 class="page-title">Tutorial: Migrate from quorum.js</h1>
     
 
-    
-
-
-
-    
     <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * For more details about the {@link https://docs.goquorum.consensys.net/en/stable/Reference/APIs/PrivacyAPI Quorum Privacy APIs}
- * @module eth
- */
-function Eth(web3) {
-  web3.eth.extend({
-    methods: [
-      /**
-       * @function sendRawPrivateTransaction
-       * @param {String} Signed transaction data in HEX format
-       * @param {Object} privateData Private data to send
-       * @param {String[]} privateData.privateFor When sending a private transaction, an array of the recipients’ base64-encoded public keys.
-       * @param {Number} [privateData.privacyFlag=0] 0 for SP (default if not provided), 1 for PP, 3 for PSV
-       * @param {Function} [callback] If you pass a callback the HTTP request is made asynchronous.
-       * @return {String} The 32 Bytes transaction hash as HEX string
-       */
-      {
-        name: "sendRawPrivateTransaction",
-        call: "eth_sendRawPrivateTransaction",
-        params: 2,
-      },
-      /**
-       * @function fillTransaction
-       * @param {Object} txObj - The transaction object to send:
-       * @param {String} txObj.from The address for the sending account.
-       * @param {String} [txObj.to]  The destination address of the message,
-       * @param {Number|String|BigNumber} [txObj.value] The value transferred for the transaction in Wei, also the endowment if it’s a contract-creation transaction.
-       * @param {String} [txObj.data] Either a byte string containing the associated data of the message, or in the case of a contract-creation transaction, the initialisation code.
-       * @param {String[]} [txObj.privateFor] When sending a private transaction, an array of the recipients’ base64-encoded public keys.
-       * @return {Object} raw: RLP encoded bytes for the passed transaction object and tx : transaction object
-       */
-      {
-        name: "fillTransaction",
-        call: "eth_fillTransaction",
-        params: 1,
-        inputFormatter: [web3.extend.formatters.inputTransactionFormatter],
-      },
-      /**
-       * @function storageRoot
-       * @param {String} address The address to fetch the storage root from in hex
-       * @param {String} [block="latest"] The block number to fetch the storage root from in hex
-       * @return {String} 32 Bytes storage root hash as hex string.
-       */
-      {
-        name: "storageRoot",
-        call: "eth_storageRoot",
-        params: 2,
-        inputFormatter: [
-          web3.extend.formatters.inputAddressFormatter,
-          web3.extend.formatters.inputDefaultBlockNumberFormatter,
-        ],
-      },
-      /**
-       * @function getQuorumPayload
-       * @param  {String} id the HEX formatted generated Sha3-512 hash of the encrypted payload from the Private Transaction Manager. This is seen in the transaction as the input field
-       * @return {String} unencrypted transaction payload in HEX format.
-       */
-      {
-        name: "getQuorumPayload",
-        call: "eth_getQuorumPayload",
-        params: 1,
-      },
-      /**
-       * @function sendTransactionAsync
-       * @param {Object} txObj Transaction Object to send
-       * @return {String}
-       */
-      {
-        name: "sendTransactionAsync",
-        call: "eth_sendTransactionAsync",
-        params: 1,
-        inputFormatter: [web3.extend.formatters.inputTransactionFormatter],
-      },
-      /**
-       * @function getContractPrivacyMetadata
-       * @param {String} contractAddress
-       * @return {Object}
-       */
-      {
-        name: "getContractPrivacyMetadata",
-        call: "eth_getContractPrivacyMetadata",
-        params: 1,
-        inputFormatter: [web3.extend.formatters.inputAddressFormatter],
-      },
-    ],
-  });
-  return web3;
-}
 
-module.exports = Eth;
-</code></pre>
-        </article>
-    </section>
+<header>
+    
 
+    <h2>Migrate from quorum.js</h2>
+</header>
 
+<article>
+    <h3>MIGRATION FROM quorum.js to web3js-quorum</h3>
+<h2>eth namespace</h2>
+<table>
+<thead>
+<tr>
+<th>quorum.js</th>
+<th>web3js-quorum</th>
+<th>changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quorum.eth.sendRawPrivateTransaction</td>
+<td>web3.eth.sendRawPrivateTransaction</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.eth.storageRoot</td>
+<td>web3.eth.storageRoot</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.eth.getQuorumPayload</td>
+<td>web3.eth.getQuorumPayload</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.eth.getContractPrivacyMetadata</td>
+<td>web3.eth.getContractPrivacyMetadata</td>
+<td>namespace</td>
+</tr>
+</tbody>
+</table>
+<h2>istanbul namespace</h2>
+<table>
+<thead>
+<tr>
+<th>quorum.js</th>
+<th>web3js-quorum</th>
+<th>changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quorum.istanbul.discard</td>
+<td>web3.istanbul.discard</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.propose</td>
+<td>web3.istanbul.propose</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.getValidatorsAtHash</td>
+<td>web3.istanbul.getValidatorsAtHash</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.getValidators</td>
+<td>web3.istanbul.getValidators</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.candidates</td>
+<td>web3.istanbul.candidates</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.getSnapshot</td>
+<td>web3.istanbul.getSnapshot</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.getSnapshotAtHash</td>
+<td>web3.istanbul.getSnapshotAtHash</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.nodeAddress</td>
+<td>web3.istanbul.nodeAddress</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.getSignersFromBlock</td>
+<td>web3.istanbul.getSignersFromBlock</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.istanbul.getSignersFromBlockByHash</td>
+<td>web3.istanbul.getSignersFromBlockByHash</td>
+<td>namespace</td>
+</tr>
+</tbody>
+</table>
+<h2>permission namespace</h2>
+<table>
+<thead>
+<tr>
+<th>quorum.js</th>
+<th>web3js-quorum</th>
+<th>changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quorum.quorumPermission.orgList</td>
+<td>web3.permission.orgList</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.acctList</td>
+<td>web3.permission.acctList</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.nodeList</td>
+<td>web3.permission.nodeList</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.roleList</td>
+<td>web3.permission.roleList</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.getOrgDetails</td>
+<td>web3.permission.getOrgDetails</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.addOrg</td>
+<td>web3.permission.addOrg</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.approveOrg</td>
+<td>web3.permission.approveOrg</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.updateOrgStatus</td>
+<td>web3.permission.updateOrgStatus</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.approveOrgStatus</td>
+<td>web3.permission.approveOrgStatus</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.addSubOrg</td>
+<td>web3.permission.addSubOrg</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.addNewRole</td>
+<td>web3.permission.addNewRole</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.removeRole</td>
+<td>web3.permission.removeRole</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.addAccountToOrg</td>
+<td>web3.permission.addAccountToOrg</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.changeAccountRole</td>
+<td>web3.permission.changeAccountRole</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.updateAccountStatus</td>
+<td>web3.permission.updateAccountStatus</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.recoverBlackListedAccount</td>
+<td>web3.permission.recoverBlackListedAccount</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.approveBlackListedAccountRecovery</td>
+<td>web3.permission.approveBlackListedAccountRecovery</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.assignAdminRole</td>
+<td>web3.permission.assignAdminRole</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.approveAdminRole</td>
+<td>web3.permission.approveAdminRole</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.addNode</td>
+<td>web3.permission.addNode</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.updateNodeStatus</td>
+<td>web3.permission.updateNodeStatus</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.recoverBlackListedNode</td>
+<td>web3.permission.recoverBlackListedNode</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.quorumPermission.approveBlackListedNodeRecovery</td>
+<td>web3.permission.approveBlackListedNodeRecovery</td>
+<td>namespace</td>
+</tr>
+</tbody>
+</table>
+<h2>raft namespace</h2>
+<table>
+<thead>
+<tr>
+<th>quorum.js</th>
+<th>web3js-quorum</th>
+<th>changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quorum.raft.cluster</td>
+<td>web3.raft.cluster</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.raft.getRole</td>
+<td>web3.raft.role</td>
+<td>namespace and function name</td>
+</tr>
+<tr>
+<td>quorum.raft.leader</td>
+<td>web3.raft.leader</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.raft.addPeer</td>
+<td>web3.raft.addPeer</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.raft.removePeer</td>
+<td>web3.raft.removePeer</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.raft.addLearner</td>
+<td>web3.raft.addLearner</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>quorum.raft.promoteToPeer</td>
+<td>web3.raft.promoteToPeer</td>
+<td>namespace</td>
+</tr>
+</tbody>
+</table>
+<h2>Raw transaction manager namespace</h2>
+<table>
+<thead>
+<tr>
+<th>quorum.js</th>
+<th>web3js-quorum</th>
+<th>changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RawTransactionManager.sendRawTransactionViaSendAPI</td>
+<td>web3.ptm.send</td>
+<td>namespace and function name</td>
+</tr>
+<tr>
+<td>RawTransactionManager.storeRawRequest</td>
+<td>web3.ptm.storeRaw</td>
+<td>namespace and function name</td>
+</tr>
+<tr>
+<td>RawTransactionManager.sendRawTransaction</td>
+<td>web3.priv.generateAndSendRawTransaction</td>
+<td>namespace and function name</td>
+</tr>
+<tr>
+<td>RawTransactionManager.setPrivate</td>
+<td>web3.utils.setPrivate</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>RawTransactionManager.sendRawRequest</td>
+<td>-</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</article>
 
+</section>
 
     
     
