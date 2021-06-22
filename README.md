@@ -1,8 +1,11 @@
+[![Website](https://img.shields.io/website?label=documentation&url=https://consensys.github.io/web3js-quorum/latest/index.html)](https://consensys.github.io/web3js-quorum/latest/index.html)
+[![npm](https://img.shields.io/npm/v/web3js-quorum)](https://www.npmjs.com/package/web3js-quorum)
+
 # web3js-quorum
 
 Web3js-Quorum is an Ethereum JavaScript library extending [web3.js](https://github.com/ethereum/web3.js/) that adds supports for [GoQuorum](https://docs.goquorum.consensys.net/en/stable/) and [Hyperledger Besu](https://besu.hyperledger.org/en/stable/) specific JSON-RPC APIs and features. In particular it enables to use [web3.js](https://github.com/ethereum/web3.js/) with private transactions.
 
-Web3js-Quorum gather all features from [quorum.js](https://github.com/ConsenSys/quorum.js) and [web3js-eea](https://github.com/ConsenSys/web3js-eea.js) in a single library.
+Web3js-Quorum gather all features from [quorum.js](https://github.com/ConsenSys/quorum.js) and [web3js-eea](https://github.com/ConsenSys/web3js-eea) in a single library.
 
 Please read the [documentation](https://consensys.github.io/web3js-quorum/latest/index.html) for more.
 
@@ -39,6 +42,10 @@ For full usage and API details see the [documentation](https://consensys.github.
 
 The [example](example) directory contains examples of web3js-quorum usage with Besu as a Quorum client.
 The [7nodes-test](7nodes-test) directory contains examples of web3js-quorum usage with GoQuorum as a Quorum client.
+
+## Migrations
+* To migrate from web3js-eea refer to [this](https://consensys.github.io/web3js-quorum/latest/tutorial-Migrate%20from%20web3js-eea.html)
+* To migrate from quorum.js refer to [this](https://consensys.github.io/web3js-quorum/latest/tutorial-Migrate%20from%20quorum.js.html)
 
 ## Contributing
 
