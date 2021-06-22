@@ -242,7 +242,7 @@ workflows:
       - generateDoc:
           filters:
             tags:
-              only: master
+              only: /^v.*/
             branches:
               only: /.*/
       - publishDoc:
