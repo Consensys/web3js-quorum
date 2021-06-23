@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>priv.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Web3Quorum.html">Web3Quorum</a></li></ul><h3>Modules</h3><ul><li><a href="module-eth.html">eth</a><ul class='methods'><li data-type='method'><a href="module-eth.html#~fillTransaction">fillTransaction</a></li><li data-type='method'><a href="module-eth.html#~getContractPrivacyMetadata">getContractPrivacyMetadata</a></li><li data-type='method'><a href="module-eth.html#~getQuorumPayload">getQuorumPayload</a></li><li data-type='method'><a href="module-eth.html#~sendRawPrivateTransaction">sendRawPrivateTransaction</a></li><li data-type='method'><a href="module-eth.html#~sendTransactionAsync">sendTransactionAsync</a></li><li data-type='method'><a href="module-eth.html#~storageRoot">storageRoot</a></li></ul></li><li><a href="module-flexiblePrivacyGroup.html">flexiblePrivacyGroup</a><ul class='methods'><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~addTo">addTo</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~create">create</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~findOnChainPrivacyGroup">findOnChainPrivacyGroup</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~removeFrom">removeFrom</a></li><li data-type='method'><a href="module-flexiblePrivacyGroup.html#~setLockState">setLockState</a></li></ul></li><li><a href="module-Istanbul.html">Istanbul</a><ul class='methods'><li data-type='method'><a href="module-Istanbul.html#~candidates">candidates</a></li><li data-type='method'><a href="module-Istanbul.html#~discard">discard</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlock">getSignersFromBlock</a></li><li data-type='method'><a href="module-Istanbul.html#~getSignersFromBlockByHash">getSignersFromBlockByHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshot">getSnapshot</a></li><li data-type='method'><a href="module-Istanbul.html#~getSnapshotAtHash">getSnapshotAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidators">getValidators</a></li><li data-type='method'><a href="module-Istanbul.html#~getValidatorsAtHash">getValidatorsAtHash</a></li><li data-type='method'><a href="module-Istanbul.html#~isValidator">isValidator</a></li><li data-type='method'><a href="module-Istanbul.html#~nodeAddress">nodeAddress</a></li><li data-type='method'><a href="module-Istanbul.html#~status">status</a></li></ul></li><li><a href="module-Permission.html">Permission</a><ul class='methods'><li data-type='method'><a href="module-Permission.html#~acctList">acctList</a></li><li data-type='method'><a href="module-Permission.html#~addAccountToOrg">addAccountToOrg</a></li><li data-type='method'><a href="module-Permission.html#~addNewRole">addNewRole</a></li><li data-type='method'><a href="module-Permission.html#~addNode">addNode</a></li><li data-type='method'><a href="module-Permission.html#~addOrg">addOrg</a></li><li data-type='method'><a href="module-Permission.html#~addSubOrg">addSubOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveAdminRole">approveAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedAccountRecovery">approveBlackListedAccountRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveBlackListedNodeRecovery">approveBlackListedNodeRecovery</a></li><li data-type='method'><a href="module-Permission.html#~approveOrg">approveOrg</a></li><li data-type='method'><a href="module-Permission.html#~approveOrgStatus">approveOrgStatus</a></li><li data-type='method'><a href="module-Permission.html#~assignAdminRole">assignAdminRole</a></li><li data-type='method'><a href="module-Permission.html#~changeAccountRole">changeAccountRole</a></li><li data-type='method'><a href="module-Permission.html#~connectionAllowed">connectionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~getOrgDetails">getOrgDetails</a></li><li data-type='method'><a href="module-Permission.html#~nodeList">nodeList</a></li><li data-type='method'><a href="module-Permission.html#~orgList">orgList</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedAccount">recoverBlackListedAccount</a></li><li data-type='method'><a href="module-Permission.html#~recoverBlackListedNode">recoverBlackListedNode</a></li><li data-type='method'><a href="module-Permission.html#~removeRole">removeRole</a></li><li data-type='method'><a href="module-Permission.html#~roleList">roleList</a></li><li data-type='method'><a href="module-Permission.html#~transactionAllowed">transactionAllowed</a></li><li data-type='method'><a href="module-Permission.html#~updateAccountStatus">updateAccountStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateNodeStatus">updateNodeStatus</a></li><li data-type='method'><a href="module-Permission.html#~updateOrgStatus">updateOrgStatus</a></li></ul></li><li><a href="module-priv.html">priv</a><ul class='methods'><li data-type='method'><a href="module-priv.html#~call">call</a></li><li data-type='method'><a href="module-priv.html#~createPrivacyGroup">createPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~debugGetStateRoot">debugGetStateRoot</a></li><li data-type='method'><a href="module-priv.html#~deletePrivacyGroup">deletePrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~distributeRawTransaction">distributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~findPrivacyGroup">findPrivacyGroup</a></li><li data-type='method'><a href="module-priv.html#~generateAndDistributeRawTransaction">generateAndDistributeRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~generateAndSendRawTransaction">generateAndSendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~getCode">getCode</a></li><li data-type='method'><a href="module-priv.html#~getEeaTransactionCount">getEeaTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getFilterChanges">getFilterChanges</a></li><li data-type='method'><a href="module-priv.html#~getFilterLogs">getFilterLogs</a></li><li data-type='method'><a href="module-priv.html#~getLogs">getLogs</a></li><li data-type='method'><a href="module-priv.html#~getPrivacyPrecompileAddress">getPrivacyPrecompileAddress</a></li><li data-type='method'><a href="module-priv.html#~getPrivateTransaction">getPrivateTransaction</a></li><li data-type='method'><a href="module-priv.html#~getTransactionCount">getTransactionCount</a></li><li data-type='method'><a href="module-priv.html#~getTransactionReceipt">getTransactionReceipt</a></li><li data-type='method'><a href="module-priv.html#~newFilter">newFilter</a></li><li data-type='method'><a href="module-priv.html#~sendRawTransaction">sendRawTransaction</a></li><li data-type='method'><a href="module-priv.html#~subscribe">subscribe</a></li><li data-type='method'><a href="module-priv.html#~subscribeWithPooling">subscribeWithPooling</a></li><li data-type='method'><a href="module-priv.html#~uninstallFilter">uninstallFilter</a></li><li data-type='method'><a href="module-priv.html#~unsubscribe">unsubscribe</a></li><li data-type='method'><a href="module-priv.html#~waitForTransactionReceipt">waitForTransactionReceipt</a></li></ul></li><li><a href="module-ptm.html">ptm</a><ul class='methods'><li data-type='method'><a href="module-ptm.html#~keys">keys</a></li><li data-type='method'><a href="module-ptm.html#~partyInfoKeys">partyInfoKeys</a></li><li data-type='method'><a href="module-ptm.html#~send">send</a></li><li data-type='method'><a href="module-ptm.html#~storeRaw">storeRaw</a></li><li data-type='method'><a href="module-ptm.html#~upCheck">upCheck</a></li></ul></li><li><a href="module-Raft.html">Raft</a><ul class='methods'><li data-type='method'><a href="module-Raft.html#~addLearner">addLearner</a></li><li data-type='method'><a href="module-Raft.html#~addPeer">addPeer</a></li><li data-type='method'><a href="module-Raft.html#~cluster">cluster</a></li><li data-type='method'><a href="module-Raft.html#~leader">leader</a></li><li data-type='method'><a href="module-Raft.html#~promoteToPeer">promoteToPeer</a></li><li data-type='method'><a href="module-Raft.html#~removePeer">removePeer</a></li><li data-type='method'><a href="module-Raft.html#~role">role</a></li></ul></li><li><a href="module-utils.html">utils</a><ul class='methods'><li data-type='method'><a href="module-utils.html#~generatePrivacyGroup">generatePrivacyGroup</a></li><li data-type='method'><a href="module-utils.html#~setPrivate">setPrivate</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-Migrate from quorum.js.html">Migrate from quorum.js</a></li><li><a href="tutorial-Migrate from web3js-eea.html">Migrate from web3js-eea</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">priv.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { Transaction } = require("ethereumjs-tx");
+const PrivateTransaction = require("./privateTransaction");
+const { privateToAddress } = require("./util/custom-ethjs-util");
+const { PrivateSubscription } = require("./privateSubscription");
+const { intToHex } = require("./util");
+
+/**
+ * @module priv
+ */
+function Priv(web3) {
+  const GAS_PRICE = 0;
+  const GAS_LIMIT = 3000000;
+  let chainId = null;
+  web3.extend({
+    property: "priv",
+    methods: [
+      /**
+       * Invokes a private contract function locally and does not change the privacy group state.
+       * @function call
+       * @param {String} privacyGroupId privacy group ID
+       * @param {Object} call transaction call object
+       * @param {String} blockNumber integer representing a block number or one of the string tags latest, earliest, or pending
+       * @return {Data} result return value of the executed contract
+       */
+      {
+        name: "call",
+        call: "priv_call",
+        params: 3,
+        inputFormatter: [
+          null, // privacyGroupId
+          null, // tx
+          web3.extend.formatters.inputDefaultBlockNumberFormatter,
+        ],
+      },
+      /**
+       * @function debugGetStateRoot
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String|Number} blockNumber
+       * @return {String} 32-byte state root
+       */
+      {
+        name: "debugGetStateRoot",
+        call: "priv_debugGetStateRoot",
+        params: 2,
+      },
+      /**
+       * @function distributeRawTransaction
+       * @param {String} transaction signed RLP-encoded private transaction
+       * @return {String} 32-byte enclave key
+       */
+      {
+        name: "distributeRawTransaction",
+        call: "priv_distributeRawTransaction",
+        params: 1,
+      },
+      /**
+       * @function getEeaTransactionCount
+       * @param {String} address account address
+       * @param {String} sender base64-encoded Orion address of the sender
+       * @param {String[]} recipients base64-encoded Orion addresses of recipients
+       * @return {String} integer representing the number of private transactions sent from the address to the specified group of sender and recipients
+       */
+      {
+        name: "getEeaTransactionCount",
+        call: "priv_getEeaTransactionCount",
+        params: 3,
+      },
+      /**
+       * @function getFilterChanges
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String} filterId filter ID
+       * @return {Object[]} list of log objects, or an empty list if nothing has changed since the last poll
+       */
+      {
+        name: "getFilterChanges",
+        call: "priv_getFilterChanges",
+        params: 2,
+        outputFormatter: web3.extend.formatters.outputLogFormatter,
+      },
+      /**
+       * @function getFilterLogs
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String} filterId filter ID
+       * @return {Object[]} list of log objects
+       */
+      {
+        name: "getFilterLogs",
+        call: "priv_getFilterLogs",
+        params: 2,
+        outputFormatter: web3.extend.formatters.outputLogFormatter,
+      },
+      /**
+       * @function getLogs
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {Object} filterOptions filter options object
+       * @return {Object[]} list of log objects
+       */
+      {
+        name: "getLogs",
+        call: "priv_getLogs",
+        params: 2,
+        outputFormatter: web3.extend.formatters.outputLogFormatter,
+      },
+      /**
+       * @function getPrivacyPrecompileAddress
+       * @return {String} address of the privacy precompile
+       */
+      {
+        name: "getPrivacyPrecompileAddress",
+        call: "priv_getPrivacyPrecompileAddress",
+        params: 0,
+      },
+      /**
+       * @function getPrivateTransaction
+       * @param {String} transaction transaction hash returned by eea_sendRawTransaction or eea_sendTransaction.
+       * @return {Object} private transaction object, or null if not a participant in the private transaction
+       */
+      {
+        name: "getPrivateTransaction",
+        call: "priv_getPrivateTransaction",
+        params: 1,
+      },
+      /**
+       * @function createPrivacyGroup
+       * @param {Object} options request options object with the following fields:
+       * @param {String[]} options.addresses list of nodes specified by Orion public keys
+       * @param {String} options.name (optional) privacy group name
+       * @param {String} options.description (optional) privacy group description
+       * @return {String} privacy group ID
+       */
+      {
+        name: "createPrivacyGroup",
+        call: "priv_createPrivacyGroup",
+        params: 1,
+      },
+      /**
+       * @function deletePrivacyGroup
+       * @param {String} privacyGroupId privacy group ID
+       * @return {String} deleted privacy group ID
+       */
+      {
+        name: "deletePrivacyGroup",
+        call: "priv_deletePrivacyGroup",
+        params: 1,
+      },
+      /**
+       * @function findPrivacyGroup
+       * @param {String[]} members members specified by Orion public keys
+       * @return {Object[]} privacy group objects
+       */
+      {
+        name: "findPrivacyGroup",
+        call: "priv_findPrivacyGroup",
+        params: 1,
+      },
+      /**
+       * @function getCode
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {String} address 20-byte contract address
+       * @param {String|Number} blockNumber
+       * @return {String} code stored at the specified address
+       */
+      {
+        name: "getCode",
+        call: "priv_getCode",
+        params: 3,
+      },
+      /**
+       * @function getTransactionCount
+       * @param {String} address account address
+       * @param {String} privacyGroupId privacy group ID
+       * @return {String} integer representing the number of private transactions sent from the address to the specified privacy group
+       */
+      {
+        name: "getTransactionCount",
+        call: "priv_getTransactionCount",
+        params: 2,
+        outputFormatter: (output) => {
+          return parseInt(output, 16);
+        },
+      },
+      /**
+       * @function getTransactionReceipt
+       * @param {String} transaction 32-byte hash of a transaction
+       * @return {Object} private Transaction receipt object, or null if no receipt found
+       */
+      {
+        name: "getTransactionReceipt",
+        call: "priv_getTransactionReceipt",
+        params: 1,
+      },
+      /**
+       * @function newFilter
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {Object} filterOptions filter options object
+       * @return {String} filter ID
+       */
+      {
+        name: "newFilter",
+        call: "priv_newFilter",
+        params: 2,
+      },
+      /**
+       * @function uninstallFilter
+       * @param {String} privacyGroupId 32-byte privacy Group ID
+       * @param {Object} filterOptions filter options object
+       * @return {Boolean} indicates if the filter is successfully uninstalled
+       */
+      {
+        name: "uninstallFilter",
+        call: "priv_uninstallFilter",
+        params: 2,
+      },
+      /**
+       * @function sendRawTransaction
+       * @param {String} transaction signed RLP-encoded private transaction
+       * @return {String} 32-byte transaction hash of the Privacy Marker Transaction
+       */
+      {
+        name: "sendRawTransaction",
+        call: "eea_sendRawTransaction",
+        params: 1,
+      },
+      /**
+       * @function subscribe
+       * @param {String} privacyGroupId
+       * @param {String} type
+       * @param {Object} filter
+       * @return {Sting} Subscription ID
+       */
+      {
+        name: "subscribe",
+        call: "priv_subscribe",
+        params: 3, // privacyGroupId, type, filter
+      },
+      /**
+       * @function unsubscribe
+       * @param {String} privacyGroupId
+       * @param {String} subscriptionId
+       * @return {Boolean} true if subscription successfully unsubscribed; otherwise, returns an error.
+       */
+      {
+        name: "unsubscribe",
+        call: "priv_unsubscribe",
+        params: 2, // privacyGroupId, subscriptionId
+      },
+    ],
+  });
+
+  const getMarkerTransaction = (txHash, retries, delay) => {
+    /* eslint-disable promise/param-names */
+    /* eslint-disable promise/avoid-new */
+
+    const waitFor = (ms) => {
+      return new Promise((r) => {
+        return setTimeout(r, ms);
+      });
+    };
+
+    let notified = false;
+    const retryOperation = (operation, times) => {
+      return new Promise((resolve, reject) => {
+        return operation()
+          .then((result) => {
+            if (result == null) {
+              if (!notified) {
+                console.log("Waiting for transaction to be mined ...");
+                notified = true;
+              }
+              if (delay === 0) {
+                throw new Error(
+                  `Timed out after ${retries} attempts waiting for transaction to be mined`
+                );
+              } else {
+                const waitInSeconds = (retries * delay) / 1000;
+                throw new Error(
+                  `Timed out after ${waitInSeconds}s waiting for transaction to be mined`
+                );
+              }
+            } else {
+              return resolve(result);
+            }
+          })
+          .catch((reason) => {
+            if (times - 1 > 0) {
+              // eslint-disable-next-line promise/no-nesting
+              return waitFor(delay)
+                .then(retryOperation.bind(null, operation, times - 1))
+                .then(resolve)
+                .catch(reject);
+            }
+            return reject(reason);
+          });
+      });
+    };
+
+    const operation = () => {
+      return web3.eth.getTransactionReceipt(txHash);
+    };
+
+    return retryOperation(operation, retries);
+  };
+
+  /**
+   * Get the private transaction Receipt with waiting until the receipt is ready.
+   * @function waitForTransactionReceipt
+   * @param {string} txHash Transaction Hash of the marker transaction
+   * @param {int} [retries=300] Number of retries to be made to get the private marker transaction receipt
+   * @param {int} [delay=1000] The delay between the retries in milliseconds
+   * @returns {Promise&lt;T>}
+   */
+  const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
+    return getMarkerTransaction(txHash, retries, delay).then((receipt) => {
+      if (web3.isQuorum) {
+        return receipt;
+      }
+      return web3.priv.getTransactionReceipt(txHash);
+    });
+  };
+
+  const getTransactionPayload = (options) => {
+    if (options.isPrivate) {
+      return web3.ptm.storeRaw(options);
+    }
+    return options.data;
+  };
+
+  const serializeSignedTransaction = (options, data) => {
+    const rawTransaction = {
+      nonce: intToHex(options.nonce),
+      from: options.from,
+      to: options.to,
+      value: intToHex(options.value),
+      gasLimit: intToHex(options.gasLimit),
+      gasPrice: intToHex(options.gasPrice),
+      data: `0x${data}`,
+    };
+
+    const tx = new Transaction(rawTransaction, {
+      chain: "mainnet",
+      hardfork: "homestead",
+    });
+    tx.sign(Buffer.from(options.from.privateKey.substring(2), "hex"));
+
+    const serializedTx = tx.serialize();
+    return `0x${serializedTx.toString("hex")}`;
+  };
+
+  const sendRawRequest = async (
+    payload,
+    privateFor,
+    privacyFlag = undefined
+  ) => {
+    const privacyParams = {
+      privateFor,
+    };
+    if (typeof privacyFlag !== "undefined") {
+      privacyParams.privacyFlag = privacyFlag;
+    }
+    const txHash = await web3.eth.sendRawPrivateTransaction(
+      payload,
+      privacyParams
+    );
+    return waitForTransactionReceipt(txHash);
+  };
+
+  const genericSendRawTransaction = async (options, method) => {
+    if (web3.isQuorum) {
+      const transactionPayload = await getTransactionPayload(options);
+      const serializedTx = serializeSignedTransaction(
+        options,
+        transactionPayload
+      );
+
+      const privateTx = web3.utils.setPrivate(serializedTx);
+      return sendRawRequest(
+        `0x${privateTx.toString("hex")}`,
+        options.privateFor,
+        options.privacyFlag
+      );
+    }
+    if (options.privacyGroupId &amp;&amp; options.privateFor) {
+      throw Error("privacyGroupId and privateFor are mutually exclusive");
+    }
+    chainId = chainId || (await web3.eth.getChainId());
+    const tx = new PrivateTransaction();
+    const privateKeyBuffer = Buffer.from(options.privateKey, "hex");
+    const from = `0x${privateToAddress(privateKeyBuffer).toString("hex")}`;
+    const privacyGroupId =
+      options.privacyGroupId || web3.utils.generatePrivacyGroup(options);
+    const transactionCount =
+      options.nonce ||
+      (await web3.priv.getTransactionCount(from, privacyGroupId));
+    tx.nonce = options.nonce || transactionCount;
+    tx.gasPrice = GAS_PRICE;
+    tx.gasLimit = GAS_LIMIT;
+    tx.to = options.to;
+    tx.value = 0;
+    tx.data = options.data;
+    tx._chainId = chainId;
+    tx.privateFrom = options.privateFrom;
+
+    if (options.privateFor) {
+      tx.privateFor = options.privateFor;
+    }
+    if (options.privacyGroupId) {
+      tx.privacyGroupId = options.privacyGroupId;
+    }
+    tx.restriction = "restricted";
+
+    tx.sign(privateKeyBuffer);
+
+    const signedRlpEncoded = tx.serialize().toString("hex");
+
+    let result;
+    if (method === "eea_sendRawTransaction") {
+      result = web3.priv.sendRawTransaction(signedRlpEncoded);
+    } else if (method === "priv_distributeRawTransaction") {
+      result = web3.priv.distributeRawTransaction(signedRlpEncoded);
+    }
+    if (result != null) {
+      return result;
+    }
+
+    throw new Error(`Unknown method ${method}`);
+  };
+
+  /**
+   * Generate and distribute the Raw transaction to the Besu node using the `priv_distributeRawTransaction` JSON-RPC call
+   * @function generateAndDistributeRawTransaction
+   * @param {object} options Map to send a raw transaction to besu
+   * @param {string} options.privateKey Private Key used to sign transaction with
+   * @param {string} options.privateFrom Enclave public key
+   * @param {string} options.privateFor Enclave keys to send the transaction to
+   * @param {string} options.privacyGroupId Enclave id representing the receivers of the transaction
+   * @param {string} [options.nonce] If not provided, will be calculated using `priv_getTransactionCount`
+   * @param {string} options.to The address to send the transaction
+   * @param {string} options.data Data to be sent in the transaction
+   *
+   * @returns {Promise&lt;T>}
+   */
+  const generateAndDistributeRawTransaction = (options) => {
+    return genericSendRawTransaction(options, "priv_distributeRawTransaction");
+  };
+
+  /**
+   * Generate and send the Raw transaction to the Besu node using the `eea_sendRawTransaction` JSON-RPC call
+   * @function generateAndSendRawTransaction
+   * @param {object} options Map to send a raw transaction to besu
+   * @param {string} options.privateKey Private Key used to sign transaction with
+   * @param {string} options.privateFrom Enclave public key
+   * @param {string} options.privateFor Enclave keys to send the transaction to
+   * @param {string} options.privacyGroupId Enclave id representing the receivers of the transaction
+   * @param {string} [options.nonce] If not provided, will be calculated using `priv_getTransactionCount`
+   * @param {string} options.to The address to send the transaction
+   * @param {string} options.data Data to be sent in the transaction
+   *
+   * @returns {Promise&lt;T>}
+   */
+  const generateAndSendRawTransaction = (options) => {
+    return genericSendRawTransaction(options, "eea_sendRawTransaction");
+  };
+
+  /**
+   * Subscribe to new logs matching a filter
+   *
+   * If the provider supports subscriptions, it uses `priv_subscribe`, otherwise
+   * it uses polling and `priv_getFilterChanges` to get new logs. Returns an
+   * error to the callback if there is a problem subscribing or creating the filter.
+   * @function subscribeWithPooling
+   * @param {string} privacyGroupId
+   * @param {*} filter
+   * @param {function} callback returns the filter/subscription ID, or an error
+   * @return {PrivateSubscription} a subscription object that manages the
+   * lifecycle of the filter or subscription
+   */
+  const subscribeWithPooling = async (privacyGroupId, filter, callback) => {
+    const sub = new PrivateSubscription(web3, privacyGroupId, filter);
+
+    let filterId;
+    try {
+      filterId = await sub.subscribe();
+      callback(undefined, filterId);
+    } catch (error) {
+      callback(error);
+    }
+
+    return sub;
+  };
+
+  Object.assign(web3.priv, {
+    subscriptionPollingInterval: 1000,
+    waitForTransactionReceipt,
+    generateAndDistributeRawTransaction,
+    generateAndSendRawTransaction,
+    subscribeWithPooling,
+  });
+
+  return web3;
+}
+
+module.exports = Priv;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Wed Jun 23 2021 07:33:29 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
