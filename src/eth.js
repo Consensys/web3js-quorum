@@ -82,6 +82,49 @@ function Eth(web3) {
         params: 1,
         inputFormatter: [web3.extend.formatters.inputAddressFormatter],
       },
+      /**
+       * @function distributePrivateTransaction
+       * @param {String} privateTxn Signed private transaction in hex format
+       * @param {Object} privateData Private data to send
+       * @param {String[]} privateData.privateFor An array of the recipients’ base64-encoded public keys.
+       * @param {String[]} [privateData.privateFrom] The sending party’s base64-encoded public key to use (Privacy Manager default if not provided).
+       * @param {Number} [privateData.privacyFlag=0] 0 for SP (default if not provided), 1 for PP, 3 for PSV
+       * @return {String} Transaction Manager hash to be used as a privacy marker transaction's `data` when externally signing..
+       */
+      {
+        name: "distributePrivateTransaction",
+        call: "eth_distributePrivateTransaction",
+        params: 2,
+      },
+      /**
+       * @function getPrivacyPrecompileAddress
+       * @return {String} Contract address for the privacy precompile in hex format.
+       */
+      {
+        name: "getPrivacyPrecompileAddress",
+        call: "eth_getPrivacyPrecompileAddress",
+        params: 0,
+      },
+      /**
+       * @function getPrivateTransactionByHash
+       * @param {String} hash Privacy marker transaction's hash in HEX format.
+       * @return {Transaction} private transaction (will be nil if caller is not a participant).
+       */
+      {
+        name: "getPrivateTransactionByHash",
+        call: "eth_getPrivateTransactionByHash",
+        params: 1,
+      },
+      /**
+       * @function getPrivateTransactionReceipt
+       * @param {String} hash Privacy marker transaction's hash in HEX format.
+       * @return {Receipt} private transaction receipt (will be nil if caller is not a participant).
+       */
+      {
+        name: "getPrivateTransactionReceipt",
+        call: "eth_getPrivateTransactionReceipt",
+        params: 1,
+      },
     ],
   });
   return web3;
