@@ -8,6 +8,7 @@ const {
   BLOCK_NUMBER,
   SIGNED_RLP,
   ORION_ADDRESS,
+  TRANSACTION_HASH,
 } = require("./tests-utils/constants");
 
 describe("web3.eth", () => {
@@ -164,6 +165,91 @@ describe("web3.eth", () => {
       }).toThrow(
         'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
       );
+    });
+  });
+
+  describe("web3.eth.distributePrivateTransaction", () => {
+    it("should call eth_distributePrivateTransaction", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.distributePrivateTransaction(SIGNED_RLP, {
+        privateFor: [ORION_ADDRESS],
+      });
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_distributePrivateTransaction");
+      expect(request.params).toEqual([
+        SIGNED_RLP,
+        {
+          privateFor: [ORION_ADDRESS],
+        },
+      ]);
+    });
+
+    it("throw error when call eth_distributePrivateTransaction with no param", async () => {
+      await expect(() => {
+        return web3.eth.distributePrivateTransaction();
+      }).toThrow("Invalid number of parameters");
+    });
+  });
+
+  describe("web3.eth.getPrivacyPrecompileAddress", () => {
+    it("should call eth_getPrivacyPrecompileAddress", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.getPrivacyPrecompileAddress();
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_getPrivacyPrecompileAddress");
+      expect(request.params).toEqual([]);
+    });
+  });
+
+  describe("web3.eth.getPrivateTransactionByHash", () => {
+    it("should call eth_getPrivateTransactionByHash", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.getPrivateTransactionByHash(TRANSACTION_HASH);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_getPrivateTransactionByHash");
+      expect(request.params).toEqual([TRANSACTION_HASH]);
+    });
+
+    it("throw error when call eth_getPrivateTransactionByHash with no param", async () => {
+      await expect(() => {
+        return web3.eth.getPrivateTransactionByHash();
+      }).toThrow("Invalid number of parameters");
+    });
+  });
+
+  describe("web3.eth.getPrivateTransactionReceipt", () => {
+    it("should call eth_getPrivateTransactionReceipt", async () => {
+      let request;
+      mockHttpPost((data) => {
+        request = data;
+      });
+
+      await web3.eth.getPrivateTransactionReceipt(TRANSACTION_HASH);
+
+      expect(request.jsonrpc).toEqual("2.0");
+      expect(request.method).toEqual("eth_getPrivateTransactionReceipt");
+      expect(request.params).toEqual([TRANSACTION_HASH]);
+    });
+
+    it("throw error when call eth_getPrivateTransactionReceipt with no param", async () => {
+      await expect(() => {
+        return web3.eth.getPrivateTransactionReceipt();
+      }).toThrow("Invalid number of parameters");
     });
   });
 });
