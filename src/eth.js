@@ -127,6 +127,47 @@ function Eth(web3) {
       },
     ],
   });
+
+  const sendQuorumTransaction = async (txnObject, callback) => {
+    const provider = web3.eth.currentProvider;
+
+    const jsonrpcPayload = {
+      jsonrpc: "2.0",
+      id: 3,
+      method: "eth_sendTransaction",
+      params: [txnObject],
+    };
+
+    const callSend = (sendParam) => {
+      return new Promise((resolve, reject) => {
+        try {
+          provider.send(sendParam, (err, data) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(data.result);
+
+            if (callback != null) {
+              if (data.error) {
+                callback(data.error);
+              } else {
+                callback(undefined, data.result);
+              }
+            }
+          });
+        } catch (error) {
+          reject(error);
+          callback(error);
+        }
+      });
+    };
+    callSend(jsonrpcPayload);
+  };
+
+  Object.assign(web3.eth, {
+    sendQuorumTransaction,
+  });
+
   return web3;
 }
 
