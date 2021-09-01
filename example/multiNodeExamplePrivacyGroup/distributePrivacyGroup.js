@@ -7,7 +7,7 @@ const Web3Quorum = require("../../src");
 
 const createGroup = require("../privacyGroupManagement/createPrivacyGroup");
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.bin")
@@ -23,7 +23,7 @@ const createGroupId = () => {
 const distributeRawContractCreation = (privacyGroupId) => {
   const contractOptions = {
     data: `0x${binary}`,
-    privateFrom: orion.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
@@ -73,18 +73,18 @@ const getTransactionReceipts = (txHash) => {
   });
 };
 
-const fetchFromOrion = (txHash) => {
+const fetchFromEnclave = (txHash) => {
   web3.priv
     .waitForTransactionReceipt(txHash)
     .then((result) => {
-      console.log("Got transaction receipt from orion node 1");
+      console.log("Got transaction receipt from enclave node 1");
       return console.log(result);
     })
     .catch(console.error);
   web3Node2.priv
     .waitForTransactionReceipt(txHash)
     .then((result) => {
-      console.log("Got transaction receipt from orion node 2");
+      console.log("Got transaction receipt from enclave node 2");
       return console.log(result);
     })
     .catch(console.error);
@@ -102,7 +102,7 @@ module.exports = async () => {
   ).then(console.log);
 
   setTimeout(() => {
-    fetchFromOrion(privacyMarkerTransactionResult.transactionHash);
+    fetchFromEnclave(privacyMarkerTransactionResult.transactionHash);
   }, 1000);
 };
 

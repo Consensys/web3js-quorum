@@ -71,7 +71,7 @@ function FlexiblePrivacyGroup(web3) {
    * @param {string}   options.privacyGroupId Privacy group ID to add to
    * @param {string}   options.privateKey Private Key used to sign transaction with
    * @param {string}   options.enclaveKey Orion public key
-   * @param {string[]} options.participant single enclaveKey to pass to the contract to add to the group
+   * @param {string} options.participant single enclaveKey to pass to the contract to add to the group
    * @returns {Promise<T>}
    */
   const removeFrom = (options) => {

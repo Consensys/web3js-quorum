@@ -4,11 +4,11 @@ const { createHttpProvider } = require("../helpers.js");
 const EventEmitterAbi = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const storeValueFromNode1 = (address, value, privacyGroupId) => {
   const web3 = new Web3Quorum(
-    new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
+    new Web3(createHttpProvider(enclave.node1.jwt, network.node1.url))
   );
   const contract = new web3.eth.Contract(EventEmitterAbi);
 
@@ -22,7 +22,7 @@ const storeValueFromNode1 = (address, value, privacyGroupId) => {
   const functionCall = {
     to: address,
     data: functionAbi.signature + functionArgs,
-    privateFrom: orion.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
@@ -55,16 +55,31 @@ const getValue = (url, jwt, address, privacyGroupId) => {
 };
 
 const getValueFromNode1 = (address, privacyGroupId) => {
-  return getValue(network.node1.url, orion.node1.jwt, address, privacyGroupId);
+  return getValue(
+    network.node1.url,
+    enclave.node1.jwt,
+    address,
+    privacyGroupId
+  );
 };
 
 const getValueFromNode2 = (address, privacyGroupId) => {
-  return getValue(network.node2.url, orion.node2.jwt, address, privacyGroupId);
+  return getValue(
+    network.node2.url,
+    enclave.node2.jwt,
+    address,
+    privacyGroupId
+  );
 };
 
-// in this example node3 is a second tenant on besu1 with orion key orion11
+// in this example node3 is a second tenant on besu1 with enclave key enclave11
 const getValueFromNode3 = (address, privacyGroupId) => {
-  return getValue(network.node1.url, orion.node11.jwt, address, privacyGroupId);
+  return getValue(
+    network.node1.url,
+    enclave.node11.jwt,
+    address,
+    privacyGroupId
+  );
 };
 
 module.exports = {

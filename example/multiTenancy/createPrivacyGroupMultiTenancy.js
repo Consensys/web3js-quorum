@@ -1,15 +1,15 @@
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
 
 const web3 = new Web3Quorum(
-  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
+  new Web3(createHttpProvider(enclave.node1.jwt, network.node1.url))
 );
 
 const createPrivacyGroup = () => {
   const contractOptions = {
-    addresses: [orion.node1.publicKey, orion.node12.publicKey],
+    addresses: [enclave.node1.publicKey, enclave.node12.publicKey],
     name: "web3js-quorum",
     description: "test",
   };
@@ -22,9 +22,9 @@ const createPrivacyGroup = () => {
 const createPrivacyGroupForNode123 = () => {
   const contractOptions = {
     addresses: [
-      orion.node1.publicKey,
-      orion.node11.publicKey,
-      orion.node12.publicKey,
+      enclave.node1.publicKey,
+      enclave.node11.publicKey,
+      enclave.node12.publicKey,
     ],
     name: "web3js-quorum",
     description: "test",

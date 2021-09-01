@@ -3,7 +3,7 @@ const path = require("path");
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "../solidity/Greeter/greeter.bin")
@@ -17,7 +17,7 @@ const web3Node2 = new Web3Quorum(new Web3(network.node2.url));
 const createGreeterContract = (privacyGroupId) => {
   const contractOptions = {
     data: `0x${binary}`,
-    privateFrom: orion.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
@@ -76,9 +76,9 @@ const callGenericFunctionOnContract = (
 module.exports = async () => {
   const privacyGroupCreationResult = await web3Node1.eth.flexiblePrivacyGroup.create(
     {
-      participants: [orion.node1.publicKey, orion.node2.publicKey],
-      enclaveKey: orion.node1.publicKey,
-      privateFrom: orion.node1.publicKey,
+      participants: [enclave.node1.publicKey, enclave.node2.publicKey],
+      enclaveKey: enclave.node1.publicKey,
+      privateFrom: enclave.node1.publicKey,
       privateKey: network.node1.privateKey,
     }
   );
@@ -93,7 +93,7 @@ module.exports = async () => {
 
   const callGreetFunctionResult = await callGenericFunctionOnContract(
     web3Node1,
-    orion.node1.publicKey,
+    enclave.node1.publicKey,
     network.node1.privateKey,
     greeterContractAddress,
     privacyGroupCreationResult.privacyGroupId,
@@ -107,7 +107,7 @@ module.exports = async () => {
 
   const callSetGreetingFunctionResultFromSecondParticipant = await callGenericFunctionOnContract(
     web3Node2,
-    orion.node2.publicKey,
+    enclave.node2.publicKey,
     network.node2.privateKey,
     greeterContractAddress,
     privacyGroupCreationResult.privacyGroupId,
@@ -121,7 +121,7 @@ module.exports = async () => {
 
   const callFireEventFunctionResult = await callGenericFunctionOnContract(
     web3Node1,
-    orion.node1.publicKey,
+    enclave.node1.publicKey,
     network.node1.privateKey,
     greeterContractAddress,
     privacyGroupCreationResult.privacyGroupId,
