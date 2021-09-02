@@ -29,7 +29,7 @@ function FlexiblePrivacyGroup(web3) {
    * @param {Object}   options Map to add the members
    * @param {string}   options.privacyGroupId Privacy group ID to add to
    * @param {string}   options.privateKey Private Key used to sign transaction with
-   * @param {string}   options.enclaveKey Orion public key
+   * @param {string}   options.enclaveKey Enclave public key
    * @param {string[]} options.participants list of enclaveKey to pass to the contract to add to the group
    * @return {Promise<T>}
    */
@@ -70,7 +70,7 @@ function FlexiblePrivacyGroup(web3) {
    * @param {Object}   options Map to add the members
    * @param {string}   options.privacyGroupId Privacy group ID to add to
    * @param {string}   options.privateKey Private Key used to sign transaction with
-   * @param {string}   options.enclaveKey Orion public key
+   * @param {string}   options.enclaveKey Enclave public key
    * @param {string} options.participant single enclaveKey to pass to the contract to add to the group
    * @returns {Promise<T>}
    */
@@ -105,7 +105,7 @@ function FlexiblePrivacyGroup(web3) {
    * @param {Object} options Map to lock the group
    * @param {string} options.privacyGroupId Privacy group ID to lock/unlock
    * @param {string} options.privateKey Private Key used to sign transaction with
-   * @param {string} options.enclaveKey Orion public key
+   * @param {string} options.enclaveKey Enclave public key
    * @param {boolean} options.lock boolean indicating whether to lock or unlock
    * @returns {Promise<T>}
    */
@@ -136,7 +136,7 @@ function FlexiblePrivacyGroup(web3) {
    * @param {Object}   options Map to add the members
    * @param {string}   options.privacyGroupId Privacy group ID to add to
    * @param {string}   options.privateKey Private Key used to sign transaction with
-   * @param {string}   options.enclaveKey Orion public key
+   * @param {string}   options.enclaveKey Enclave public key
    * @param {string[]} options.participants list of enclaveKey to pass to the contract to add to the group
    * @returns {Promise<T>}
    */
