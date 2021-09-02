@@ -128,7 +128,9 @@ function Eth(web3) {
     ],
   });
 
-  const sendQuorumTransaction = async (txnObject, callback) => {
+  // Use the web3 provider to directly call eth_sendTransaction in the node.
+  // This is necessary as web3.eth.sendTransaction doesn't work with Privacy Marker Transactions.
+  const sendTransactionUsingProvider = async (txnObject, callback) => {
     const provider = web3.eth.currentProvider;
 
     const jsonrpcPayload = {
@@ -161,7 +163,91 @@ function Eth(web3) {
         }
       });
     };
-    callSend(jsonrpcPayload);
+    return callSend(jsonrpcPayload);
+  };
+
+  const getTransactionReceipt = (txHash, retries, delay) => {
+    /* eslint-disable promise/param-names */
+    /* eslint-disable promise/avoid-new */
+
+    // TODO: Refactor to re-use this code which is common to priv.js::getMarkerTransaction()
+    const waitFor = (ms) => {
+      return new Promise((r) => {
+        return setTimeout(r, ms);
+      });
+    };
+
+    let notified = false;
+    const retryOperation = (operation, times) => {
+      return new Promise((resolve, reject) => {
+        return operation()
+          .then((result) => {
+            if (result == null) {
+              if (!notified) {
+                console.log("Waiting for transaction to be mined ...");
+                notified = true;
+              }
+              if (delay === 0) {
+                throw new Error(
+                  `Timed out after ${retries} attempts waiting for transaction to be mined`
+                );
+              } else {
+                const waitInSeconds = (retries * delay) / 1000;
+                throw new Error(
+                  `Timed out after ${waitInSeconds}s waiting for transaction to be mined`
+                );
+              }
+            } else {
+              return resolve(result);
+            }
+          })
+          .catch((reason) => {
+            if (times - 1 > 0) {
+              // eslint-disable-next-line promise/no-nesting
+              return waitFor(delay)
+                .then(retryOperation.bind(null, operation, times - 1))
+                .then(resolve)
+                .catch(reject);
+            }
+            return reject(reason);
+          });
+      });
+    };
+
+    const operation = () => {
+      return web3.eth.getTransactionReceipt(txHash);
+    };
+
+    return retryOperation(operation, retries);
+  };
+
+  /**
+   * Get the transaction Receipt, waiting until the receipt is ready.
+   * If it's a Privacy Marker Transaction then return the receipt for the inner private transaction.
+   */
+  const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
+    return getTransactionReceipt(txHash, retries, delay).then((receipt) => {
+      if (!receipt.isPrivacyMarkerTransaction) {
+        return receipt;
+      }
+      return web3.eth.getPrivateTransactionReceipt(txHash);
+    });
+  };
+
+  /**
+   * Submit a transaction.
+   * This method is similar to `web3.eth.sendTransaction()`, however it adds support for Privacy Marker Transactions.
+   * If the transaction is a Privacy Marker, then the promise will return the receipt for the inner private transaction,
+   * rather than the receipt for the Privacy Marker Transaction.
+   * Note that this method does not currently support `PromiEvent` events that are returned by `web3.eth.sendTransaction()`.
+   * @function sendQuorumTransaction
+   * @param {Object} transaction The transaction object to send (see `web3.eth.sendTransaction()` for object details)
+   * @param {Function} [callback] (optional) Optional callback, returns an error object as first parameter and the transaction hash as second.
+   * @returns {Promise<T>} Resolves when the transaction receipt is available.
+   */
+  const sendQuorumTransaction = async (txnObject, callback) => {
+    const txHash = await sendTransactionUsingProvider(txnObject, callback);
+    return waitForTransactionReceipt(txHash);
   };
 
   Object.assign(web3.eth, {
