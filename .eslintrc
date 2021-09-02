@@ -43,7 +43,7 @@
     "promise/no-new-statics": "error",
     "promise/no-return-in-finally": "warn",
     "promise/valid-params": "warn",
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["integration-tests/**/*.js", "example/**/*.js", "tests/**/*.js", "test/**/*.js", "7nodes-test/**/*.js"]}],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["integration-tests/**/*.js", "example/**/*.js", "tests/**/*.js", "test/**/*.js", "7nodes-test/**/*.js", "docker/**/*.js"]}],
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
