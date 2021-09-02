@@ -3,6 +3,7 @@ const PrivateTransaction = require("./privateTransaction");
 const { privateToAddress } = require("./util/custom-ethjs-util");
 const { PrivateSubscription } = require("./privateSubscription");
 const { intToHex } = require("./util");
+const common = require("./common");
 
 /**
  * @module priv
@@ -247,60 +248,6 @@ function Priv(web3) {
     ],
   });
 
-  const getMarkerTransaction = (txHash, retries, delay) => {
-    /* eslint-disable promise/param-names */
-    /* eslint-disable promise/avoid-new */
-
-    const waitFor = (ms) => {
-      return new Promise((r) => {
-        return setTimeout(r, ms);
-      });
-    };
-
-    let notified = false;
-    const retryOperation = (operation, times) => {
-      return new Promise((resolve, reject) => {
-        return operation()
-          .then((result) => {
-            if (result == null) {
-              if (!notified) {
-                console.log("Waiting for transaction to be mined ...");
-                notified = true;
-              }
-              if (delay === 0) {
-                throw new Error(
-                  `Timed out after ${retries} attempts waiting for transaction to be mined`
-                );
-              } else {
-                const waitInSeconds = (retries * delay) / 1000;
-                throw new Error(
-                  `Timed out after ${waitInSeconds}s waiting for transaction to be mined`
-                );
-              }
-            } else {
-              return resolve(result);
-            }
-          })
-          .catch((reason) => {
-            if (times - 1 > 0) {
-              // eslint-disable-next-line promise/no-nesting
-              return waitFor(delay)
-                .then(retryOperation.bind(null, operation, times - 1))
-                .then(resolve)
-                .catch(reject);
-            }
-            return reject(reason);
-          });
-      });
-    };
-
-    const operation = () => {
-      return web3.eth.getTransactionReceipt(txHash);
-    };
-
-    return retryOperation(operation, retries);
-  };
-
   /**
    * Get the private transaction Receipt with waiting until the receipt is ready.
    * @function waitForTransactionReceipt
@@ -310,12 +257,18 @@ function Priv(web3) {
    * @returns {Promise<T>}
    */
   const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
-    return getMarkerTransaction(txHash, retries, delay).then((receipt) => {
-      if (web3.isQuorum) {
-        return receipt;
-      }
-      return web3.priv.getTransactionReceipt(txHash);
-    });
+    const operation = () => {
+      return web3.eth.getTransactionReceipt(txHash);
+    };
+
+    return common
+      .performOperationWithRetries(operation, txHash, retries, delay)
+      .then((receipt) => {
+        if (web3.isQuorum) {
+          return receipt;
+        }
+        return web3.priv.getTransactionReceipt(txHash);
+      });
   };
 
   const getTransactionPayload = (options) => {

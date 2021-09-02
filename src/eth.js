@@ -1,3 +1,5 @@
+const common = require("./common");
+
 /**
  * For more details about the {@link https://docs.goquorum.consensys.net/en/stable/Reference/APIs/PrivacyAPI Quorum Privacy APIs}
  * @module eth
@@ -166,72 +168,21 @@ function Eth(web3) {
     return callSend(jsonrpcPayload);
   };
 
-  const getTransactionReceipt = (txHash, retries, delay) => {
-    /* eslint-disable promise/param-names */
-    /* eslint-disable promise/avoid-new */
-
-    // TODO: Refactor to re-use this code which is common to priv.js::getMarkerTransaction()
-    const waitFor = (ms) => {
-      return new Promise((r) => {
-        return setTimeout(r, ms);
-      });
-    };
-
-    let notified = false;
-    const retryOperation = (operation, times) => {
-      return new Promise((resolve, reject) => {
-        return operation()
-          .then((result) => {
-            if (result == null) {
-              if (!notified) {
-                console.log("Waiting for transaction to be mined ...");
-                notified = true;
-              }
-              if (delay === 0) {
-                throw new Error(
-                  `Timed out after ${retries} attempts waiting for transaction to be mined`
-                );
-              } else {
-                const waitInSeconds = (retries * delay) / 1000;
-                throw new Error(
-                  `Timed out after ${waitInSeconds}s waiting for transaction to be mined`
-                );
-              }
-            } else {
-              return resolve(result);
-            }
-          })
-          .catch((reason) => {
-            if (times - 1 > 0) {
-              // eslint-disable-next-line promise/no-nesting
-              return waitFor(delay)
-                .then(retryOperation.bind(null, operation, times - 1))
-                .then(resolve)
-                .catch(reject);
-            }
-            return reject(reason);
-          });
-      });
-    };
-
+  // Get the transaction Receipt, waiting until the receipt is ready.
+  // If it's a Privacy Marker Transaction then return the receipt for the inner private transaction.
+  const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
     const operation = () => {
       return web3.eth.getTransactionReceipt(txHash);
     };
 
-    return retryOperation(operation, retries);
-  };
-
-  /**
-   * Get the transaction Receipt, waiting until the receipt is ready.
-   * If it's a Privacy Marker Transaction then return the receipt for the inner private transaction.
-   */
-  const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
-    return getTransactionReceipt(txHash, retries, delay).then((receipt) => {
-      if (!receipt.isPrivacyMarkerTransaction) {
-        return receipt;
-      }
-      return web3.eth.getPrivateTransactionReceipt(txHash);
-    });
+    return common
+      .performOperationWithRetries(operation, txHash, retries, delay)
+      .then((receipt) => {
+        if (!receipt.isPrivacyMarkerTransaction) {
+          return receipt;
+        }
+        return web3.eth.getPrivateTransactionReceipt(txHash);
+      });
   };
 
   /**
