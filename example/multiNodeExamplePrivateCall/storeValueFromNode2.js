@@ -3,7 +3,7 @@ const Web3Quorum = require("../../src");
 const EventEmitterAbi = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const storeValueFromNode2 = (address, value, privacyGroupId) => {
   const web3 = new Web3Quorum(new Web3(network.node2.url));
@@ -19,7 +19,7 @@ const storeValueFromNode2 = (address, value, privacyGroupId) => {
   const functionCall = {
     to: address,
     data: functionAbi.signature + functionArgs,
-    privateFrom: orion.node2.publicKey,
+    privateFrom: enclave.node2.publicKey,
     privacyGroupId,
     privateKey: network.node2.privateKey,
   };

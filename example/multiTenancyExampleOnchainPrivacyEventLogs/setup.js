@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const Web3Quorum = require("../../src");
 
-const { network, orion } = require("../keys");
+const { network, enclave } = require("../keys");
 const { createHttpProvider } = require("../helpers.js");
 
 const bytecode = fs.readFileSync(
@@ -11,23 +11,23 @@ const bytecode = fs.readFileSync(
 );
 
 const node = new Web3Quorum(
-  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
+  new Web3(createHttpProvider(enclave.node1.jwt, network.node1.url))
 );
 
 async function run() {
-  const enclaveKey = orion.node1.publicKey;
+  const enclaveKey = enclave.node1.publicKey;
   const addresses = [
-    orion.node1.publicKey,
-    orion.node11.publicKey,
-    orion.node2.publicKey,
+    enclave.node1.publicKey,
+    enclave.node11.publicKey,
+    enclave.node2.publicKey,
   ];
 
   // create privacy group
   const onChainPrivacyGroupCreationResult = await node.eth.flexiblePrivacyGroup.create(
     {
       participants: addresses,
-      enclaveKey: orion.node1.publicKey,
-      privateFrom: orion.node1.publicKey,
+      enclaveKey: enclave.node1.publicKey,
+      privateFrom: enclave.node1.publicKey,
       privateKey: network.node1.privateKey,
     }
   );

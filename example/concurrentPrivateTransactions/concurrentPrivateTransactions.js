@@ -2,7 +2,7 @@ const Web3 = require("web3");
 const Tx = require("ethereumjs-tx").Transaction;
 const PromisePool = require("async-promise-pool");
 const Web3Quorum = require("../../src");
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const web3 = new Web3Quorum(new Web3(network.node1.url));
 
@@ -16,8 +16,8 @@ const BATCH_SIZE = 5;
 
 // options used to create a privacy group with only one member
 const privacyOptions = {
-  privateFrom: orion.node1.publicKey,
-  privateFor: [orion.node1.publicKey],
+  privateFrom: enclave.node1.publicKey,
+  privateFor: [enclave.node1.publicKey],
   privateKey: network.node1.privateKey,
 };
 

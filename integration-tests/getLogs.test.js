@@ -2,7 +2,7 @@ const Web3 = require("web3");
 const Web3Quorum = require("../src");
 
 const { contracts, ContractFactory } = require("./support/helpers");
-const { network, orion } = require("./support/keys");
+const { network, enclave } = require("./support/keys");
 
 describe("getLogs", () => {
   const node1Client = new Web3Quorum(new Web3(network.node1.url));
@@ -24,13 +24,13 @@ describe("getLogs", () => {
   beforeAll(async () => {
     // create privacy group
     privacyGroupId = await node1Client.priv.createPrivacyGroup({
-      addresses: [orion.node1.publicKey, orion.node2.publicKey],
+      addresses: [enclave.node1.publicKey, enclave.node2.publicKey],
       name: "",
       description: "Nodes 1 and 2",
     });
     await factory.connect(
       node1Client,
-      { enclaveKey: orion.node1.publicKey, privacyGroupId },
+      { enclaveKey: enclave.node1.publicKey, privacyGroupId },
       network.node1.privateKey
     );
 
@@ -46,7 +46,7 @@ describe("getLogs", () => {
     // send some transactions from member 2
     await factory.connect(
       node2Client,
-      { enclaveKey: orion.node2.publicKey, privacyGroupId },
+      { enclaveKey: enclave.node2.publicKey, privacyGroupId },
       network.node2.privateKey
     );
 
@@ -54,7 +54,7 @@ describe("getLogs", () => {
     // deploy another contract
     await factory.connect(
       node1Client,
-      { enclaveKey: orion.node1.publicKey, privacyGroupId },
+      { enclaveKey: enclave.node1.publicKey, privacyGroupId },
       network.node1.privateKey
     );
     const contract2 = await factory.privateDeploy(privacyGroupId);

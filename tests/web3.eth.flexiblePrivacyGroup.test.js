@@ -3,7 +3,7 @@ const Web3Quorum = require("../src/index");
 const { mockHttpPost, resetMock } = require("./tests-utils/httpMock");
 const {
   URL,
-  ORION_ADDRESS,
+  ENCLAVE_ADDRESS,
   CHAIN_ID,
   PRIVATE_KEY,
   PRIVACY_GROUP_ID,
@@ -27,12 +27,12 @@ describe("web3.eth.flexiblePrivacyGroup", () => {
       });
 
       await web3.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup([
-        ORION_ADDRESS,
+        ENCLAVE_ADDRESS,
       ]);
 
       expect(request.jsonrpc).toEqual("2.0");
       expect(request.method).toEqual("privx_findOnChainPrivacyGroup");
-      expect(request.params).toEqual([[ORION_ADDRESS]]);
+      expect(request.params).toEqual([[ENCLAVE_ADDRESS]]);
     });
 
     it("throw error when call privx_findOnChainPrivacyGroup with no param", async () => {
@@ -79,8 +79,8 @@ describe("web3.eth.flexiblePrivacyGroup", () => {
       await web3.eth.flexiblePrivacyGroup.addTo({
         privacyGroupId: PRIVACY_GROUP_ID,
         privateKey: PRIVATE_KEY,
-        enclaveKey: ORION_ADDRESS,
-        participants: [ORION_ADDRESS],
+        enclaveKey: ENCLAVE_ADDRESS,
+        participants: [ENCLAVE_ADDRESS],
       });
       expect(requests[0].method).toEqual("eth_chainId");
       expectSendPrivateTX(requests);
@@ -109,9 +109,9 @@ describe("web3.eth.flexiblePrivacyGroup", () => {
         await web3.eth.flexiblePrivacyGroup[method]({
           privacyGroupId: PRIVACY_GROUP_ID,
           privateKey: PRIVATE_KEY,
-          enclaveKey: ORION_ADDRESS,
-          participants: [ORION_ADDRESS],
-          participant: ORION_ADDRESS,
+          enclaveKey: ENCLAVE_ADDRESS,
+          participants: [ENCLAVE_ADDRESS],
+          participant: ENCLAVE_ADDRESS,
           lock: true,
         });
         expectSendPrivateTX(requests, -1);

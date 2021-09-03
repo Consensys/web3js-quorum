@@ -1,170 +1,477 @@
 ---
-version: '3.4'
+version: '3.6'
+
+x-besu-bootnode-def:
+  &besu-bootnode-def
+  restart: "on-failure"
+  image: hyperledger/besu:${BESU_VERSION:-latest}
+  env_file:
+    - ./config/besu/.env
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+      /opt/besu/bin/besu public-key export --to=/tmp/bootnode_pubkey;
+      /opt/besu/bin/besu \
+      --config-file=/config/config.toml \
+      --p2p-host=$$(hostname -i) \
+      --genesis-file=/config/genesis.json \
+      --node-private-key-file=/opt/besu/keys/key \
+      --min-gas-price=0 \
+      --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
+      --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
+
+x-besu-def:
+  &besu-def
+  restart: "on-failure"
+  image: hyperledger/besu:${BESU_VERSION:-latest}
+  env_file:
+    - ./config/besu/.env
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+
+      while [ ! -f "/opt/besu/public-keys/bootnode_pubkey" ]; do sleep 5; done ;
+      /opt/besu/bin/besu \
+      --config-file=/config/config.toml \
+      --p2p-host=$$(hostname -i) \
+      --genesis-file=/config/genesis.json \
+      --node-private-key-file=/opt/besu/keys/key \
+      --min-gas-price=0 \
+      --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
+      --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
+
+x-besu-tx-def:
+  &besu-tx-def
+  restart: "on-failure"
+  image: hyperledger/besu:${BESU_VERSION:-latest}
+  environment:
+    - LOG4J_CONFIGURATION_FILE=/config/log-config.xml
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+
+      
+      for i in $$(seq 1 100)
+      do
+        set -e
+        if [ "I'm up!" == "$$(wget --timeout 10 -qO- --proxy off 172.16.239.2$${NODE_ID}:9000/upcheck)" ];
+          then break
+        else
+          echo "Waiting for Tessera..."
+          sleep 10
+        fi
+      done
+      
+
+
+      while [ ! -f "/opt/besu/public-keys/bootnode_pubkey" ]; do sleep 5; done ;
+      /opt/besu/bin/besu \
+      --config-file=/config/config.toml \
+      --p2p-host=$$(hostname -i) \
+      --genesis-file=/config/genesis.json \
+      --node-private-key-file=/opt/besu/keys/key \
+      --min-gas-price=0 \
+      --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
+      --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
+
+x-tessera-def:
+  &tessera-def
+  image: quorumengineering/tessera:${QUORUM_TESSERA_VERSION:-latest}
+  expose:
+    - 9000
+    - 9080
+    - 9101
+  restart: "no"
+  healthcheck:
+    test: ["CMD", "wget", "--spider", "--proxy", "off", "http://localhost:9000/upcheck"]
+    interval: 3s
+    timeout: 3s
+    retries: 20
+    start_period: 5s
+  entrypoint:
+    - /bin/sh
+    - -c
+    - |
+      mkdir -p /var/log/tessera/;
+      mkdir -p /data/tm/;
+      cp /config/keys/tm.* /data/tm/ ;
+
+          cat <<EOF > /data/tm/tessera-config-09.json
+          {
+            "mode": "orion",
+            "useWhiteList": false,
+            "jdbc": {
+              "username": "sa",
+              "password": "",
+              "url": "jdbc:h2:./data/tm/db;MODE=Oracle;TRACE_LEVEL_SYSTEM_OUT=0",
+              "autoCreateTables": true
+            },
+            "serverConfigs":[
+            {
+              "app":"ThirdParty",
+              "enabled": true,
+              "serverAddress": "http://$$(hostname -i):9080",
+              "communicationType" : "REST"
+            },
+            {
+              "app":"Q2T",
+              "enabled": true,
+              "serverAddress": "http://$$(hostname -i):9101",
+              "sslConfig": {
+                "tls": "OFF"
+              },
+              "communicationType" : "REST"
+            },
+            {
+              "app":"P2P",
+              "enabled": true,
+              "serverAddress": "http://$$(hostname -i):9000",
+              "sslConfig": {
+                "tls": "OFF"
+              },
+              "communicationType" : "REST"
+            }
+            ],
+            "peer": [
+                {
+                    "url": "http://member1tessera:9000"
+                },
+                {
+                    "url": "http://member2tessera:9000"
+                },
+                {
+                    "url": "http://member3tessera:9000"
+                }
+            ],
+            "keys": {
+              "passwords": [],
+              "keyData": [
+                {
+                  "config": $$(cat /data/tm/tm.key),
+                  "publicKey": "$$(cat /data/tm/tm.pub)"
+                }
+              ]
+            },
+            "alwaysSendTo": []
+          }
+      EOF
+          cat /data/tm/tessera-config-09.json
+          /tessera/bin/tessera -configfile /data/tm/tessera-config-09.json &> /var/log/tessera/tessera-$$HOSTNAME.log | tee -a /var/log/tessera/tessera-$$HOSTNAME.log
+
+x-ethsignerProxy-def:
+  &ethsignerProxy-def
+  image: consensys/quorum-ethsigner:${QUORUM_ETHSIGNER_VERSION:-latest}
+  command: [
+    "--chain-id=1337",
+    "--http-listen-host=0.0.0.0",
+    "--downstream-http-port=8545",
+    "--downstream-http-host=rpcnode",
+    "file-based-signer",
+    "-k",
+    "/opt/ethsigner/keyfile",
+    "-p",
+    "/opt/ethsigner/passwordfile"
+  ]
+  ports:
+    - 8545
+
 services:
 
-  orion1:
-    image: "pegasyseng/orion:latest"
-    command: ["/config/orion/orion.conf"]
-    volumes:
-      - ./config/orion/networkFiles/orion1:/config/orion/
-
-  orion2:
-    image: "pegasyseng/orion:latest"
-    command: ["/config/orion/orion.conf"]
-    volumes:
-      - ./config/orion/networkFiles/orion2:/config/orion/
-
-  orion3:
-    image: "pegasyseng/orion:latest"
-    command: ["/config/orion/orion.conf"]
-    volumes:
-      - ./config/orion/networkFiles/orion3:/config/orion/
-
-  bootnode:
-    build:
-      context: besu/.
-      args:
-        BESU_VERSION: ${BESU_VERSION}
-    image: quickstart/besu:${BESU_VERSION}
+  validator1:
+    << : *besu-bootnode-def
     environment:
-      - BESU_PUBLIC_KEY_DIRECTORY=${BESU_PUBLIC_KEY_DIRECTORY}
-    entrypoint: /opt/besu/bootnode_start.sh --network=dev --min-gas-price=0 --host-whitelist=*
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator1,service.version=${BESU_VERSION:-latest}
     volumes:
-      - public-keys:${BESU_PUBLIC_KEY_DIRECTORY}
+      - public-keys:/tmp/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/validator1/keys:/opt/besu/keys
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.11
+
+  validator2:
+    << : *besu-def
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator2,service.version=${BESU_VERSION:-latest}
+    volumes:
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/validator2/keys:/opt/besu/keys
+    depends_on:
+      - validator1
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.12
+
+  validator3:
+    << : *besu-def
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator3,service.version=${BESU_VERSION:-latest}
+    volumes:
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/validator3/keys:/opt/besu/keys
+    depends_on:
+      - validator1
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.13
+
+  validator4:
+    << : *besu-def
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=validator4,service.version=${BESU_VERSION:-latest}
+    volumes:
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/validator4/keys:/opt/besu/keys
+    depends_on:
+      - validator1
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.14
 
   rpcnode:
-    image: quickstart/besu:${BESU_VERSION}
+    << : *besu-def
+    container_name: rpcnode
     environment:
-      - BESU_PUBLIC_KEY_DIRECTORY=${BESU_PUBLIC_KEY_DIRECTORY}
-    command: [
-      "--network=dev",
-      "--rpc-http-enabled",
-      "--rpc-http-host=0.0.0.0",
-      "--rpc-http-port=8545",
-      "--rpc-http-cors-origins=*",
-      "--rpc-http-api=EEA,WEB3,ETH,NET,PRIV",
-      "--rpc-ws-enabled",
-      "--rpc-ws-host=0.0.0.0",
-      "--rpc-ws-port=8546",
-      "--host-whitelist=*",
-      "--min-gas-price=0"]
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=rpcnode,service.version=${BESU_VERSION:-latest}
     volumes:
-      - public-keys:${BESU_PUBLIC_KEY_DIRECTORY}
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/rpcnode/keys:/opt/besu/keys
     depends_on:
-      - bootnode
+      - validator1
     ports:
       - 8545:8545/tcp
       - 8546:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.15
 
-  minernode:
-    image: quickstart/besu:${BESU_VERSION}
-    environment:
-      - BESU_PUBLIC_KEY_DIRECTORY=${BESU_PUBLIC_KEY_DIRECTORY}
-    command: [
-      "--network=dev",
-      "--miner-enabled",
-      "--miner-coinbase=0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
-      "--min-gas-price=0"]
-    volumes:
-      - public-keys:${BESU_PUBLIC_KEY_DIRECTORY}
-    depends_on:
-      - bootnode
 
-  node1:
-    image: quickstart/besu:${BESU_VERSION}
-    environment:
-      - BESU_PUBLIC_KEY_DIRECTORY=${BESU_PUBLIC_KEY_DIRECTORY}
-      - BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=${BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED}
-    command: [
-      "--node-private-key-file=/opt/besu/keys/key",
-      "--network=dev",
-      "--rpc-http-enabled",
-      "--rpc-http-host=0.0.0.0",
-      "--rpc-http-port=8545",
-      "--rpc-http-cors-origins=*",
-      "--rpc-http-api=EEA,WEB3,ETH,NET,PRIV",
-      "--rpc-ws-enabled",
-      "--rpc-ws-host=0.0.0.0",
-      "--rpc-ws-port=8546",
-      "--host-whitelist=*",
-      "--min-gas-price=0",
-      "--privacy-enabled=true",
-      "--privacy-url=http://orion1:8888",
-      "--privacy-public-key-file=/config/orion/orion.pub"]
+  ethsignerProxy:
+    << : *ethsignerProxy-def
     volumes:
-      - public-keys:${BESU_PUBLIC_KEY_DIRECTORY}
-      - ./config/orion/networkFiles/orion1/nodeKey.pub:/config/orion/orion.pub
-      - ./config/besu/networkFiles/node1/keys:/opt/besu/keys
+      - ./config/ethsigner/password:/opt/ethsigner/passwordfile
+      - ./config/ethsigner/key:/opt/ethsigner/keyfile
     depends_on:
-      - bootnode
-      - orion1
+      - validator1
+      - rpcnode
+    ports:
+      - 18545:8545/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.40
+
+
+
+  member1tessera:
+    << : *tessera-def
+    ports:
+      - 9081:9080
+    environment:
+      - TESSERA_CONFIG_TYPE="-09"
+    volumes:
+      - ./config/tessera/networkFiles/member1:/config/keys
+      - member1tessera:/data
+      - ./logs/tessera:/var/log/tessera/
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.26
+
+  member1besu:
+    << : *besu-tx-def
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member1besu,service.version=${BESU_VERSION:-latest}
+      - NODE_ID=6
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        while [ ! -f "/opt/besu/public-keys/bootnode_pubkey" ]; do sleep 5; done ;
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --genesis-file=/config/genesis.json \
+        --node-private-key-file=/opt/besu/keys/key \
+        --min-gas-price=0 \
+        --privacy-enabled \
+        --privacy-url=http://member1tessera:9101 \
+        --privacy-public-key-file=/config/tessera/tm.pub \
+        --privacy-onchain-groups-enabled=${PRIVACY_ONCHAIN_GROUPS_ENABLED:-false} \
+        --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
+    volumes:
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/member1/keys:/opt/besu/keys
+      - ./config/tessera/networkFiles/member1/tm.pub:/config/tessera/tm.pub
+    depends_on:
+      - validator1
+      - member1tessera
     ports:
       - 20000:8545/tcp
       - 20001:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.16
 
-  node2:
-    image: quickstart/besu:${BESU_VERSION}
+  member2tessera:
+    << : *tessera-def
+    ports:
+      - 9082:9080
     environment:
-      - BESU_PUBLIC_KEY_DIRECTORY=${BESU_PUBLIC_KEY_DIRECTORY}
-      - BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=${BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED}
-    command: [
-      "--node-private-key-file=/opt/besu/keys/key",
-      "--network=dev",
-      "--rpc-http-enabled",
-      "--rpc-http-host=0.0.0.0",
-      "--rpc-http-port=8545",
-      "--rpc-http-cors-origins=*",
-      "--rpc-http-api=EEA,WEB3,ETH,NET,PRIV",
-      "--rpc-ws-enabled",
-      "--rpc-ws-host=0.0.0.0",
-      "--rpc-ws-port=8546",
-      "--host-whitelist=*",
-      "--min-gas-price=0",
-      "--privacy-enabled=true",
-      "--privacy-url=http://orion2:8888",
-      "--privacy-public-key-file=/config/orion/orion.pub"]
+      - TESSERA_CONFIG_TYPE="-09"
     volumes:
-      - public-keys:${BESU_PUBLIC_KEY_DIRECTORY}
-      - ./config/orion/networkFiles/orion2/nodeKey.pub:/config/orion/orion.pub
-      - ./config/besu/networkFiles/node2/keys:/opt/besu/keys
+      - ./config/tessera/networkFiles/member2:/config/keys
+      - member2tessera:/data
+      - ./logs/tessera:/var/log/tessera/
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.27
+
+  member2besu:
+    << : *besu-tx-def
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member2besu,service.version=${BESU_VERSION:-latest}
+      - NODE_ID=7
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        while [ ! -f "/opt/besu/public-keys/bootnode_pubkey" ]; do sleep 5; done ;
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --genesis-file=/config/genesis.json \
+        --node-private-key-file=/opt/besu/keys/key \
+        --min-gas-price=0 \
+        --privacy-enabled \
+        --privacy-url=http://member2tessera:9101 \
+        --privacy-public-key-file=/config/tessera/tm.pub \
+        --privacy-onchain-groups-enabled=${PRIVACY_ONCHAIN_GROUPS_ENABLED:-false} \
+        --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
+    volumes:
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/member2/keys:/opt/besu/keys
+      - ./config/tessera/networkFiles/member2/tm.pub:/config/tessera/tm.pub
     depends_on:
-      - bootnode
-      - orion2
+      - validator1
+      - member2tessera
     ports:
       - 20002:8545/tcp
       - 20003:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.17
 
-  node3:
-    image: quickstart/besu:${BESU_VERSION}
+  member3tessera:
+    << : *tessera-def
+    ports:
+      - 9083:9080
     environment:
-      - BESU_PUBLIC_KEY_DIRECTORY=${BESU_PUBLIC_KEY_DIRECTORY}
-      - BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=${BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED}
-    command: [
-      "--node-private-key-file=/opt/besu/keys/key",
-      "--network=dev",
-      "--rpc-http-enabled",
-      "--rpc-http-host=0.0.0.0",
-      "--rpc-http-port=8545",
-      "--rpc-http-cors-origins=*",
-      "--rpc-http-api=EEA,WEB3,ETH,NET,PRIV",
-      "--rpc-ws-enabled",
-      "--rpc-ws-host=0.0.0.0",
-      "--rpc-ws-port=8546",
-      "--host-whitelist=*",
-      "--min-gas-price=0",
-      "--privacy-enabled=true",
-      "--privacy-url=http://orion3:8888",
-      "--privacy-public-key-file=/config/orion/orion.pub"]
+      - TESSERA_CONFIG_TYPE="-09"
     volumes:
-      - public-keys:${BESU_PUBLIC_KEY_DIRECTORY}
-      - ./config/orion/networkFiles/orion3/nodeKey.pub:/config/orion/orion.pub
-      - ./config/besu/networkFiles/node3/keys:/opt/besu/keys
+      - ./config/tessera/networkFiles/member3:/config/keys
+      - member3tessera:/data
+      - ./logs/tessera:/var/log/tessera/
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.28
+
+  member3besu:
+    << : *besu-tx-def
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=member3besu,service.version=${BESU_VERSION:-latest}
+      - NODE_ID=8
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        while [ ! -f "/opt/besu/public-keys/bootnode_pubkey" ]; do sleep 5; done ;
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --genesis-file=/config/genesis.json \
+        --node-private-key-file=/opt/besu/keys/key \
+        --min-gas-price=0 \
+        --privacy-enabled \
+        --privacy-url=http://member3tessera:9101 \
+        --privacy-public-key-file=/config/tessera/tm.pub \
+        --privacy-onchain-groups-enabled=${PRIVACY_ONCHAIN_GROUPS_ENABLED:-false} \
+        --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
+        --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
+    volumes:
+      - public-keys:/opt/besu/public-keys/
+      - ./config/besu/config.toml:/config/config.toml
+      - ./config/besu/permissions_config.toml:/config/permissions_config.toml
+      - ./config/besu/static-nodes.json:/config/static-nodes.json
+      - ./config/besu/log-config.xml:/config/log-config.xml
+      - ./logs/besu:/tmp/besu
+      - ./config/besu/${BESU_CONS_ALGO:-ibft2}Genesis.json:/config/genesis.json
+      - ./config/besu/networkFiles/member3/keys:/opt/besu/keys
+      - ./config/tessera/networkFiles/member3/tm.pub:/config/tessera/tm.pub
     depends_on:
-      - bootnode
-      - orion3
+      - validator1
+      - member3tessera
     ports:
       - 20004:8545/tcp
       - 20005:8546/tcp
+    networks:
+      quorum-dev-quickstart:
+        ipv4_address: 172.16.239.18
+
 
 volumes:
   public-keys:
+  member1tessera:
+  member2tessera:
+  member3tessera:
+
+networks:
+  quorum-dev-quickstart:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.239.0/24

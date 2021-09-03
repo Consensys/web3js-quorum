@@ -3,7 +3,7 @@ const Web3 = require("web3");
 
 const Web3Quorum = require("../../src");
 
-const { network, orion } = require("../support/keys");
+const { network, enclave } = require("../support/keys");
 const { contracts } = require("../support/helpers");
 
 describe("On chain privacy", () => {
@@ -14,10 +14,10 @@ describe("On chain privacy", () => {
   const privacyContractAddress = contracts.privacyInterface.address;
 
   let privacyGroupId;
-  const participants = [orion.node1.publicKey];
+  const participants = [enclave.node1.publicKey];
 
   const privacyOptions = {
-    enclaveKey: orion.node1.publicKey,
+    enclaveKey: enclave.node1.publicKey,
     privacyGroupId: undefined, // set later
     privateKey: network.node1.privateKey,
   };
@@ -25,7 +25,7 @@ describe("On chain privacy", () => {
   it("should create privacy group", async () => {
     const receipt = await node1Client.eth.flexiblePrivacyGroup.create({
       participants,
-      enclaveKey: orion.node1.publicKey,
+      enclaveKey: enclave.node1.publicKey,
       privateKey: network.node1.privateKey,
     });
 
@@ -33,7 +33,7 @@ describe("On chain privacy", () => {
     // assign privacy group ID for later use
     privacyOptions.privacyGroupId = privacyGroupId;
 
-    expect(receipt.privateFrom).toEqual(orion.node1.publicKey);
+    expect(receipt.privateFrom).toEqual(enclave.node1.publicKey);
     expect(receipt.status).toEqual("0x1");
     expect(receipt.logs).toHaveLength(participants.length);
     expect(receipt.privacyGroupId).not.toEqual(null);
@@ -50,7 +50,7 @@ describe("On chain privacy", () => {
       privacyGroupId: id,
     });
 
-    expect(receipt.privateFrom).toEqual(orion.node1.publicKey);
+    expect(receipt.privateFrom).toEqual(enclave.node1.publicKey);
     expect(receipt.status).toEqual("0x1");
     expect(receipt.logs).toHaveLength(participants.length);
     expect(receipt.privacyGroupId).toEqual(id);
@@ -87,7 +87,7 @@ describe("On chain privacy", () => {
     // add node 2
     const addReceipt = await node1Client.eth.flexiblePrivacyGroup.addTo({
       ...privacyOptions,
-      participants: [orion.node2.publicKey],
+      participants: [enclave.node2.publicKey],
     });
     expect(addReceipt.status).toEqual("0x1");
   });
@@ -95,7 +95,7 @@ describe("On chain privacy", () => {
   it("non-member should not be able to add to the group", async () => {
     await expect(
       node3Client.eth.flexiblePrivacyGroup.addTo({
-        enclaveKey: orion.node3.publicKey,
+        enclaveKey: enclave.node3.publicKey,
         privateKey: network.node3.privateKey,
         privacyGroupId,
       })
@@ -111,7 +111,7 @@ describe("On chain privacy", () => {
       const receipt = await node1Client.priv
         .generateAndSendRawTransaction({
           data: `0x${contracts.eventEmitter.bytecode}`,
-          privateFrom: orion.node1.publicKey,
+          privateFrom: enclave.node1.publicKey,
           privacyGroupId,
           privateKey: network.node1.privateKey,
         })
@@ -175,7 +175,7 @@ describe("On chain privacy", () => {
     it("creating node should be able to write to the contract", async () => {
       const result = await writeValue(
         node1Client,
-        orion.node1.publicKey,
+        enclave.node1.publicKey,
         network.node1.privateKey,
         1
       );
@@ -185,7 +185,7 @@ describe("On chain privacy", () => {
     it("member node should be able to write to the contract", async () => {
       const result = await writeValue(
         node2Client,
-        orion.node2.publicKey,
+        enclave.node2.publicKey,
         network.node2.privateKey,
         2
       );
@@ -196,7 +196,7 @@ describe("On chain privacy", () => {
       await expect(
         writeValue(
           node3Client,
-          orion.node3.publicKey,
+          enclave.node3.publicKey,
           network.node3.privateKey,
           3
         )
@@ -210,7 +210,7 @@ describe("On chain privacy", () => {
       const removeReceipt = await node1Client.eth.flexiblePrivacyGroup.removeFrom(
         {
           ...privacyOptions,
-          participant: orion.node2.publicKey,
+          participant: enclave.node2.publicKey,
         }
       );
       expect(removeReceipt.status).toEqual("0x1");
@@ -224,7 +224,7 @@ describe("On chain privacy", () => {
         .generateAndSendRawTransaction({
           to: contractAddress,
           data: contract.methods.store([newValue]).encodeABI(),
-          privateFrom: orion.node1.publicKey,
+          privateFrom: enclave.node1.publicKey,
           privacyGroupId,
           privateKey: network.node1.privateKey,
         })
@@ -252,7 +252,7 @@ describe("On chain privacy", () => {
 
     it("removed node should not find the privacy group", async () => {
       const result = await node2Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-        [orion.node2.publicKey]
+        [enclave.node2.publicKey]
       );
       expect(result).toHaveLength(0);
     });

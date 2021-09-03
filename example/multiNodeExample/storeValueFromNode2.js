@@ -3,7 +3,7 @@ const Web3Quorum = require("../../src");
 const EventEmitterAbi = require("../solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const storeValueFromNode2 = (address, value) => {
   const web3 = new Web3Quorum(new Web3(network.node2.url));
@@ -19,8 +19,8 @@ const storeValueFromNode2 = (address, value) => {
   const functionCall = {
     to: address,
     data: functionAbi.signature + functionArgs,
-    privateFrom: orion.node2.publicKey,
-    privateFor: [orion.node1.publicKey],
+    privateFrom: enclave.node2.publicKey,
+    privateFor: [enclave.node1.publicKey],
     privateKey: network.node2.privateKey,
   };
   return web3.priv
@@ -66,8 +66,8 @@ const getValueFromNode1 = (address) => {
   return getValue(
     network.node1.url,
     address,
-    orion.node1.publicKey,
-    [orion.node2.publicKey],
+    enclave.node1.publicKey,
+    [enclave.node2.publicKey],
     network.node1.privateKey
   );
 };
@@ -76,8 +76,8 @@ const getValueFromNode2 = (address) => {
   return getValue(
     network.node2.url,
     address,
-    orion.node2.publicKey,
-    [orion.node1.publicKey],
+    enclave.node2.publicKey,
+    [enclave.node1.publicKey],
     network.node2.privateKey
   );
 };
@@ -86,8 +86,8 @@ const getValueFromNode3 = (address) => {
   return getValue(
     network.node3.url,
     address,
-    orion.node3.publicKey,
-    [orion.node1.publicKey],
+    enclave.node3.publicKey,
+    [enclave.node1.publicKey],
     network.node3.privateKey
   );
 };
