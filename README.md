@@ -18,7 +18,7 @@ Please read the [documentation](https://consensys.github.io/web3js-quorum/latest
 ## Installation
 
 ```shell
-npm install web3js-quorum
+npm install web3 web3js-quorum
 ```
 
 ## Quickstart
