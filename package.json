@@ -116,6 +116,6 @@
     "web3": "^1.2.6"
   },
   "peerDependencies": {
-    "web3": "^1.x"
+    "web3": "^1.2.x"
   }
 }
