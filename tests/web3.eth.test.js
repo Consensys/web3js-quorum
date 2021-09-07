@@ -98,7 +98,7 @@ describe("web3.eth", () => {
       await expect(() => {
         return web3.eth.storageRoot();
       }).toThrow(
-        'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
+        "Provided address undefined is invalid, the capitalization checksum test failed, or it's an indirect IBAN address which can't be converted."
       );
     });
   });
@@ -163,7 +163,7 @@ describe("web3.eth", () => {
       await expect(() => {
         return web3.eth.getContractPrivacyMetadata();
       }).toThrow(
-        'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
+        "Provided address undefined is invalid, the capitalization checksum test failed, or it's an indirect IBAN address which can't be converted."
       );
     });
   });
