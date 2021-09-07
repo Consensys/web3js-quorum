@@ -40,7 +40,7 @@ For full usage and API details see the [documentation](https://consensys.github.
 
 ## Examples
 
-The [example](https://github.com/ConsenSys/web3js-quorum/tree/master/example) directory contains examples of web3js-quorum usage with Besu as a Quorum client.
+The [example](https://github.com/ConsenSys/web3js-quorum/tree/master/example) directory contains examples of web3js-quorum usage with Besu as a Quorum client.  
 The [7nodes-test](https://github.com/ConsenSys/web3js-quorum/tree/master/7nodes-test) directory contains examples of web3js-quorum usage with GoQuorum as a Quorum client.
 
 ## Migrations
