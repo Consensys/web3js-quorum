@@ -262,7 +262,7 @@ function Priv(web3) {
     };
 
     return common
-      .performOperationWithRetries(operation, txHash, retries, delay)
+      .waitForTransactionWithRetries(operation, txHash, retries, delay)
       .then((receipt) => {
         if (web3.isQuorum) {
           return receipt;

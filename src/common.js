@@ -3,8 +3,9 @@
  * @module common
  */
 
-// Perform the specified operation, returns a promise which waits for the operation to complete.
-const performOperationWithRetries = (operation, txHash, retries, delay) => {
+// Perform the specified operation which requires waiting for a transaction to be minted.
+// Returns a promise which waits for the operation to complete.
+const waitForTransactionWithRetries = (operation, txHash, retries, delay) => {
   /* eslint-disable promise/param-names */
   /* eslint-disable promise/avoid-new */
 
@@ -54,4 +55,4 @@ const performOperationWithRetries = (operation, txHash, retries, delay) => {
   return retryOperation(operation, retries);
 };
 
-exports.performOperationWithRetries = performOperationWithRetries;
+exports.waitForTransactionWithRetries = waitForTransactionWithRetries;
