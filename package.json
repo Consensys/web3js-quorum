@@ -114,5 +114,8 @@
     "prettier": "^2.2.1",
     "wait-for-expect": "^3.0.2",
     "web3": "^1.2.6"
+  },
+  "peerDependencies": {
+    "web3": "^1.x"
   }
 }
