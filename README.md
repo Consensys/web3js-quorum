@@ -1,5 +1,6 @@
 [![Website](https://img.shields.io/website?label=documentation&url=https://consensys.github.io/web3js-quorum/latest/index.html)](https://consensys.github.io/web3js-quorum/latest/index.html)
 [![npm](https://img.shields.io/npm/v/web3js-quorum)](https://www.npmjs.com/package/web3js-quorum)
+[![Known Vulnerabilities](https://snyk.io/test/github/ConsenSys/web3js-quorum/badge.svg?targetFile=package.json)](https://snyk.io/test/github/ConsenSys/web3js-quorum?targetFile=package.json)
 
 # web3js-quorum
 
