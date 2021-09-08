@@ -46,7 +46,7 @@ function Web3Quorum(web3, enclaveOptions = {}, isQuorum = false) {
   // eslint-disable-next-line no-param-reassign
   web3.isQuorum = isQuorum;
 
-  console.log("Hello")
+  console.log("Hello");
 
   // Extend the utils namespace methods
   Utils(web3);
