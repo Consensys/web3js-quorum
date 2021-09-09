@@ -3,6 +3,7 @@
  * @module eth
  */
 function Eth(web3) {
+  console.log("dummy");
   web3.eth.extend({
     methods: [
       /**
