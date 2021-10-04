@@ -8,7 +8,7 @@
     "test:unit": "jest src",
     "test:mock": "jest ./tests",
     "test:quorum": "jest integration-tests/quorum-privacy/*.test.js --runInBand",
-    "pretest:integration": "BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=false npm run network:up",
+    "pretest:integration": "PRIVACY_ONCHAIN_GROUPS_ENABLED=false npm run network:up",
     "test:integration": "jest integration-tests/*.test.js --runInBand",
     "posttest:integration": "npm run network:down",
     "cover": "npm run cover:unit && npm run cover:mock && npm run cover:integration && npm run cover:onchain && npm run cover:report",
@@ -17,7 +17,7 @@
     "cover:integration": "npm run test:integration -- --coverage",
     "cover:onchain": "npm run test:onchain -- --coverage",
     "cover:report": "nyc report --reporter=lcov --reporter=text",
-    "pretest:onchain": "BESU_PRIVACY_ONCHAIN_GROUPS_ENABLED=true npm run network:up",
+    "pretest:onchain": "PRIVACY_ONCHAIN_GROUPS_ENABLED=true npm run network:up",
     "test:onchain": "jest integration-tests/onchainPrivacy/*.test.js",
     "posttest:onchain": "npm run network:down",
     "network:up": "node ./integration-tests/support/after.js && node ./integration-tests/support/before.js",
@@ -86,10 +86,10 @@
   "homepage": "https://github.com/ConsenSysQuorum/web3js-quorum#readme",
   "dependencies": {
     "ethereumjs-tx": "^2.1.2",
-    "ethereumjs-util": "6.1.0",
+    "ethereumjs-util": "6.2.1",
     "lodash": "^4.17.21",
     "request-promise-native": "^1.0.9",
-    "rlp": "2.2.4"
+    "rlp": "2.2.6"
   },
   "devDependencies": {
     "async-promise-pool": "^1.0.3",
@@ -113,6 +113,9 @@
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "wait-for-expect": "^3.0.2",
-    "web3": "^1.2.6"
+    "web3": "^1.5.2"
+  },
+  "peerDependencies": {
+    "web3": "^1.x"
   }
 }

@@ -2,7 +2,7 @@ const Web3 = require("web3");
 const Web3Quorum = require("../../src");
 
 const Utils = require("../helpers.js");
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const node1 = new Web3Quorum(new Web3(network.node1.url));
 const node2 = new Web3Quorum(new Web3(network.node2.url));
@@ -11,9 +11,9 @@ const node3 = new Web3Quorum(new Web3(network.node3.url));
 module.exports = async () => {
   const onChainPrivacyGroupCreationResult = await node1.eth.flexiblePrivacyGroup.create(
     {
-      participants: [orion.node1.publicKey, orion.node2.publicKey],
-      enclaveKey: orion.node1.publicKey,
-      privateFrom: orion.node1.publicKey,
+      participants: [enclave.node1.publicKey, enclave.node2.publicKey],
+      enclaveKey: enclave.node1.publicKey,
+      privateFrom: enclave.node1.publicKey,
       privateKey: network.node1.privateKey,
     }
   );
@@ -21,7 +21,7 @@ module.exports = async () => {
   console.log(onChainPrivacyGroupCreationResult);
 
   const findResult = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-    [orion.node1.publicKey, orion.node2.publicKey]
+    [enclave.node1.publicKey, enclave.node2.publicKey]
   );
   console.log("Found privacy group results:");
   Utils.logMatchingGroup(
@@ -30,9 +30,9 @@ module.exports = async () => {
   );
 
   const addResult = await node1.eth.flexiblePrivacyGroup.addTo({
-    participants: [orion.node3.publicKey],
-    enclaveKey: orion.node1.publicKey,
-    privateFrom: orion.node1.publicKey,
+    participants: [enclave.node3.publicKey],
+    enclaveKey: enclave.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId: onChainPrivacyGroupCreationResult.privacyGroupId,
     privateKey: network.node1.privateKey,
   });
@@ -46,7 +46,7 @@ module.exports = async () => {
   console.log(receiptFromNode3);
 
   const findResultWithAddedNode = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-    [orion.node1.publicKey, orion.node2.publicKey, orion.node3.publicKey]
+    [enclave.node1.publicKey, enclave.node2.publicKey, enclave.node3.publicKey]
   );
   console.log("Found privacy groups with added node:");
   Utils.logMatchingGroup(
@@ -55,9 +55,9 @@ module.exports = async () => {
   );
 
   const removeResult = await node1.eth.flexiblePrivacyGroup.removeFrom({
-    participant: orion.node3.publicKey,
-    enclaveKey: orion.node1.publicKey,
-    privateFrom: orion.node1.publicKey,
+    participant: enclave.node3.publicKey,
+    enclaveKey: enclave.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId: onChainPrivacyGroupCreationResult.privacyGroupId,
     privateKey: network.node1.privateKey,
   });
@@ -65,7 +65,7 @@ module.exports = async () => {
   console.log(removeResult);
 
   const findResultRemovedNode = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-    [orion.node1.publicKey, orion.node2.publicKey]
+    [enclave.node1.publicKey, enclave.node2.publicKey]
   );
   Utils.logMatchingGroup(
     findResultRemovedNode,

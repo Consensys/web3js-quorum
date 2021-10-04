@@ -3,7 +3,7 @@ const path = require("path");
 const Web3 = require("web3");
 const Web3Quorum = require("../../src");
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 const { createHttpProvider } = require("../helpers.js");
 
 const binary = fs.readFileSync(
@@ -11,13 +11,13 @@ const binary = fs.readFileSync(
 );
 
 const node1 = new Web3Quorum(
-  new Web3(createHttpProvider(orion.node1.jwt, network.node1.url))
+  new Web3(createHttpProvider(enclave.node1.jwt, network.node1.url))
 );
 
 const createEventEmitterContract = (privacyGroupId) => {
   const contractOptions = {
     data: `0x${binary}`,
-    privateFrom: orion.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };
@@ -35,9 +35,9 @@ const getPrivateContractAddress = (transactionHash) => {
 module.exports = async () => {
   const privacyGroupCreationResult = await node1.eth.flexiblePrivacyGroup.create(
     {
-      participants: [orion.node1.publicKey, orion.node2.publicKey],
-      enclaveKey: orion.node1.publicKey,
-      privateFrom: orion.node1.publicKey,
+      participants: [enclave.node1.publicKey, enclave.node2.publicKey],
+      enclaveKey: enclave.node1.publicKey,
+      privateFrom: enclave.node1.publicKey,
       privateKey: network.node1.privateKey,
     }
   );

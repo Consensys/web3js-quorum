@@ -9,7 +9,7 @@ const contractMeta = require("../solidity/HumanStandardToken/HumanStandardToken.
 const HumanStandardTokenAbi = JSON.parse(contractMeta.interface);
 
 const ethUtil = require("../src/util/custom-ethjs-util");
-const { orion, network } = require("./keys.js");
+const { enclave, network } = require("./keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "./solidity/EventEmitter/EventEmitter.bin")
@@ -34,8 +34,8 @@ const constructorArgs = web3.eth.abi
 
 const contractOptions = {
   data: `0x${binary}${constructorArgs}`,
-  privateFrom: orion.node1.publicKey,
-  privateFor: [orion.node1.publicKey],
+  privateFrom: enclave.node1.publicKey,
+  privateFor: [enclave.node1.publicKey],
   privateKey: network.node1.privateKey,
 };
 
@@ -68,8 +68,8 @@ web3.priv
     return web3.priv.generateAndSendRawTransaction({
       to: contractAddress,
       data: functionAbi.signature + functionArgs,
-      privateFrom: orion.node1.publicKey,
-      privateFor: [orion.node2.publicKey],
+      privateFrom: enclave.node1.publicKey,
+      privateFor: [enclave.node2.publicKey],
       privateKey: network.node1.privateKey,
     });
   })

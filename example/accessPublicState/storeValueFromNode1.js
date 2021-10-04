@@ -6,7 +6,7 @@ const EventEmitter = require("../solidity/EventEmitter/EventEmitter.json")
 const CrossContractReader = require("../solidity/CrossContractReader/CrossContractReader.json")
   .output.abi;
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const storeValueFromNode1 = (address, value) => {
   const web3 = new Web3Quorum(new Web3(network.node1.url));
@@ -94,8 +94,8 @@ const getValueFromNode1 = (publicAddress, privateAddress) => {
     network.node1.url,
     publicAddress,
     privateAddress,
-    orion.node1.publicKey,
-    [orion.node2.publicKey],
+    enclave.node1.publicKey,
+    [enclave.node2.publicKey],
     network.node1.privateKey
   );
 };

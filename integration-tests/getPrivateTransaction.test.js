@@ -2,7 +2,7 @@ const Web3 = require("web3");
 const Web3Quorum = require("../src");
 
 const { contracts } = require("./support/helpers");
-const { network, orion } = require("./support/keys");
+const { network, enclave } = require("./support/keys");
 
 describe("getPrivateTransaction", () => {
   const node2Client = new Web3Quorum(new Web3(network.node2.url));
@@ -14,14 +14,14 @@ describe("getPrivateTransaction", () => {
   beforeAll(async () => {
     // create a privacy group with nodes 1 and 2
     privacyGroupId = await node1Client.priv.createPrivacyGroup({
-      addresses: [orion.node1.publicKey, orion.node2.publicKey],
+      addresses: [enclave.node1.publicKey, enclave.node2.publicKey],
     });
 
     // deploy a contract and get the receipt
     const receipt = await node1Client.priv
       .generateAndSendRawTransaction({
         data: `0x${contracts.eventEmitter.bytecode}`,
-        privateFrom: orion.node1.publicKey,
+        privateFrom: enclave.node1.publicKey,
         privacyGroupId,
         privateKey: network.node1.privateKey,
       })
@@ -35,14 +35,14 @@ describe("getPrivateTransaction", () => {
   it("should get tx from originating node", async () => {
     const result = await node1Client.priv.getPrivateTransaction(publicHash);
 
-    expect(result.privateFrom).toEqual(orion.node1.publicKey);
+    expect(result.privateFrom).toEqual(enclave.node1.publicKey);
     expect(result.privacyGroupId).toEqual(privacyGroupId);
   });
 
   it("should get tx from other member node", async () => {
     const result = await node2Client.priv.getPrivateTransaction(publicHash);
 
-    expect(result.privateFrom).toEqual(orion.node1.publicKey);
+    expect(result.privateFrom).toEqual(enclave.node1.publicKey);
     expect(result.privacyGroupId).toEqual(privacyGroupId);
   });
 

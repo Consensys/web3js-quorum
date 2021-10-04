@@ -7,7 +7,7 @@ const {
   ADDRESS,
   BLOCK_NUMBER,
   SIGNED_RLP,
-  ORION_ADDRESS,
+  ENCLAVE_ADDRESS,
   TRANSACTION_HASH,
 } = require("./tests-utils/constants");
 
@@ -26,7 +26,7 @@ describe("web3.eth", () => {
       });
 
       await web3.eth.sendRawPrivateTransaction(SIGNED_RLP, {
-        privateFor: [ORION_ADDRESS],
+        privateFor: [ENCLAVE_ADDRESS],
       });
 
       expect(request.jsonrpc).toEqual("2.0");
@@ -34,7 +34,7 @@ describe("web3.eth", () => {
       expect(request.params).toEqual([
         SIGNED_RLP,
         {
-          privateFor: [ORION_ADDRESS],
+          privateFor: [ENCLAVE_ADDRESS],
         },
       ]);
     });
@@ -98,7 +98,7 @@ describe("web3.eth", () => {
       await expect(() => {
         return web3.eth.storageRoot();
       }).toThrow(
-        'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
+        "Provided address undefined is invalid, the capitalization checksum test failed, or it's an indirect IBAN address which can't be converted."
       );
     });
   });
@@ -163,7 +163,7 @@ describe("web3.eth", () => {
       await expect(() => {
         return web3.eth.getContractPrivacyMetadata();
       }).toThrow(
-        'Provided address "undefined" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.'
+        "Provided address undefined is invalid, the capitalization checksum test failed, or it's an indirect IBAN address which can't be converted."
       );
     });
   });
@@ -176,7 +176,7 @@ describe("web3.eth", () => {
       });
 
       await web3.eth.distributePrivateTransaction(SIGNED_RLP, {
-        privateFor: [ORION_ADDRESS],
+        privateFor: [ENCLAVE_ADDRESS],
       });
 
       expect(request.jsonrpc).toEqual("2.0");
@@ -184,7 +184,7 @@ describe("web3.eth", () => {
       expect(request.params).toEqual([
         SIGNED_RLP,
         {
-          privateFor: [ORION_ADDRESS],
+          privateFor: [ENCLAVE_ADDRESS],
         },
       ]);
     });

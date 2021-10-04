@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
 
-const { network, orion } = require("../keys");
+const { network, enclave } = require("../keys");
 const Web3Quorum = require("../../src");
 
 const artifact = fs.readFileSync(
@@ -15,7 +15,7 @@ const node = new Web3Quorum(new Web3(network.node1.url));
 
 async function run() {
   const { privacyGroupId, contractAddress } = params;
-  const enclaveKey = orion.node1.publicKey;
+  const enclaveKey = enclave.node1.publicKey;
 
   // send a transaction
   const args = process.argv.slice(2);

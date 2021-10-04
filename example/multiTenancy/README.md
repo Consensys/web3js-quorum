@@ -1,10 +1,10 @@
 ## Examples using Multi-tenancy
-In order to use multi-tenancy examples, you need to be running Besu and Orion in multi-tenancy mode. Add extra orion keys and JWT authentication tokens to keys.js. This is for running examples only, not for use in production environments.
+In order to use multi-tenancy examples, you need to be running Besu and enclave in multi-tenancy mode. Add extra enclave keys and JWT authentication tokens to keys.js. This is for running examples only, not for use in production environments.
 
 For example, to add a second tenant on node 1
 
 ```json
-{ orion: {
+{ enclave: {
   ...
     node11: {
       publicKey: "dyKxmO5Ji7d8aZTXvk02x98l6oB9Q4MBTq6W4tIW+AM=",

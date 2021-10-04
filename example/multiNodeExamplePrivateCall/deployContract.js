@@ -6,7 +6,7 @@ const Web3Quorum = require("../../src");
 
 const createGroup = require("../privacyGroupManagement/createPrivacyGroup");
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.bin")
@@ -21,7 +21,7 @@ const createGroupId = () => {
 const createPrivateEmitterContract = (privacyGroupId) => {
   const contractOptions = {
     data: `0x${binary}`,
-    privateFrom: orion.node1.publicKey,
+    privateFrom: enclave.node1.publicKey,
     privacyGroupId,
     privateKey: network.node1.privateKey,
   };

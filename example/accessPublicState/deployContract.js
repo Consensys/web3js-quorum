@@ -5,7 +5,7 @@ const Web3 = require("web3");
 const Tx = require("ethereumjs-tx").Transaction;
 const Web3Quorum = require("../../src");
 
-const { orion, network } = require("../keys.js");
+const { enclave, network } = require("../keys.js");
 
 const binaryEventEmitter = fs.readFileSync(
   path.join(__dirname, "../solidity/EventEmitter/EventEmitter.bin")
@@ -57,8 +57,8 @@ const createPublicEventEmitter = () => {
 const createPrivateCrossContractReader = () => {
   const contractOptions = {
     data: `0x${binaryCrossContractReader}`,
-    privateFrom: orion.node1.publicKey,
-    privateFor: [orion.node2.publicKey],
+    privateFrom: enclave.node1.publicKey,
+    privateFor: [enclave.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
   return web3.priv.generateAndSendRawTransaction(contractOptions);

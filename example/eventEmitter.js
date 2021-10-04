@@ -6,7 +6,7 @@ const Web3Quorum = require("../src");
 const EventEmitterAbi = require("./solidity/EventEmitter/EventEmitter.json")
   .output.abi;
 
-const { orion, network } = require("./keys.js");
+const { enclave, network } = require("./keys.js");
 
 const binary = fs.readFileSync(
   path.join(__dirname, "./solidity/EventEmitter/EventEmitter.bin")
@@ -19,8 +19,8 @@ new web3.eth.Contract(EventEmitterAbi);
 const createPrivateEmitterContract = () => {
   const contractOptions = {
     data: `0x${binary}`,
-    privateFrom: orion.node1.publicKey,
-    privateFor: [orion.node2.publicKey],
+    privateFrom: enclave.node1.publicKey,
+    privateFor: [enclave.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
   return web3.priv.generateAndSendRawTransaction(contractOptions);
@@ -47,8 +47,8 @@ const storeValue = (contractAddress, value) => {
   const functionCall = {
     to: contractAddress,
     data: functionAbi.signature + functionArgs,
-    privateFrom: orion.node1.publicKey,
-    privateFor: [orion.node2.publicKey],
+    privateFrom: enclave.node1.publicKey,
+    privateFor: [enclave.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
   return web3.priv.generateAndSendRawTransaction(functionCall);
@@ -62,8 +62,8 @@ const getValue = (contractAddress) => {
   const functionCall = {
     to: contractAddress,
     data: functionAbi.signature,
-    privateFrom: orion.node1.publicKey,
-    privateFor: [orion.node2.publicKey],
+    privateFrom: enclave.node1.publicKey,
+    privateFor: [enclave.node2.publicKey],
     privateKey: network.node1.privateKey,
   };
 

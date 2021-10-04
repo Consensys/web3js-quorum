@@ -7,7 +7,7 @@ const {
   PRIVACY_GROUP_ID,
   ADDRESS,
   SIGNED_RLP,
-  ORION_ADDRESS,
+  ENCLAVE_ADDRESS,
   LOG_OBJECT,
   TRANSACTION_HASH,
   CREATE_PRIVACY_GROUP_OBJECT,
@@ -118,13 +118,17 @@ describe("web3.priv", () => {
       mockHttpPost((data) => {
         request = data;
       });
-      await web3.priv.getEeaTransactionCount(ADDRESS, ORION_ADDRESS, [
-        ORION_ADDRESS,
+      await web3.priv.getEeaTransactionCount(ADDRESS, ENCLAVE_ADDRESS, [
+        ENCLAVE_ADDRESS,
       ]);
 
       expect(request.jsonrpc).toEqual("2.0");
       expect(request.method).toEqual("priv_getEeaTransactionCount");
-      expect(request.params).toEqual([ADDRESS, ORION_ADDRESS, [ORION_ADDRESS]]);
+      expect(request.params).toEqual([
+        ADDRESS,
+        ENCLAVE_ADDRESS,
+        [ENCLAVE_ADDRESS],
+      ]);
     });
 
     it("throw error when call priv_getEeaTransactionCount with no param", async () => {

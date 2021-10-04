@@ -57,8 +57,8 @@ function Priv(web3) {
       /**
        * @function getEeaTransactionCount
        * @param {String} address account address
-       * @param {String} sender base64-encoded Orion address of the sender
-       * @param {String[]} recipients base64-encoded Orion addresses of recipients
+       * @param {String} sender base64-encoded Enclave address of the sender
+       * @param {String[]} recipients base64-encoded Enclave addresses of recipients
        * @return {String} integer representing the number of private transactions sent from the address to the specified group of sender and recipients
        */
       {
@@ -124,7 +124,7 @@ function Priv(web3) {
       /**
        * @function createPrivacyGroup
        * @param {Object} options request options object with the following fields:
-       * @param {String[]} options.addresses list of nodes specified by Orion public keys
+       * @param {String[]} options.addresses list of nodes specified by Enclave public keys
        * @param {String} options.name (optional) privacy group name
        * @param {String} options.description (optional) privacy group description
        * @return {String} privacy group ID
@@ -146,7 +146,7 @@ function Priv(web3) {
       },
       /**
        * @function findPrivacyGroup
-       * @param {String[]} members members specified by Orion public keys
+       * @param {String[]} members members specified by Enclave public keys
        * @return {Object[]} privacy group objects
        */
       {
@@ -359,7 +359,7 @@ function Priv(web3) {
     if (options.privacyGroupId) {
       tx.privacyGroupId = options.privacyGroupId;
     }
-    tx.restriction = "restricted";
+    tx.restriction = options.restriction || "restricted";
 
     tx.sign(privateKeyBuffer);
 
