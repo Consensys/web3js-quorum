@@ -392,8 +392,8 @@ function Priv(web3) {
       options.nonce ||
       (await web3.priv.getTransactionCount(from, privacyGroupId));
     tx.nonce = options.nonce || transactionCount;
-    tx.gasPrice = GAS_PRICE;
-    tx.gasLimit = GAS_LIMIT;
+    tx.gasPrice = options.gasPrice || GAS_PRICE;
+    tx.gasLimit = options.gasLimit || GAS_LIMIT;
     tx.to = options.to;
     tx.value = 0;
     tx.data = options.data;
@@ -454,6 +454,8 @@ function Priv(web3) {
    * @param {string} [options.nonce] If not provided, will be calculated using `priv_getTransactionCount`
    * @param {string} options.to The address to send the transaction
    * @param {string} options.data Data to be sent in the transaction
+   * @param {string} options.gasLimit The gas limit to use for the privacy marker transaction (if applicable)
+   * @param {string} options.gasPrice The gas price to use for the privacy marker transaction (if applicable)
    *
    * @returns {Promise<T>}
    */
