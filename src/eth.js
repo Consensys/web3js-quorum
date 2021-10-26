@@ -1,3 +1,5 @@
+const common = require("./common");
+
 /**
  * For more details about the {@link https://docs.goquorum.consensys.net/en/stable/Reference/APIs/PrivacyAPI Quorum Privacy APIs}
  * @module eth
@@ -127,6 +129,82 @@ function Eth(web3) {
       },
     ],
   });
+
+  // Use the web3 provider to directly call eth_sendTransaction in the node.
+  // This is necessary as web3.eth.sendTransaction doesn't work with Privacy Marker Transactions.
+  const sendTransactionUsingProvider = async (txnObject, callback) => {
+    const provider = web3.eth.currentProvider;
+
+    const jsonrpcPayload = {
+      jsonrpc: "2.0",
+      id: 3,
+      method: "eth_sendTransaction",
+      params: [txnObject],
+    };
+
+    const callSend = (sendParam) => {
+      return new Promise((resolve, reject) => {
+        try {
+          provider.send(sendParam, (err, data) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(data.result);
+
+            if (callback != null) {
+              if (data.error) {
+                callback(data.error);
+              } else {
+                callback(undefined, data.result);
+              }
+            }
+          });
+        } catch (error) {
+          reject(error);
+          callback(error);
+        }
+      });
+    };
+    return callSend(jsonrpcPayload);
+  };
+
+  // Get the transaction Receipt, waiting until the receipt is ready.
+  // If it's a Privacy Marker Transaction then return the receipt for the inner private transaction.
+  const waitForTransactionReceipt = (txHash, retries = 300, delay = 1000) => {
+    const operation = () => {
+      return web3.eth.getTransactionReceipt(txHash);
+    };
+
+    return common
+      .waitForTransactionWithRetries(operation, txHash, retries, delay)
+      .then((receipt) => {
+        if (!receipt.isPrivacyMarkerTransaction) {
+          return receipt;
+        }
+        return web3.eth.getPrivateTransactionReceipt(txHash);
+      });
+  };
+
+  /**
+   * Submit a transaction.
+   * This method is similar to `web3.eth.sendTransaction()`, however it adds support for Privacy Marker Transactions.
+   * If the transaction is a Privacy Marker, then the promise will return the receipt for the inner private transaction,
+   * rather than the receipt for the Privacy Marker Transaction.
+   * Note that this method does not currently support `PromiEvent` events that are returned by `web3.eth.sendTransaction()`.
+   * @function sendGoQuorumTransaction
+   * @param {Object} transaction The transaction object to send (see `web3.eth.sendTransaction()` for object details)
+   * @param {Function} [callback] (optional) Optional callback, returns an error object as first parameter and the transaction hash as second.
+   * @returns {Promise<T>} Resolves when the transaction receipt is available.
+   */
+  const sendGoQuorumTransaction = async (txnObject, callback) => {
+    const txHash = await sendTransactionUsingProvider(txnObject, callback);
+    return waitForTransactionReceipt(txHash);
+  };
+
+  Object.assign(web3.eth, {
+    sendGoQuorumTransaction,
+  });
+
   return web3;
 }
 
