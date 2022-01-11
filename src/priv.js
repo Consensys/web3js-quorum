@@ -301,15 +301,8 @@ function Priv(web3) {
 
   const sendRawRequest = async (
     payload,
-    privateFor,
-    privacyFlag = undefined
+    privacyParams
   ) => {
-    const privacyParams = {
-      privateFor,
-    };
-    if (typeof privacyFlag !== "undefined") {
-      privacyParams.privacyFlag = privacyFlag;
-    }
     const txHash = await web3.eth.sendRawPrivateTransaction(
       payload,
       privacyParams
@@ -327,9 +320,11 @@ function Priv(web3) {
 
       const privateTx = web3.utils.setPrivate(serializedTx);
       return sendRawRequest(
-        `0x${privateTx.toString("hex")}`,
-        options.privateFor,
-        options.privacyFlag
+        `0x${privateTx.toString("hex")}`, {
+          privateFor: options.privateFor,
+          privacyFlag: options.privacyFlag,
+          mandatoryFor: options.mandatoryFor,
+        }
       );
     }
     if (options.privacyGroupId && options.privateFor) {
