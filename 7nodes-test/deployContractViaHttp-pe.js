@@ -89,10 +89,13 @@ const bytecodeWithInitParam = simpleContract
       from: signAcct,
       isPrivate: true,
       privateFrom: "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
-      privateFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc=", "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo="],
+      privateFor: [
+        "QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc=",
+        "BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=",
+      ],
       nonce: txCount,
       privacyFlag: 2,
-      mandatoryFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="]
+      mandatoryFor: ["QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc="],
     });
 
     console.log("Contract address: ", tx.contractAddress);
