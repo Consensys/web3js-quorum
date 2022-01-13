@@ -127,6 +127,15 @@ function Eth(web3) {
         call: "eth_getPrivateTransactionReceipt",
         params: 1,
       },
+      /**
+       * @function getPSI
+       * @return {String} the private state identifier (PSI)
+       */
+      {
+        name: "getPSI",
+        call: "eth_getPSI",
+        params: 0,
+      },
     ],
   });
 

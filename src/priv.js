@@ -299,17 +299,7 @@ function Priv(web3) {
     return `0x${serializedTx.toString("hex")}`;
   };
 
-  const sendRawRequest = async (
-    payload,
-    privateFor,
-    privacyFlag = undefined
-  ) => {
-    const privacyParams = {
-      privateFor,
-    };
-    if (typeof privacyFlag !== "undefined") {
-      privacyParams.privacyFlag = privacyFlag;
-    }
+  const sendRawRequest = async (payload, privacyParams) => {
     const txHash = await web3.eth.sendRawPrivateTransaction(
       payload,
       privacyParams
@@ -326,11 +316,11 @@ function Priv(web3) {
       );
 
       const privateTx = web3.utils.setPrivate(serializedTx);
-      return sendRawRequest(
-        `0x${privateTx.toString("hex")}`,
-        options.privateFor,
-        options.privacyFlag
-      );
+      return sendRawRequest(`0x${privateTx.toString("hex")}`, {
+        privateFor: options.privateFor,
+        privacyFlag: options.privacyFlag,
+        mandatoryFor: options.mandatoryFor,
+      });
     }
     if (options.privacyGroupId && options.privateFor) {
       throw Error("privacyGroupId and privateFor are mutually exclusive");
