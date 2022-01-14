@@ -89,7 +89,7 @@
     "ethereumjs-util": "6.2.1",
     "lodash": "^4.17.21",
     "request-promise-native": "^1.0.9",
-    "rlp": "2.2.6"
+    "rlp": "2.2.7"
   },
   "devDependencies": {
     "async-promise-pool": "^1.0.3",
