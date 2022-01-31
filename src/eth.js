@@ -13,6 +13,7 @@ function Eth(web3) {
        * @param {Object} privateData Private data to send
        * @param {String[]} privateData.privateFor When sending a private transaction, an array of the recipients’ base64-encoded public keys.
        * @param {Number} [privateData.privacyFlag=0] 0 for SP (default if not provided), 1 for PP, 3 for PSV
+       * @param {String[]} [privateData.mandatoryFor] an array of the recipients’ base64-encoded public keys
        * @param {Function} [callback] If you pass a callback the HTTP request is made asynchronous.
        * @return {String} The 32 Bytes transaction hash as HEX string
        */
@@ -91,6 +92,7 @@ function Eth(web3) {
        * @param {String[]} privateData.privateFor An array of the recipients’ base64-encoded public keys.
        * @param {String[]} [privateData.privateFrom] The sending party’s base64-encoded public key to use (Privacy Manager default if not provided).
        * @param {Number} [privateData.privacyFlag=0] 0 for SP (default if not provided), 1 for PP, 3 for PSV
+       * @param {String[]} [privateData.mandatoryFor] an array of the recipients’ base64-encoded public keys
        * @return {String} Transaction Manager hash to be used as a privacy marker transaction's `data` when externally signing..
        */
       {
