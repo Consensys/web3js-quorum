@@ -92,7 +92,7 @@ declare module "web3js-quorum" {
   }
 
   export interface IPrivWeb3 {
-    call(privacyGroupId: string, call: TransactionConfig, blockNumber: string): Promise<string>
+    call(privacyGroupId: string, call: TransactionConfig, blockNumber?: string): Promise<string>
 
     debugGetStateRoot(privacyGroupId: string, blockNumber: string | number): Promise<string>
 

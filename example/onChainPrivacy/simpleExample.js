@@ -23,9 +23,10 @@ module.exports = async () => {
     onChainPrivacyGroupCreationResult.commitmentHash
   );
 
-  const findResult = await node2.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-    [enclave.node1.publicKey, enclave.node2.publicKey]
-  );
+  const findResult = await node2.eth.flexiblePrivacyGroup.find([
+    enclave.node1.publicKey,
+    enclave.node2.publicKey,
+  ]);
   Utils.logMatchingGroup(
     findResult,
     onChainPrivacyGroupCreationResult.privacyGroupId

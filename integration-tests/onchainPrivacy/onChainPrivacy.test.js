@@ -57,28 +57,28 @@ describe("On chain privacy", () => {
     expect(receipt.to).toEqual(privacyContractAddress);
   });
 
-  // findOnChainPrivacyGroup
+  // findFlexiblePrivacyGroup
   it("should find privacy group after creation", async () => {
-    const found = await node1Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-      participants
-    );
-
+    const found = await node1Client.eth.flexiblePrivacyGroup.find(participants);
     // the one we created should be in there
     const created = found.find((group) => {
       return group.privacyGroupId === privacyGroupId;
     });
-
     expect(created.privacyGroupId).toEqual(privacyGroupId);
     expect(created.members).toEqual(participants.sort());
-    expect(created.type).toEqual("ONCHAIN");
+    expect(created.type).toEqual("FLEXIBLE");
     expect(created.name).toEqual("");
     expect(created.description).toEqual("");
   });
 
+  it("should get participants of a privacy group ID", async () => {
+    const found = await node1Client.eth.flexiblePrivacyGroup.getParticipants({
+      privacyGroupId,
+    });
+    expect(found).toEqual(participants);
+  });
   it("non-member should not find privacy group(s)", async () => {
-    const found = await node2Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-      participants
-    );
+    const found = await node2Client.eth.flexiblePrivacyGroup.find(participants);
     expect(found).toHaveLength(0);
   });
 
@@ -100,6 +100,18 @@ describe("On chain privacy", () => {
         privacyGroupId,
       })
     ).rejects.toThrowError();
+  });
+
+  describe.each([
+    "findPrivacyGroup",
+    "createPrivacyGroup",
+    "deletePrivacyGroup",
+  ])("off chain privacy group disabled", (method) => {
+    it(`should throw error method ${method} not found`, async () => {
+      await expect(
+        node1Client.priv[method](participants)
+      ).rejects.toThrowError();
+    });
   });
 
   // deploy contract
@@ -251,9 +263,9 @@ describe("On chain privacy", () => {
     });
 
     it("removed node should not find the privacy group", async () => {
-      const result = await node2Client.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-        [enclave.node2.publicKey]
-      );
+      const result = await node2Client.eth.flexiblePrivacyGroup.find([
+        enclave.node2.publicKey,
+      ]);
       expect(result).toHaveLength(0);
     });
   });

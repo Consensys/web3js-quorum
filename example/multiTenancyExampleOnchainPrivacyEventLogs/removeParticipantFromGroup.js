@@ -15,9 +15,11 @@ async function run() {
   const { privacyGroupId } = params;
   const addressToRemove = enclave.node11.publicKey;
 
-  const findResultWithAddedNode = await node.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-    [enclave.node1.publicKey, enclave.node2.publicKey, enclave.node11.publicKey]
-  );
+  const findResultWithAddedNode = await node.eth.flexiblePrivacyGroup.find([
+    enclave.node1.publicKey,
+    enclave.node2.publicKey,
+    enclave.node11.publicKey,
+  ]);
   console.log("Found privacy groups with added node:");
   logMatchingGroup(findResultWithAddedNode, privacyGroupId);
 
@@ -33,9 +35,10 @@ async function run() {
     `Removed third participant ${addressToRemove} from privacy group ${privacyGroupId}`
   );
 
-  const findResultWithRemovedNode = await node.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(
-    [enclave.node1.publicKey, enclave.node2.publicKey]
-  );
+  const findResultWithRemovedNode = await node.eth.flexiblePrivacyGroup.find([
+    enclave.node1.publicKey,
+    enclave.node2.publicKey,
+  ]);
   console.log("Found privacy groups with removed node:");
   logMatchingGroup(findResultWithRemovedNode, privacyGroupId);
 }

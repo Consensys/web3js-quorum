@@ -25,10 +25,10 @@
 
 
 ## Privx namespace 
-| Web3js-eea                                      | web3js-quorum                                                    | changes                     |
-|-------------------------------------------------|------------------------------------------------------------------|-----------------------------|
-| web3.privx.findOnChainPrivacyGroup({addresses}) | web3.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup(addresses) | namespace and parameters    |
-| web3.privx.createPrivacyGroup                   | web3.eth.flexiblePrivacyGroup.create                             | function name and namespace |
-| web3.privx.removeFromPrivacyGroup               | web3.eth.flexiblePrivacyGroup.removeFrom                         | function name and namespace |
-| web3.privx.addToPrivacyGroup                    | web3.eth.flexiblePrivacyGroup.addTo                              | function name and namespace |
-| web3.privx.setPrivacyGroupLockState             | web3.eth.flexiblePrivacyGroup.setLockState                       | function name and namespace |
+| Web3js-eea                                      | web3js-quorum                                 | changes                     |
+|-------------------------------------------------|-----------------------------------------------|-----------------------------|
+| web3.privx.findOnChainPrivacyGroup({addresses}) | web3.eth.flexiblePrivacyGroup.find(addresses) | namespace and parameters    |
+| web3.privx.createPrivacyGroup                   | web3.eth.flexiblePrivacyGroup.create          | function name and namespace |
+| web3.privx.removeFromPrivacyGroup               | web3.eth.flexiblePrivacyGroup.removeFrom      | function name and namespace |
+| web3.privx.addToPrivacyGroup                    | web3.eth.flexiblePrivacyGroup.addTo           | function name and namespace |
+| web3.privx.setPrivacyGroupLockState             | web3.eth.flexiblePrivacyGroup.setLockState    | function name and namespace |
