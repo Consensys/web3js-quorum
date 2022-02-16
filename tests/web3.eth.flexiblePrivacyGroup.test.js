@@ -19,25 +19,23 @@ describe("web3.eth.flexiblePrivacyGroup", () => {
     resetMock();
   });
 
-  describe("web3.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup", () => {
-    it("should call privx_findOnChainPrivacyGroup", async () => {
+  describe("web3.eth.flexiblePrivacyGroup.find", () => {
+    it("should call privx_findFlexiblePrivacyGroup", async () => {
       let request;
       mockHttpPost((data) => {
         request = data;
       });
 
-      await web3.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup([
-        ENCLAVE_ADDRESS,
-      ]);
+      await web3.eth.flexiblePrivacyGroup.find([ENCLAVE_ADDRESS]);
 
       expect(request.jsonrpc).toEqual("2.0");
-      expect(request.method).toEqual("privx_findOnChainPrivacyGroup");
+      expect(request.method).toEqual("privx_findFlexiblePrivacyGroup");
       expect(request.params).toEqual([[ENCLAVE_ADDRESS]]);
     });
 
-    it("throw error when call privx_findOnChainPrivacyGroup with no param", async () => {
+    it("throw error when call privx_findFlexiblePrivacyGroup with no param", async () => {
       await expect(() => {
-        return web3.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup();
+        return web3.eth.flexiblePrivacyGroup.find();
       }).toThrow("Invalid number of parameters");
     });
   });

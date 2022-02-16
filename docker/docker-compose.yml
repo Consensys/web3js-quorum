@@ -53,7 +53,7 @@ x-besu-tx-def:
     - -c
     - |
 
-      
+
       for i in $$(seq 1 100)
       do
         set -e
@@ -64,7 +64,7 @@ x-besu-tx-def:
           sleep 10
         fi
       done
-      
+
 
 
       while [ ! -f "/opt/besu/public-keys/bootnode_pubkey" ]; do sleep 5; done ;
@@ -327,7 +327,7 @@ services:
         --privacy-enabled \
         --privacy-url=http://member1tessera:9101 \
         --privacy-public-key-file=/config/tessera/tm.pub \
-        --privacy-onchain-groups-enabled=${PRIVACY_ONCHAIN_GROUPS_ENABLED:-false} \
+        --privacy-flexible-groups-enabled=${PRIVACY_FLEXIBLE_GROUPS_ENABLED:-false} \
         --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
         --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
     volumes:
@@ -383,7 +383,7 @@ services:
         --privacy-enabled \
         --privacy-url=http://member2tessera:9101 \
         --privacy-public-key-file=/config/tessera/tm.pub \
-        --privacy-onchain-groups-enabled=${PRIVACY_ONCHAIN_GROUPS_ENABLED:-false} \
+        --privacy-flexible-groups-enabled=${PRIVACY_FLEXIBLE_GROUPS_ENABLED:-false} \
         --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
         --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
     volumes:
@@ -439,7 +439,7 @@ services:
         --privacy-enabled \
         --privacy-url=http://member3tessera:9101 \
         --privacy-public-key-file=/config/tessera/tm.pub \
-        --privacy-onchain-groups-enabled=${PRIVACY_ONCHAIN_GROUPS_ENABLED:-false} \
+        --privacy-flexible-groups-enabled=${PRIVACY_FLEXIBLE_GROUPS_ENABLED:-false} \
         --rpc-http-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} \
         --rpc-ws-api=EEA,WEB3,ETH,NET,PRIV,PERM,${BESU_CONS_API:-IBFT} ;
     volumes:

@@ -92,7 +92,7 @@ declare module "web3js-quorum" {
   }
 
   export interface IPrivWeb3 {
-    call(privacyGroupId: string, call: TransactionConfig, blockNumber: string): Promise<string>
+    call(privacyGroupId: string, call: TransactionConfig, blockNumber?: string): Promise<string>
 
     debugGetStateRoot(privacyGroupId: string, blockNumber: string | number): Promise<string>
 
@@ -316,6 +316,7 @@ declare module "web3js-quorum" {
   }
 
   export interface IEthWeb3 extends Eth {
+    flexiblePrivacyGroup: IFlexiblePrivacyGroup
     sendRawPrivateTransaction(signed: string, privateData: IPrivateData): Promise<string>
 
     fillTransaction(tx: ITransaction): Promise<{ raw: string, tx: IPrivateTransactionObject }>
@@ -339,6 +340,32 @@ declare module "web3js-quorum" {
     getPSI(): Promise<string>
 
     sendGoQuorumTransaction(tx: TransactionConfig): Promise<IPrivateTransactionReceipt>
+  }
+
+  export interface IFlexiblePrivacyGroup {
+    find(enclaveKeys: string[]): Promise<IPrivacyGroup[]>
+    getParticipants({privacyGroupId: string}): Promise<string[]>
+    create(options: ICreateFlexiblePrivacyGroup): Promise<IPrivateTransactionReceipt>
+    removeFrom(options: IRemoveFromFlexiblePrivacyGroup): Promise<IPrivateTransactionReceipt>
+    setLockState(options: ISetLockStateFlexiblePrivacyGroup): Promise<IPrivateTransactionReceipt>
+    addTo(options: ICreateFlexiblePrivacyGroup): Promise<IPrivateTransactionReceipt>
+  }
+
+  export interface IBaseFlexiblePrivacyGroup {
+    readonly privacyGroupId: string
+    readonly privateKey: string
+    readonly enclaveKey: string
+  }
+  export interface ICreateFlexiblePrivacyGroup extends IBaseFlexiblePrivacyGroup {
+    readonly participants: string[]
+  }
+
+  export interface IRemoveFromFlexiblePrivacyGroup extends IBaseFlexiblePrivacyGroup {
+    readonly participants: string
+  }
+
+  export interface ISetLockStateFlexiblePrivacyGroup extends IBaseFlexiblePrivacyGroup {
+    readonly lock: boolean
   }
 
   export interface IPrivateData {

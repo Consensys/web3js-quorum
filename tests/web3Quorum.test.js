@@ -11,9 +11,7 @@ describe("web3Quorum", () => {
 
   it("should match the web3Quorum eth.flexiblePrivacyGroup namespace snapshot", () => {
     expect(web3.eth.flexiblePrivacyGroup).toMatchSnapshot();
-    expect(
-      typeof web3.eth.flexiblePrivacyGroup.findOnChainPrivacyGroup
-    ).toEqual("function");
+    expect(typeof web3.eth.flexiblePrivacyGroup.find).toEqual("function");
   });
 
   it("should match the web3Quorum utils namespace snapshot", () => {

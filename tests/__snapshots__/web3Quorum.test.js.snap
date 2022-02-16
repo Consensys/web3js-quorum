@@ -61,7 +61,8 @@ exports[`web3Quorum should match the web3Quorum eth.flexiblePrivacyGroup namespa
 Object {
   "addTo": [Function],
   "create": [Function],
-  "findOnChainPrivacyGroup": [Function],
+  "find": [Function],
+  "getParticipants": [Function],
   "removeFrom": [Function],
   "setLockState": [Function],
 }

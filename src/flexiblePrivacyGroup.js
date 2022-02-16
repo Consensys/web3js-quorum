@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const { hexToBase64 } = require("./util");
 
 const privacyProxyAbi = require("../solidity/PrivacyProxy.json").output.abi;
 
@@ -11,13 +12,13 @@ function FlexiblePrivacyGroup(web3) {
     property: "flexiblePrivacyGroup",
     methods: [
       /**
-       * @function findOnChainPrivacyGroup
-       * @param {String[]} addresses
+       * @function find
+       * @param {String[]} public enclave keys
        * @return {Object}
        */
       {
-        name: "findOnChainPrivacyGroup",
-        call: "privx_findOnChainPrivacyGroup",
+        name: "find",
+        call: "privx_findFlexiblePrivacyGroup",
         params: 1,
       },
     ],
@@ -61,6 +62,35 @@ function FlexiblePrivacyGroup(web3) {
       .generateAndSendRawTransaction(functionCall)
       .then((transactionHash) => {
         return web3.priv.waitForTransactionReceipt(transactionHash);
+      });
+  };
+
+  /**
+   * Get Participants of a specific privacy group
+   * @function getParticipants
+   * @param {Object}   options
+   * @param {string} options.privacyGroupId Privacy group ID
+   * @return {Promise<T>}
+   */
+  const getParticipants = (options) => {
+    const contract = new web3.eth.Contract(privacyProxyAbi);
+    const functionAbi = contract._jsonInterface.find((e) => {
+      return e.name === "getParticipants";
+    });
+
+    return web3.priv
+      .call(options.privacyGroupId, {
+        to: "0x000000000000000000000000000000000000007c",
+        data: functionAbi.signature,
+      })
+      .then((result) => {
+        const functionArgs = web3.eth.abi.decodeParameters(
+          functionAbi.outputs,
+          result
+        )[0];
+        return functionArgs.map((hash) => {
+          return hexToBase64(hash.slice(2));
+        });
       });
   };
 
@@ -157,6 +187,7 @@ function FlexiblePrivacyGroup(web3) {
 
   Object.assign(web3.eth.flexiblePrivacyGroup, {
     create,
+    getParticipants,
     removeFrom,
     setLockState,
     addTo,
