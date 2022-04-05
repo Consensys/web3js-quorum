@@ -1,6 +1,6 @@
 {
   "name": "web3js-quorum",
-  "version": "21.7.0-rc1",
+  "version": "22.4.0",
   "description": "Web3 JS Quorum - JSON-RPC API",
   "main": "src/index.js",
   "types": "./src/typescript/index.d.ts",
