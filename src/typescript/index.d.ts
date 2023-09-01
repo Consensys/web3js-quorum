@@ -97,7 +97,7 @@ declare module "web3js-quorum" {
   }
 
   export interface IPtmSend extends IOptions {
-    readonly privateFor: string;
+    readonly privateFor: string[];
   }
 
   export interface IPtmStoreRaw extends IOptions {
@@ -320,7 +320,7 @@ declare module "web3js-quorum" {
   export interface IDistributeRawTransaction {
     readonly privateKey: string;
     readonly privateFrom: string;
-    readonly privateFor: string;
+    readonly privateFor: string[];
     readonly privacyGroupId: string;
     readonly nonce: string;
     readonly to: string;
