@@ -6,7 +6,24 @@ import * as Buffer from "buffer";
 
 declare module "web3js-quorum" {
 
-  export default function Web3Quorum(web3: Web3, enclaveOptions: EnclaveOptions, isQuorum: boolean): IWeb3Quorum;
+  /**
+   * Handles elements
+   * @name Web3Quorum
+   * @class Web3Quorum
+   *
+   * @param web3 instance of the web3.js library. Must have a provider configured. 
+   * @param {Object}  [enclaveOptions] configs of the transaction manager required for GoQuorum case only
+   * @param {string}  enclaveOptions.ipcPath     absolute file path to the ipc of the transaction manager
+   * @param {string}  enclaveOptions.privateUrl  http url to the transaction manager
+   * @param {Object}  enclaveOptions.tlsSettings TLS configuration for the transaction manager when using HTTPS in privateUrl
+   * @param {Buffer}  enclaveOptions.tlsSettings.key           client key buffer
+   * @param {Buffer}  enclaveOptions.tlsSettings.clcert        client certificate buffer
+   * @param {Buffer}  enclaveOptions.tlsSettings.cacert        CA certificate buffer
+   * @param {Boolean} enclaveOptions.tlsSettings.allowInsecure
+   * @param {Boolean} [isQuorum=false] indicates if the connected to client is quorum or besu
+   * @throws If the Web3 instance provided does not come with a provider.
+   */
+  export default function Web3Quorum(web3: Web3, enclaveOptions?: EnclaveOptions, isQuorum?: boolean): IWeb3Quorum;
 
   export interface IWeb3Quorum extends Web3 {
     utils: IUtilsWeb3;
