@@ -12,7 +12,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity ^0.6.0;
+pragma solidity >=0.7.0 <0.9.0;
+pragma experimental ABIEncoderV2;
 import "./PrivacyInterface.sol";
 
 contract PrivacyProxy is PrivacyInterface {
@@ -27,17 +28,17 @@ contract PrivacyProxy is PrivacyInterface {
     implementation = _newImp;
   }
 
-  function addParticipants(bytes32[] memory _publicEnclaveKeys) public override returns (bool) {
+  function addParticipants(bytes[] calldata _publicEnclaveKeys) public override returns (bool) {
     PrivacyInterface privacyInterface = PrivacyInterface(implementation);
     return privacyInterface.addParticipants(_publicEnclaveKeys);
   }
 
-  function getParticipants() view public override returns (bytes32[] memory) {
+  function getParticipants() view public override returns (bytes[] memory) {
     PrivacyInterface privacyInterface = PrivacyInterface(implementation);
     return privacyInterface.getParticipants();
   }
 
-  function removeParticipant(bytes32 _participant) public override returns (bool) {
+  function removeParticipant(bytes calldata _participant) public override returns (bool) {
     PrivacyInterface privacyInterface = PrivacyInterface(implementation);
     bool result = privacyInterface.removeParticipant(_participant);
     if (result) {
@@ -75,14 +76,12 @@ contract PrivacyProxy is PrivacyInterface {
     require(this.canExecute(), "The contract is locked.");
     require(implementation != _newImplementation, "The contract to upgrade to has to be different from the current management contract.");
     require(this.canUpgrade(), "Not allowed to upgrade the management contract.");
-    bytes32[] memory participants = this.getParticipants();
+    bytes[] memory participants = this.getParticipants();
     _setImplementation(_newImplementation);
     PrivacyInterface privacyInterface = PrivacyInterface(implementation);
     privacyInterface.addParticipants(participants);
   }
 
-  event ParticipantRemoved(
-    bytes32 publicEnclaveKey
-  );
+  event ParticipantRemoved(bytes publicEnclaveKey);
 
 }
