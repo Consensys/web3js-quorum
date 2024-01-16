@@ -12,14 +12,16 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity ^0.6.0;
+pragma solidity >=0.7.0 <0.9.0;
+pragma experimental ABIEncoderV2;
+
 interface PrivacyInterface {
 
-  function addParticipants(bytes32[] calldata publicEnclaveKeys) external returns (bool);
+  function addParticipants(bytes[] calldata publicEnclaveKeys) external returns (bool);
 
-  function removeParticipant(bytes32 participant) external returns (bool);
+  function removeParticipant(bytes calldata participant) external returns (bool);
 
-  function getParticipants() external view returns (bytes32[] memory);
+  function getParticipants() external view returns (bytes[] memory);
 
   function lock() external;
 
@@ -31,3 +33,4 @@ interface PrivacyInterface {
 
   function canUpgrade() external returns (bool);
 }
+
